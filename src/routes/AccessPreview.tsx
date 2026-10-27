@@ -22,7 +22,7 @@ export function AccessPreview() {
       <section className="access-preview__stage" aria-label="Anteprima accesso CuraCasa">
         <div className="access-preview__identity">
           <span className="access-preview__icon">
-            <img src={`${import.meta.env.BASE_URL}brand/logo-stacked.svg`} alt="" width="120" height="120" />
+            <img src={`${import.meta.env.BASE_URL}brand/app-icon.svg`} alt="" width="120" height="120" />
           </span>
           <h1>La tua casa, un pensiero in meno.</h1>
           <p>Ritrova le tue faccende. Riprendi da dove eri rimasto.</p>
