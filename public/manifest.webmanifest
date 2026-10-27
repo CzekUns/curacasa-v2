@@ -1,7 +1,7 @@
 {
-  "name": "CuraCasa V2",
+  "name": "CuraCasa – Pulizie di casa",
   "short_name": "CuraCasa",
-  "description": "Faccende, scadenze e calendario per la cura della casa.",
+  "description": "Organizza faccende, scadenze e calendario delle pulizie di casa.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
