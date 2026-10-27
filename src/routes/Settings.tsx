@@ -2,10 +2,24 @@ import { SignOutButton, useUser } from "@clerk/react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Download, Plus, RefreshCw, Trash2, Upload } from "lucide-react";
 import { forceAppUpdate } from "../lib/pwa";
+import { isDemoMode } from "../lib/demo";
 import { createDefaultData, downloadJson, loadData, saveData } from "../lib/store";
 
-export function Settings() {
+function ClerkAccountInfo() {
   const { user } = useUser();
+  return (
+    <>
+      <p>{user?.primaryEmailAddress?.emailAddress || "Account Clerk attivo"}</p>
+      <SignOutButton>
+        <button className="secondary-action" type="button">
+          Logout
+        </button>
+      </SignOutButton>
+    </>
+  );
+}
+
+export function Settings() {
   const [data, setData] = useState(loadData);
 
   function addRoom(event: FormEvent<HTMLFormElement>) {
@@ -94,12 +108,11 @@ export function Settings() {
 
       <section className="settings-card">
         <h2>Account</h2>
-        <p>{user?.primaryEmailAddress?.emailAddress || "Account Clerk attivo"}</p>
-        <SignOutButton>
-          <button className="secondary-action" type="button">
-            Logout
-          </button>
-        </SignOutButton>
+        {isDemoMode ? (
+          <p>Modalità test senza login. I dati restano in questo browser e non sono sincronizzati con altri dispositivi.</p>
+        ) : (
+          <ClerkAccountInfo />
+        )}
       </section>
     </div>
   );
