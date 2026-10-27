@@ -1,0 +1,29 @@
+name: Install Italian Clerk translations
+on:
+  push:
+    branches: [feat/curacasa-brand-intro-clerk]
+    paths: [.github/workflows/install-clerk-italian.yml]
+permissions:
+  contents: write
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm install @clerk/localizations --save
+      - name: Commit dependency and lockfile
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'auth: add official Italian Clerk localization'
+            git push
+          fi
