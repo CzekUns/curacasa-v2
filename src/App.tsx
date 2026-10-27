@@ -30,7 +30,7 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={isDemoMode ? <Navigate to="/app" replace /> : <Landing />} />
+      <Route path="/" element={<Landing />} />
       <Route path="/app" element={isDemoMode ? <AppShell /> : <ProtectedRoute />}>
         <Route index element={<Home />} />
         <Route path="faccende" element={<Chores />} />

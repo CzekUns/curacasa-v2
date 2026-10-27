@@ -1,6 +1,7 @@
 import { SignOutButton, useUser } from "@clerk/react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Download, Plus, RefreshCw, Trash2, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 import { forceAppUpdate } from "../lib/pwa";
 import { isDemoMode } from "../lib/demo";
 import { createDefaultData, downloadJson, loadData, saveData } from "../lib/store";
@@ -109,7 +110,10 @@ export function Settings() {
       <section className="settings-card">
         <h2>Account</h2>
         {isDemoMode ? (
-          <p>Modalità test senza login. I dati restano in questo browser e non sono sincronizzati con altri dispositivi.</p>
+          <>
+            <p>Modalità test senza login. I dati restano in questo browser e non sono sincronizzati con altri dispositivi.</p>
+            <Link className="secondary-action" to="/">Visualizza la homepage</Link>
+          </>
         ) : (
           <ClerkAccountInfo />
         )}
