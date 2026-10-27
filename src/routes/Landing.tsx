@@ -1,8 +1,11 @@
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
-import { ArrowRight, CalendarDays, Home, ListChecks } from "lucide-react";
+import { ArrowRight, CalendarDays, ListChecks } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Brand } from "../components/Brand";
 import { landingDescription, landingFeatures, landingTitle } from "../content/landing";
 import { isDemoMode } from "../lib/demo";
+
+const appDestination = `${import.meta.env.BASE_URL}#/app`;
 
 export function Landing() {
   return (
@@ -14,18 +17,16 @@ export function Landing() {
       </div>
 
       <header className="landing-topbar">
-        <span className="landing-logo">
-          <Home size={17} /> CuraCasa
-        </span>
+        <Brand className="landing-brand-reveal" />
         {isDemoMode ? (
-          <Link className="landing-mini-link" to="/app">Apri app</Link>
+          <Link className="landing-mini-link" to="/app">Apri demo</Link>
         ) : (
           <>
             <Show when="signed-in">
               <Link className="landing-mini-link" to="/app">Apri app</Link>
             </Show>
             <Show when="signed-out">
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" forceRedirectUrl={appDestination}>
                 <button className="landing-mini-link" type="button">Accedi</button>
               </SignInButton>
             </Show>
@@ -34,18 +35,22 @@ export function Landing() {
       </header>
 
       <section className="landing-hero" aria-labelledby="landing-title">
-        <div className="landing-copy">
+        <div className="landing-copy landing-reveal">
+          <div className="landing-hero-mark" aria-hidden="true">
+            <img src={`${import.meta.env.BASE_URL}brand/mark.svg`} width="90" height="90" alt="" />
+            <span className="landing-hero-glint" />
+          </div>
           <h1 id="landing-title">{landingTitle}</h1>
           <p className="landing-subtitle">{landingDescription}</p>
           <div className="landing-actions">
             {isDemoMode ? (
-              <Link className="landing-cta landing-cta--primary" to="/app">
-                Apri CuraCasa <ArrowRight size={17} />
+              <Link className="landing-cta landing-cta--primary" to="/accesso">
+                Scopri l'accesso <ArrowRight size={17} />
               </Link>
             ) : (
               <>
                 <Show when="signed-out">
-                  <SignUpButton mode="modal">
+                  <SignUpButton mode="modal" forceRedirectUrl={appDestination}>
                     <button className="landing-cta landing-cta--primary" type="button">
                       Inizia gratis <ArrowRight size={17} />
                     </button>
@@ -64,10 +69,11 @@ export function Landing() {
           </ul>
         </div>
 
-        <div className="phone-preview" aria-hidden="true">
+        <div className="phone-preview landing-phone-reveal" aria-hidden="true">
           <div className="phone-frame">
             <div className="phone-notch" />
             <div className="preview-screen">
+              <img className="preview-brand-icon" src={`${import.meta.env.BASE_URL}brand/mark.svg`} width="74" height="74" alt="" />
               <span className="preview-eyebrow">CuraCasa</span>
               <h2>La tua casa, a colpo d'occhio.</h2>
               <div className="preview-card">
