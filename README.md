@@ -82,3 +82,26 @@ ufficiale, poi registra il dominio in Google Search Console e invia la sitemap.
 I testi principali si aggiornano in `src/content/landing.ts`.
 L'app e la preview GitHub Pages continuano a usare la configurazione Clerk
 gia' esistente, senza modifiche alle sessioni o ai pagamenti.
+
+
+## Identità CuraCasa e accesso
+
+Il marchio ufficiale è in `public/brand/mark.svg` e `logo.svg`. Favicon,
+icone PWA (192/512), variante maskable, icona iOS e file ICO vengono
+generati da `scripts/generate_brand_icons.py` a partire dagli SVG.
+
+Nella homepage l'ingresso è animato una volta sola tramite CSS e rispetta
+`prefers-reduced-motion`. Nessuna animazione blocca la navigazione o il login.
+
+La versione GitHub Pages di test usa `VITE_DEMO_BYPASS_AUTH=true`: il pulsante
+«Scopri l'accesso» apre `#/accesso`, una *anteprima di stile*, non una pagina
+di autenticazione. Il bottone «Apri demo» accede senza account.
+
+Quando la variabile demo è disabilitata e la chiave Clerk è configurata,
+«Inizia gratis» e «Accedi» aprono le vere modali Clerk, personalizzate con
+palette, logo e localizzazione italiana ufficiale. Clerk continua a gestire
+verifica, sicurezza, OAuth e sessioni; le quote del piano non cambiano.
+
+La PWA installata parte da `#/app` per non ripetere la presentazione ogni
+volta. Dopo l'aggiornamento del logo potrebbe essere necessario reinstallare
+il collegamento PWA su alcuni telefoni per aggiornare l'icona.
