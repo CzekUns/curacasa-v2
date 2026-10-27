@@ -1,8 +1,9 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Clock, Pencil, Play, Search, Square, X } from "lucide-react";
+import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreIcon, choreIconOptions, type ChoreIconName } from "../lib/icons";
-import { addLog, daysAgo, lastLog, loadData, relativeDays, saveData, statusFor, type ChoreType } from "../lib/store";
+import { addLog, daysAgo, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor, type ChoreType } from "../lib/store";
 
 export function Chores() {
   const [data, setData] = useState(loadData);
@@ -16,6 +17,14 @@ export function Chores() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [manualMinutes, setManualMinutes] = useState("");
   const [completionNote, setCompletionNote] = useState("");
+  const [recentlyDoneId, setRecentlyDoneId] = useState<string | null>(null);
+  const { feedback, announce } = useActionFeedback();
+
+  useEffect(() => {
+    if (!recentlyDoneId) return;
+    const timer = window.setTimeout(() => setRecentlyDoneId(null), 900);
+    return () => window.clearTimeout(timer);
+  }, [recentlyDoneId]);
 
   const rooms = useMemo(() => ["", ...data.rooms], [data.rooms]);
   const chores = data.chores.filter((chore) => {
@@ -25,24 +34,36 @@ export function Chores() {
   });
 
   function markDone(choreId: string) {
-    const next = addLog(data, choreId);
-    saveData(next);
+    const current = loadData();
+    const next = addLog(current, choreId);
     setData(next);
+    if (next === current) return;
+    saveData(next);
+    setRecentlyDoneId(choreId);
+    announce("Faccenda completata!");
   }
 
   function markDoneWithDetails(choreId: string) {
     const timerMinutes = elapsedSeconds ? Math.max(1, Math.round(elapsedSeconds / 60)) : 0;
     const durationMinutes = Number(manualMinutes || timerMinutes || 0);
-    const next = addLog(data, choreId, {
+    const current = loadData();
+    const next = addLog(current, choreId, {
       durationMinutes,
       note: completionNote.trim(),
     });
-    saveData(next);
     setData(next);
+    if (next === current) {
+      closeDetail();
+      return;
+    }
+    saveData(next);
+    setRecentlyDoneId(choreId);
     closeDetail();
+    announce("Faccenda completata!");
   }
 
   function openDetail(choreId: string) {
+    if (hasCompletedToday(loadData(), choreId)) return;
     setDetailId(choreId);
     setEditingId(null);
     setIconMenuOpen(false);
@@ -112,6 +133,7 @@ export function Chores() {
 
   return (
     <div className="page-stack">
+      <ActionFeedback feedback={feedback} />
       <section className="page-heading">
         <p className="eyebrow">Tutte le faccende</p>
         <div>
@@ -144,10 +166,11 @@ export function Chores() {
         <section className="task-list">
           {chores.map((chore) => {
             const last = lastLog(chore, data.logs);
+            const doneToday = hasCompletedToday(data, chore.id);
             return (
               <div className="task-edit-group" key={chore.id}>
-                <article className={`task-row ${statusFor(chore, data.logs)}`}>
-                  <button className="icon-hit-area" type="button" onClick={() => openDetail(chore.id)} aria-label={`Apri ${chore.title}`}>
+                <article className={`task-row ${statusFor(chore, data.logs)} ${doneToday ? "task-row--done-today" : ""} ${recentlyDoneId === chore.id ? "is-just-done" : ""}`}>
+                  <button className="icon-hit-area" type="button" disabled={doneToday} onClick={() => openDetail(chore.id)} aria-label={doneToday ? `${chore.title} già svolta oggi` : `Apri ${chore.title}`}>
                     <span className="icon-tile">
                       <ChoreIcon name={chore.icon} size={40} />
                     </span>
@@ -155,16 +178,22 @@ export function Chores() {
                   <div>
                     <strong>{chore.title}</strong>
                     <span>
-                      {chore.room || "Tutta casa"} - {relativeDays(daysAgo(last?.completedAt))}
+                      {chore.room || "Tutta casa"} - {doneToday ? "svolta oggi" : relativeDays(daysAgo(last?.completedAt))}
                     </span>
                   </div>
                   <div className="task-actions">
                     <button type="button" onClick={() => startEdit(chore.id, chore.icon)} aria-label={`Modifica ${chore.title}`}>
                       <Pencil size={16} />
                     </button>
-                    <button type="button" onClick={() => markDone(chore.id)} aria-label={`Completa ${chore.title}`}>
-                      <Check size={17} />
-                    </button>
+                    {doneToday ? (
+                      <Link className="task-calendar-link" to="/app/calendario" title="Vedi nel calendario" aria-label={`Vedi ${chore.title} nel calendario`}>
+                        <Check size={17} />
+                      </Link>
+                    ) : (
+                      <button type="button" onClick={() => markDone(chore.id)} aria-label={`Completa ${chore.title}`}>
+                        <Check size={17} />
+                      </button>
+                    )}
                   </div>
                 </article>
                 {editingId === chore.id ? (
@@ -294,7 +323,7 @@ export function Chores() {
           </div>
         </section>
       )}
-      {detailChore ? (
+      {detailChore && !hasCompletedToday(data, detailChore.id) ? (
         <div className="task-sheet-backdrop" role="dialog" aria-modal="true" aria-labelledby="task-sheet-title">
           <section className="task-sheet">
             <div className="form-title">

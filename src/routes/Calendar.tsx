@@ -1,7 +1,8 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { CalendarPlus, Clock, Pencil, Play, Square, X } from "lucide-react";
 import { ChoreIcon } from "../lib/icons";
-import { addLog, dayKey, loadData, monthKey, saveData, type ChoreLog } from "../lib/store";
+import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
+import { addLog, dayKey, hasCompletedOnDay, loadData, monthKey, saveData, type ChoreLog } from "../lib/store";
 
 function timerText(seconds: number) {
   const hours = Math.floor(seconds / 3600);
@@ -29,6 +30,8 @@ function logDurationSeconds(log: ChoreLog) {
 
 export function Calendar() {
   const [data, setData] = useState(loadData);
+  const { feedback, announce } = useActionFeedback();
+  const [addStatus, setAddStatus] = useState("");
   const [month, setMonth] = useState(monthKey());
   const [selectedDay, setSelectedDay] = useState(dayKey(new Date()));
   const [addRoom, setAddRoom] = useState("");
@@ -95,15 +98,22 @@ export function Calendar() {
     const choreId = String(form.get("choreId") || "");
     if (!choreId) return;
     const durationSeconds = durationSecondsFrom(addManualMinutes, addElapsedSeconds, addTimerStartedAt);
-    const next = addLog(data, choreId, {
+    const current = loadData();
+    const next = addLog(current, choreId, {
       completedAt: `${selectedDay}T12:00:00`,
       durationMinutes: Math.ceil(durationSeconds / 60),
       durationSeconds,
       note: String(form.get("note") || ""),
       rooms: addRoom ? [addRoom] : [],
     });
-    saveData(next);
     setData(next);
+    if (next === current) {
+      setAddStatus("Questa faccenda è già registrata per il giorno scelto. Seleziona un altro giorno.");
+      return;
+    }
+    saveData(next);
+    setAddStatus("");
+    announce("Faccenda registrata nel calendario!");
     event.currentTarget.reset();
     setAddRoom("");
     setAddManualMinutes("");
@@ -155,6 +165,7 @@ export function Calendar() {
 
   return (
     <div className="page-stack">
+      <ActionFeedback feedback={feedback} />
       <section className="page-heading">
         <p className="eyebrow">Calendario globale</p>
         <div>
@@ -196,6 +207,7 @@ export function Calendar() {
                 type="button"
                 onClick={() => {
                   setSelectedDay(key);
+                  setAddStatus("");
                   stopEditingLog();
                 }}
               >
@@ -318,8 +330,8 @@ export function Calendar() {
           <select name="choreId" required>
             <option value="">Scegli</option>
             {data.chores.map((chore) => (
-              <option key={chore.id} value={chore.id}>
-                {chore.title}
+              <option key={chore.id} value={chore.id} disabled={hasCompletedOnDay(data, chore.id, selectedDay)}>
+                {chore.title}{hasCompletedOnDay(data, chore.id, selectedDay) ? " · già svolta" : ""}
               </option>
             ))}
           </select>
@@ -368,6 +380,7 @@ export function Calendar() {
         <button className="primary-action" type="submit">
           Aggiungi registrazione
         </button>
+        {addStatus ? <p className="status-note" role="status">{addStatus}</p> : null}
       </form>
     </div>
   );

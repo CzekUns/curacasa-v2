@@ -24,6 +24,8 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
+      - name: Verify preset uniqueness and daily completion rules
+        run: npm run test:logic
       - name: Build branded GitHub Pages preview
         env:
           VITE_BASE_PATH: /curacasa-v2/

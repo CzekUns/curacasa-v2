@@ -12,6 +12,8 @@ export type Chore = {
   notes: string;
   createdAt: string;
   updatedAt: string;
+  /** Stable identity for a Store preset, even when the user edits its title. */
+  presetKey?: string;
 };
 
 export type ChoreLog = {
@@ -46,36 +48,6 @@ const LEGACY_ICON_MAP: Record<string, string> = {
   vacuum: "aspirapolvere",
   window: "vetri",
 };
-
-const LEGACY_DEFAULT_TITLES = new Set([
-  "Aspirapolvere",
-  "Bagni",
-  "Pulire lavandino",
-  "Cucina",
-  "Pulire cucina",
-  "Cambio letto",
-  "Balcone",
-  "Sistemare balcone",
-  "Vetri",
-  "Pulire vetri",
-  "Pulire tapparelle",
-  "Lavare tende",
-  "Annaffiare piante",
-  "Svuotare pattumiera",
-  "Pulire forno",
-  "Pulire frigorifero",
-  "Pulire doccia",
-  "Pulire WC",
-  "Fare lavatrice",
-  "Pulire specchio",
-  "Spazzare",
-  "Cambiare asciugamani",
-  "Lavare pavimento",
-  "Pulire termosifoni",
-  "Sistemare armadio",
-  "Pulire tavolo",
-  "Spolverare",
-]);
 
 export function dayKey(value: string | Date) {
   const date = value instanceof Date ? value : new Date(value);
@@ -139,12 +111,6 @@ export function loadData(): AppData {
       ? parsed.chores.map((chore) => ({ ...chore, icon: LEGACY_ICON_MAP[chore.icon] || chore.icon }))
       : [];
     const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
-    const onlyLegacyDefaults = chores.length > 0 && chores.every((chore) => LEGACY_DEFAULT_TITLES.has(chore.title));
-    if (!logs.length && onlyLegacyDefaults) {
-      const data = { rooms, chores: [], logs };
-      saveData(data);
-      return data;
-    }
     return {
       rooms,
       chores,
@@ -178,11 +144,63 @@ export function statusFor(chore: Chore, logs: ChoreLog[]) {
   return "normal";
 }
 
+/** Signature shared by Store activities and older imports with no presetKey. */
+export function presetSignature(chore: Pick<Chore, "title" | "icon">): string {
+  const normalize = (value: string) =>
+    value.normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("it-IT");
+  return `${normalize(chore.title)}::${normalize(chore.icon)}`;
+}
+
+export type PresetChore = Omit<Chore, "id" | "createdAt" | "updatedAt" | "notes"> & {
+  notes?: string;
+};
+
+/**
+ * Idempotent import: skips presets already in personal chores (including
+ * older imported chores). Does not delete or mutate existing chores/logs.
+ */
+export function importPresets(data: AppData, presets: PresetChore[]): { data: AppData; added: number } {
+  const existing = new Set(
+    data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore)].filter((key): key is string => !!key)),
+  );
+  const stamp = now();
+  const additions: Chore[] = [];
+  for (const preset of presets) {
+    const key = presetSignature(preset);
+    if (existing.has(key)) continue;
+    existing.add(key);
+    additions.push({
+      ...preset,
+      id: id("chore"),
+      presetKey: key,
+      notes: preset.notes || "",
+      createdAt: stamp,
+      updatedAt: stamp,
+    });
+  }
+  return { data: additions.length ? { ...data, chores: [...data.chores, ...additions] } : data, added: additions.length };
+}
+
+export function hasCompletedOnDay(data: AppData, choreId: string, date: string | Date): boolean {
+  const dateKey = dayKey(date);
+  return data.logs.some((log) => log.choreId === choreId && dayKey(log.completedAt) === dateKey);
+}
+
+export function hasCompletedToday(data: AppData, choreId: string): boolean {
+  return hasCompletedOnDay(data, choreId, new Date());
+}
+
 export function addLog(data: AppData, choreId: string, payload?: Partial<ChoreLog>): AppData {
+  const completedAt = payload?.completedAt || now();
+  // One registration per chore and local calendar day, including via Calendar.
+  if (!data.chores.some((chore) => chore.id === choreId) ||
+      hasCompletedOnDay(data, choreId, completedAt)) {
+    return data;
+  }
   const log: ChoreLog = {
     id: id("log"),
     choreId,
-    completedAt: payload?.completedAt || now(),
+    completedAt,
     durationMinutes: Number(payload?.durationMinutes || 0),
     durationSeconds: Number(payload?.durationSeconds || 0),
     note: payload?.note || "",
