@@ -2,17 +2,30 @@
   "name": "CuraCasa – Pulizie di casa",
   "short_name": "CuraCasa",
   "description": "Organizza faccende, scadenze e calendario delle pulizie di casa.",
-  "start_url": ".",
+  "start_url": "./#/app",
   "scope": ".",
   "display": "standalone",
   "background_color": "#faf7f2",
   "theme_color": "#faf7f2",
   "icons": [
     {
-      "src": "chore-icons/casa.jpg",
+      "src": "brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "brand/icon-512.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "brand/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "."
 }
