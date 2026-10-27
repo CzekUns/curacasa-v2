@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Create crisp install and browser icons from CuraCasa's vector brand assets."""
-from io import BytesIO
 from pathlib import Path
 
 import cairosvg
@@ -24,9 +23,9 @@ for size in (192, 512):
     render("app-icon.svg", f"icon-{size}.png", size)
 render("app-icon-maskable.svg", "icon-maskable-512.png", 512)
 render("app-icon.svg", "apple-touch-icon.png", 180)
-render("app-icon.svg", "favicon-48.png", 48)
-render("app-icon.svg", "favicon-32.png", 32)
-render("app-icon.svg", "favicon-16.png", 16)
+render("favicon.svg", "favicon-48.png", 48)
+render("favicon.svg", "favicon-32.png", 32)
+render("favicon.svg", "favicon-16.png", 16)
 
 ico_frames = [
     Image.open(BRAND / f"favicon-{size}.png").convert("RGBA")
