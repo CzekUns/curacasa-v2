@@ -60,7 +60,7 @@ function curacasaSeo(): Plugin {
       // The React app replaces the fallback after boot; crawlers and users
       // without JavaScript still receive meaningful HTML, not an empty #root.
       const fallback = `<main class="landing-page">
-        <header class="landing-topbar"><span class="landing-logo">CuraCasa</span></header>
+        <header class="landing-topbar"><span class="landing-logo"><img src="${escapeHtml(base)}brand/mark.svg" width="36" height="36" alt="" /> CuraCasa</span></header>
         <section class="landing-hero">
           <div class="landing-copy">
             <h1>${escapeHtml(landingTitle)}</h1>
