@@ -49,36 +49,6 @@ const LEGACY_ICON_MAP: Record<string, string> = {
   window: "vetri",
 };
 
-const LEGACY_DEFAULT_TITLES = new Set([
-  "Aspirapolvere",
-  "Bagni",
-  "Pulire lavandino",
-  "Cucina",
-  "Pulire cucina",
-  "Cambio letto",
-  "Balcone",
-  "Sistemare balcone",
-  "Vetri",
-  "Pulire vetri",
-  "Pulire tapparelle",
-  "Lavare tende",
-  "Annaffiare piante",
-  "Svuotare pattumiera",
-  "Pulire forno",
-  "Pulire frigorifero",
-  "Pulire doccia",
-  "Pulire WC",
-  "Fare lavatrice",
-  "Pulire specchio",
-  "Spazzare",
-  "Cambiare asciugamani",
-  "Lavare pavimento",
-  "Pulire termosifoni",
-  "Sistemare armadio",
-  "Pulire tavolo",
-  "Spolverare",
-]);
-
 export function dayKey(value: string | Date) {
   const date = value instanceof Date ? value : new Date(value);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
@@ -141,12 +111,6 @@ export function loadData(): AppData {
       ? parsed.chores.map((chore) => ({ ...chore, icon: LEGACY_ICON_MAP[chore.icon] || chore.icon }))
       : [];
     const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
-    const onlyLegacyDefaults = chores.length > 0 && chores.every((chore) => LEGACY_DEFAULT_TITLES.has(chore.title));
-    if (!logs.length && onlyLegacyDefaults) {
-      const data = { rooms, chores: [], logs };
-      saveData(data);
-      return data;
-    }
     return {
       rooms,
       chores,
