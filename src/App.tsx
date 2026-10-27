@@ -2,6 +2,7 @@ import { useAuth } from "@clerk/react";
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
+import { AccessPreview } from "./routes/AccessPreview";
 import { initPwaInstallPrompt, registerServiceWorker } from "./lib/pwa";
 import { isDemoMode } from "./lib/demo";
 import { AddChore } from "./routes/AddChore";
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      {isDemoMode && <Route path="/accesso" element={<AccessPreview />} />}
       <Route path="/app" element={isDemoMode ? <AppShell /> : <ProtectedRoute />}>
         <Route index element={<Home />} />
         <Route path="faccende" element={<Chores />} />

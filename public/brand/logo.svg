@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1170 300" role="img" aria-label="CuraCasa">
+<g transform="translate(3 4) scale(.56)">
+<g fill="none" stroke="#17323a" stroke-width="29" stroke-linecap="round" stroke-linejoin="round">
+<path d="M99 244 250 102a10 10 0 0 1 13 0l149 142"/>
+<path d="M139 252v122c0 12 10 22 22 22h102"/>
+<path d="M370 161v-44h-37" stroke-width="24"/>
+</g>
+<path d="M204 258c0-23 18-41 40-41 15 0 28 9 36 20 8-11 21-20 36-20 22 0 40 18 40 41 0 33-35 59-76 93-41-34-76-60-76-93z" fill="#e8897b" transform="translate(-19 5) scale(.94)"/>
+<path d="M287 412c-7-75 40-132 123-135-4 87-49 138-123 135z" fill="#79a580"/>
+<path d="M293 397c28-42 61-70 97-104" stroke="#f6fbef" stroke-width="10" stroke-linecap="round" fill="none"/>
+<path d="M331 360c-18-5-28-16-37-31M356 334c2-15 6-24 14-36" stroke="#e4f2e3" stroke-width="7" stroke-linecap="round" fill="none" opacity=".9"/>
+</g>
+<text x="302" y="204" fill="#17323a" font-family="Montserrat,Arial,sans-serif" font-size="142" font-weight="800" letter-spacing="-5">CuraCasa</text>
+</svg>
