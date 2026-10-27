@@ -43,19 +43,20 @@ export async function requestAppInstall() {
 export function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, { scope: import.meta.env.BASE_URL }).catch(() => undefined);
   });
 }
 
 export async function forceAppUpdate() {
   if ("serviceWorker" in navigator) {
     const registrations = await navigator.serviceWorker.getRegistrations();
-    await Promise.all(registrations.map((registration) => registration.unregister()));
+    const appScope = new URL(import.meta.env.BASE_URL, window.location.origin).href;
+    await Promise.all(registrations.filter((registration) => registration.scope === appScope).map((registration) => registration.unregister()));
   }
 
   if ("caches" in window) {
     const keys = await caches.keys();
-    await Promise.all(keys.map((key) => caches.delete(key)));
+    await Promise.all(keys.filter((key) => key.startsWith("curacasa-v2-")).map((key) => caches.delete(key)));
   }
 
   window.location.reload();
