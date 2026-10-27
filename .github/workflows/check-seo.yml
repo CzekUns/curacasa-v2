@@ -1,0 +1,44 @@
+name: Validate CuraCasa homepage and SEO
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [feat/landing-seo-foundation]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Check React and demo SEO output
+        env:
+          VITE_BASE_PATH: /curacasa-v2/
+          VITE_DEMO_BYPASS_AUTH: "true"
+          SEO_SITE_URL: https://czekuns.github.io/curacasa-v2/
+          SEO_INDEXABLE: "false"
+        run: |
+          npm run build
+          grep -q 'name="robots" content="noindex"' dist/index.html
+          grep -q 'Organizza le pulizie di casa' dist/index.html
+          grep -q 'property="og:title"' dist/index.html
+          test ! -f dist/sitemap.xml
+      - name: Check production SEO assets
+        env:
+          VITE_BASE_PATH: /
+          SEO_SITE_URL: https://curacasa.example/
+          SEO_INDEXABLE: "true"
+        run: |
+          npm run build
+          grep -q 'rel="canonical" href="https://curacasa.example/"' dist/index.html
+          grep -q 'application/ld+json' dist/index.html
+          test -f dist/sitemap.xml
+          test -f dist/robots.txt
