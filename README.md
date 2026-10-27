@@ -58,3 +58,27 @@ VITE_CLERK_PUBLISHABLE_KEY
 - Backup JSON export/import.
 
 I dati applicativi sono locali al browser in questa versione statica; Clerk governa accesso e sessione.
+
+## SEO e homepage
+
+La homepage e' pubblica e ha un contenuto HTML iniziale gia' leggibile dai crawler.
+Le schermate personali restano sotto HashRouter e non sono destinate all'indicizzazione.
+
+La demo `CzekUns/curacasa-v2` usa `SEO_INDEXABLE=false`: non va indicizzata
+per evitare che la copia di prova competa con la versione ufficiale.
+
+Quando pubblichi la versione ufficiale, configura nel sistema di build:
+
+```bash
+SEO_SITE_URL=https://tuo-dominio.it/
+SEO_INDEXABLE=true
+```
+
+Il build genera canonical, metadati social, dati strutturati WebApplication e
+`sitemap.xml`; genera `robots.txt` solo se l'URL del sito e' sulla radice
+del dominio. Imposta questi valori prima di mettere online la versione
+ufficiale, poi registra il dominio in Google Search Console e invia la sitemap.
+
+I testi principali si aggiornano in `src/content/landing.ts`.
+L'app e la preview GitHub Pages continuano a usare la configurazione Clerk
+gia' esistente, senza modifiche alle sessioni o ai pagamenti.
