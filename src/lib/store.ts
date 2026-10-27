@@ -147,7 +147,7 @@ export function statusFor(chore: Chore, logs: ChoreLog[]) {
 /** Signature shared by Store activities and older imports with no presetKey. */
 export function presetSignature(chore: Pick<Chore, "title" | "icon">): string {
   const normalize = (value: string) =>
-    value.normalize("NFKC").trim().replace(/\\s+/g, " ").toLocaleLowerCase("it-IT");
+    value.normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("it-IT");
   return `${normalize(chore.title)}::${normalize(chore.icon)}`;
 }
 
