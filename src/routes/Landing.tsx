@@ -1,6 +1,7 @@
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
 import { ArrowRight, CalendarDays, Home, ListChecks, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
+import { isDemoMode } from "../lib/demo";
 
 export function Landing() {
   return (
@@ -14,11 +15,17 @@ export function Landing() {
         <span className="landing-logo">
           <Home size={17} /> CuraCasa
         </span>
-        <Show when="signed-in">
+        {isDemoMode ? (
           <Link className="landing-mini-link" to="/app">
             Apri app
           </Link>
-        </Show>
+        ) : (
+          <Show when="signed-in">
+            <Link className="landing-mini-link" to="/app">
+              Apri app
+            </Link>
+          </Show>
+        )}
       </header>
 
       <section className="landing-hero">
@@ -30,6 +37,13 @@ export function Landing() {
             fogli sparsi o calendari rigidi.
           </p>
           <div className="landing-actions">
+            {isDemoMode ? (
+              <Link className="landing-cta landing-cta--primary" to="/app">
+                <span>Prova CuraCasa</span>
+                <ArrowRight size={17} />
+              </Link>
+            ) : (
+              <>
             <Show when="signed-out">
               <SignInButton mode="modal">
                 <button className="landing-cta landing-cta--primary" type="button">
@@ -49,6 +63,8 @@ export function Landing() {
                 <ArrowRight size={17} />
               </Link>
             </Show>
+              </>
+            )}
           </div>
         </div>
 
@@ -77,8 +93,8 @@ export function Landing() {
       <section className="landing-proof">
         <article>
           <ShieldCheck size={19} />
-          <strong>Accesso Clerk</strong>
-          <span>Login moderno, sicuro e pronto per il deploy statico.</span>
+          <strong>{isDemoMode ? "Demo senza login" : "Accesso Clerk"}</strong>
+          <span>{isDemoMode ? "Esplora l'app senza registrazione, con dati salvati nel browser." : "Login moderno, sicuro e pronto per il deploy statico."}</span>
         </article>
         <article>
           <ListChecks size={19} />
