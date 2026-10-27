@@ -38,6 +38,8 @@ createRoot(document.getElementById("root")!).render(
             fontFamilyButtons: "Montserrat, Arial, sans-serif",
           },
           options: {
+            logoImageUrl: `${window.location.origin}${import.meta.env.BASE_URL}brand/logo.svg`,
+            logoPlacement: "inside",
             socialButtonsPlacement: "top",
             socialButtonsVariant: "blockButton",
           },
