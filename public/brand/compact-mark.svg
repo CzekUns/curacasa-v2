@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="CuraCasa: casa con cuore e foglia">
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M47 124 126 54 205 124" stroke="#bb9279" stroke-width="12"/>
+  <path d="M76 134 V205 H177 V134" stroke="#cfa58a" stroke-width="12"/>
+</g>
+<path d="M103 139 C103 130 110 124 119 124 C125 124 130 127 134 132 C138 127 143 124 149 124 C158 124 165 130 165 139 C165 151 151 162 134 176 C117 162 103 151 103 139Z" fill="#cf967c"/>
+<path d="M178 205 C174 176 190 158 218 157 C218 182 202 200 178 205Z" fill="#858f74"/>
+<path d="M185 196 C192 186 200 177 209 169" fill="none" stroke="#fffdf9" stroke-width="4.5" stroke-linecap="round"/>
+</svg>
