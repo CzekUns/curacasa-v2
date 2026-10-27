@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/react";
-import { Home, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
+import { Brand } from "../Brand";
 import { Link } from "react-router-dom";
 import { isDemoMode } from "../../lib/demo";
 
@@ -7,10 +8,7 @@ export function Header() {
   return (
     <header className="app-header">
       <Link className="brand-mark" to="/app" aria-label="CuraCasa Home">
-        <span className="brand-icon">
-          <Home size={18} />
-        </span>
-        <span>CuraCasa</span>
+        <Brand compact />
       </Link>
       <div className="header-actions">
         {!isDemoMode && <UserButton />}
