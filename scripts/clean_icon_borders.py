@@ -39,7 +39,7 @@ def clean(path: Path) -> None:
         raise ValueError(f"No cream card detected in {path}")
     biggest = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
     coverage = stats[biggest, cv2.CC_STAT_AREA] / (w * h)
-    if not 0.30 < coverage < 0.93:
+    if not 0.12 < coverage < 0.93:
         raise ValueError(f"Unexpected card coverage {coverage:.2%} in {path}")
 
     ys, xs = np.where(labels == biggest)
