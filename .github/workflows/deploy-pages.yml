@@ -38,6 +38,8 @@ jobs:
         env:
           VITE_BASE_PATH: /curacasa-v2/
           VITE_DEMO_BYPASS_AUTH: "true"
+          SEO_SITE_URL: https://czekuns.github.io/curacasa-v2/
+          SEO_INDEXABLE: "false"
         run: npm run build
 
       - name: Configure GitHub Pages
