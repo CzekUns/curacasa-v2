@@ -37,7 +37,7 @@ jobs:
       - name: Build for GitHub Pages
         env:
           VITE_BASE_PATH: /curacasa-v2/
-          VITE_CLERK_PUBLISHABLE_KEY: ${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
+          VITE_DEMO_BYPASS_AUTH: "true"
         run: npm run build
 
       - name: Configure GitHub Pages
