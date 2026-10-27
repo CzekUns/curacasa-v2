@@ -105,3 +105,24 @@ verifica, sicurezza, OAuth e sessioni; le quote del piano non cambiano.
 La PWA installata parte da `#/app` per non ripetere la presentazione ogni
 volta. Dopo l'aggiornamento del logo potrebbe essere necessario reinstallare
 il collegamento PWA su alcuni telefoni per aggiornare l'icona.
+
+
+## Palette e icone compatte
+
+Lo sfondo di tutte le pagine utilizza la stessa sfumatura della schermata
+d'accesso: avorio `#faf5ef`, rosa cipria `#f5e5e1`, salvia `#e6eeed`.
+Le card hanno fondi semitrasparenti chiari, mentre la navigazione inferiore
+usa vetro opalino invece del precedente nero.
+
+- `public/brand/mark.svg`: logo originale, con cerchio e ramoscello,
+  conservato per la presentazione in grande.
+- `public/brand/compact-mark.svg`: casa/cuore/foglia con linee più decise
+  per i piccoli marchi nell'interfaccia.
+- `public/brand/favicon.svg`: casa e cuore ingranditi, senza ramo e senza
+  cerchio, per restare leggibili a 16/32 px.
+- `public/brand/app-icon.svg` e `app-icon-maskable.svg`: versione compatta
+  della PWA (con margine di sicurezza nella maskable).
+
+Tutti i PNG e `favicon.ico` sono derivati dagli SVG dallo script
+`scripts/generate_brand_icons.py`. Per rigenerarli eseguire manualmente
+il workflow **Render CuraCasa PWA brand icons** sul branch di lavoro.
