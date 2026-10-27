@@ -2,6 +2,10 @@ name: Render CuraCasa PWA brand icons
 on:
   push:
     branches: [feat/curacasa-brand-intro-clerk]
+    paths:
+      - 'public/brand/*.svg'
+      - 'scripts/generate_brand_icons.py'
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
