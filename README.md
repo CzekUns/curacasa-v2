@@ -126,3 +126,28 @@ usa vetro opalino invece del precedente nero.
 Tutti i PNG e `favicon.ico` sono derivati dagli SVG dallo script
 `scripts/generate_brand_icons.py`. Per rigenerarli eseguire manualmente
 il workflow **Render CuraCasa PWA brand icons** sul branch di lavoro.
+
+
+## Store, faccende giornaliere e temi (ottobre 2026)
+
+- Lo Shop importa i preset tramite `importPresets()`, con un'identità
+  persistente (`presetKey`) basata su titolo+icona. I preset già presenti
+  vengono disabilitati; le collezioni importano **solo quelli mancanti**.
+  Gli import precedenti senza `presetKey` sono riconosciuti se conservano
+  titolo e icona originali. Le copie già presenti non vengono eliminate
+  automaticamente, per non compromettere cronologia e riferimenti.
+- Non vengono più eliminate le faccende legittime solo perché hanno i nomi
+  usati nelle vecchie attività predefinite.
+- Una faccenda si registra al massimo **una volta per data locale**.
+  I pulsanti in Home e Faccende risultano bloccati una volta svolta oggi.
+  Il Calendario permette la scelta di un'altra data e mostra le attività
+  già svolte in quella selezionata. La verifica avviene anche nella funzione
+  `addLog()`, non soltanto nell'interfaccia.
+- La conferma di import e completamento mostra una microanimazione con check,
+  compatibile con `prefers-reduced-motion` e annunciata agli screen reader.
+- Nella scheda **Shop → Temi**, Classico (predefinito) e Cipria cambiano
+  soltanto palette e colori delle superfici. Geometria, sfumature,
+  posizionamento e funzionalità rimangono gli stessi. La preferenza viene
+  memorizzata nella chiave `curacasa_v2_theme`, separatamente dai dati
+  delle pulizie.
+- Per regressione: `npm run test:logic` (Node.js 22), oltre alla build.
