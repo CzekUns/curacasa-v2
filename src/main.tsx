@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/react";
+import { itIT } from "@clerk/localizations/it-IT";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
@@ -26,6 +27,7 @@ createRoot(document.getElementById("root")!).render(
     ) : clerkPublishableKey ? (
       <ClerkProvider
         publishableKey={clerkPublishableKey}
+        localization={itIT}
         afterSignOutUrl={import.meta.env.BASE_URL}
         appearance={{
           variables: {
