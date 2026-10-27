@@ -24,7 +24,25 @@ createRoot(document.getElementById("root")!).render(
         <App />
       </HashRouter>
     ) : clerkPublishableKey ? (
-      <ClerkProvider publishableKey={clerkPublishableKey} afterSignOutUrl={import.meta.env.BASE_URL}>
+      <ClerkProvider
+        publishableKey={clerkPublishableKey}
+        afterSignOutUrl={import.meta.env.BASE_URL}
+        appearance={{
+          variables: {
+            colorPrimary: "#8f5960",
+            colorBackground: "#fffdf9",
+            colorForeground: "#17323a",
+            colorBorder: "#e7d9d6",
+            borderRadius: "1.1rem",
+            fontFamily: "Montserrat, Arial, sans-serif",
+            fontFamilyButtons: "Montserrat, Arial, sans-serif",
+          },
+          options: {
+            socialButtonsPlacement: "top",
+            socialButtonsVariant: "blockButton",
+          },
+        }}
+      >
         <HashRouter>
           <App />
         </HashRouter>
