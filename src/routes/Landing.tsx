@@ -1,5 +1,5 @@
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
-import { ArrowRight, CalendarDays, ListChecks } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Brand } from "../components/Brand";
 import { landingDescription, landingFeatures, landingTitle } from "../content/landing";
@@ -69,25 +69,16 @@ export function Landing() {
           </ul>
         </div>
 
-        <div className="phone-preview landing-phone-reveal" aria-hidden="true">
-          <div className="phone-frame">
-            <div className="phone-notch" />
-            <div className="preview-screen">
-              <img className="preview-brand-icon" src={`${import.meta.env.BASE_URL}brand/mark.svg`} width="74" height="74" alt="" />
-              <span className="preview-eyebrow">CuraCasa</span>
-              <h2>La tua casa, a colpo d'occhio.</h2>
-              <div className="preview-card">
-                <ListChecks size={18} />
-                <strong>Faccende</strong>
-                <span>Organizza e registra le pulizie</span>
-              </div>
-              <div className="preview-card rose">
-                <CalendarDays size={18} />
-                <strong>Calendario</strong>
-                <span>Controlla le prossime scadenze</span>
-              </div>
-            </div>
-          </div>
+        <div className="landing-hero-art" aria-hidden="true">
+          <img
+            src={`${import.meta.env.BASE_URL}brand/hero-whisper.svg`}
+            alt=""
+            width="1200"
+            height="820"
+            loading="eager"
+            decoding="async"
+            draggable={false}
+          />
         </div>
       </section>
     </main>
