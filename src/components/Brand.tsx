@@ -8,7 +8,7 @@ export function Brand({ compact = false, className = "" }: BrandProps) {
     <span className={`curacasa-brand${compact ? " curacasa-brand--compact" : ""} ${className}`.trim()}>
       <span className="curacasa-brand__symbol">
         <img
-          src={`${import.meta.env.BASE_URL}brand/mark.svg`}
+          src={`${import.meta.env.BASE_URL}brand/${compact ? "compact-mark.svg" : "mark.svg"}`}
           width="44"
           height="44"
           alt=""
