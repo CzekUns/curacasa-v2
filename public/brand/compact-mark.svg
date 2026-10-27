@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="CuraCasa: casa con cuore e foglia">
-<g fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M47 124 126 54 205 124" stroke="#bb9279" stroke-width="12"/>
-  <path d="M76 134 V205 H177 V134" stroke="#cfa58a" stroke-width="12"/>
-</g>
-<path d="M103 139 C103 130 110 124 119 124 C125 124 130 127 134 132 C138 127 143 124 149 124 C158 124 165 130 165 139 C165 151 151 162 134 176 C117 162 103 151 103 139Z" fill="#cf967c"/>
-<path d="M178 205 C174 176 190 158 218 157 C218 182 202 200 178 205Z" fill="#858f74"/>
-<path d="M185 196 C192 186 200 177 209 169" fill="none" stroke="#fffdf9" stroke-width="4.5" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="CuraCasa: marchio compatto">
+<g fill="none" stroke="#B8795F" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M99 47 C140 24 184 40 209 77 C236 119 218 167 184 193 C147 221 98 207 75 179 C69 172 64 163 60 154" /></g>
+<g fill="none" stroke="#C98768" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path d="M87 124 L137 69 L187 124" /><path d="M99 129 V166 H176 V129" /></g>
+<g fill="#C77865"><path d="M160 90 C160 83 165 79 171 83 C174 79 180 80 181 86 C183 93 171 101 171 101 C171 101 160 95 160 90 Z"/></g>
+<g fill="none" stroke="#667C5D" stroke-linecap="round" stroke-linejoin="round">
+ <g stroke-width="9"><path d="M59 147 C52 112 65 70 89 54"/><path d="M59 145 C57 119 41 107 37 80"/></g>
+ <g stroke-width="6"><path d="M63 106 C50 80 66 51 108 48 C100 80 90 97 63 106 Z"/><path d="M63 106 C76 81 93 64 105 50"/></g>
+</g></svg>

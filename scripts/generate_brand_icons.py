@@ -19,10 +19,22 @@ def render(source: str, target: str, size: int) -> None:
     )
 
 
+def render_lockup(source: str, target: str, width: int) -> None:
+    """Preserve the natural SVG aspect ratio: logo lockups are not square."""
+    cairosvg.svg2png(
+        url=str(BRAND / source),
+        write_to=str(BRAND / target),
+        output_width=width,
+    )
+
+
 for size in (192, 512):
     render("app-icon.svg", f"icon-{size}.png", size)
 render("app-icon-maskable.svg", "icon-maskable-512.png", 512)
 render("app-icon.svg", "apple-touch-icon.png", 180)
+render("mark.svg", "mark-512.png", 512)
+render_lockup("logo.svg", "logo-horizontal-1024.png", 1024)
+render_lockup("logo-stacked.svg", "logo-stacked-512.png", 512)
 render("favicon.svg", "favicon-48.png", 48)
 render("favicon.svg", "favicon-32.png", 32)
 render("favicon.svg", "favicon-16.png", 16)
