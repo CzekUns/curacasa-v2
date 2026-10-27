@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import App from "./App";
 import { clerkPublishableKey } from "./lib/clerk";
+import { isDemoMode } from "./lib/demo";
 import "./styles/global.css";
 
 function MissingClerkConfig() {
@@ -18,7 +19,11 @@ function MissingClerkConfig() {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {clerkPublishableKey ? (
+    {isDemoMode ? (
+      <HashRouter>
+        <App />
+      </HashRouter>
+    ) : clerkPublishableKey ? (
       <ClerkProvider publishableKey={clerkPublishableKey} afterSignOutUrl={import.meta.env.BASE_URL}>
         <HashRouter>
           <App />

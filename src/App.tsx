@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
 import { initPwaInstallPrompt, registerServiceWorker } from "./lib/pwa";
+import { isDemoMode } from "./lib/demo";
 import { AddChore } from "./routes/AddChore";
 import { Calendar } from "./routes/Calendar";
 import { Chores } from "./routes/Chores";
@@ -29,8 +30,8 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/app" element={<ProtectedRoute />}>
+      <Route path="/" element={isDemoMode ? <Navigate to="/app" replace /> : <Landing />} />
+      <Route path="/app" element={isDemoMode ? <AppShell /> : <ProtectedRoute />}>
         <Route index element={<Home />} />
         <Route path="faccende" element={<Chores />} />
         <Route path="aggiungi" element={<AddChore />} />
@@ -38,7 +39,7 @@ export default function App() {
         <Route path="opzioni" element={<Settings />} />
         <Route path="shop" element={<Shop />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to={isDemoMode ? "/app" : "/"} replace />} />
     </Routes>
   );
 }

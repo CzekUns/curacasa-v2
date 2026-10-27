@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/react";
 import { Home, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
+import { isDemoMode } from "../../lib/demo";
 
 export function Header() {
   return (
@@ -12,7 +13,7 @@ export function Header() {
         <span>CuraCasa</span>
       </Link>
       <div className="header-actions">
-        <UserButton />
+        {!isDemoMode && <UserButton />}
         <Link className="header-action" to="/app/opzioni" aria-label="Opzioni">
           <Settings size={18} />
         </Link>
