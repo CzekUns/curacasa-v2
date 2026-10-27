@@ -7,6 +7,9 @@ import App from "./App";
 import { clerkPublishableKey } from "./lib/clerk";
 import { isDemoMode } from "./lib/demo";
 import "./styles/global.css";
+import { initTheme } from "./lib/theme";
+
+initTheme();
 
 function MissingClerkConfig() {
   return (
