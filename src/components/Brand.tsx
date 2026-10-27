@@ -16,7 +16,7 @@ export function Brand({ compact = false, className = "" }: BrandProps) {
           draggable={false}
         />
       </span>
-      <span className="curacasa-brand__name">CuraCasa</span>
+      <span className="curacasa-brand__name"><span>Cura</span><span>Casa</span></span>
     </span>
   );
 }
