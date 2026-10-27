@@ -141,11 +141,13 @@ export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = 
 ];
 
 export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number }) {
-  const src = choreIconImages[name as ChoreIconName];
+  const iconPath = choreIconImages[name as ChoreIconName];
 
-  if (!src) {
+  if (!iconPath) {
     return <Home aria-hidden="true" size={Math.max(18, Math.round(size * 0.56))} />;
   }
+
+  const src = `${import.meta.env.BASE_URL}${iconPath.slice(1)}`;
 
   return (
     <img
