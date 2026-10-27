@@ -8,13 +8,16 @@
   --silk: #faf7f2;
   --paper: #fffdf9;
   --dust: #e6eeed;
+  --app-backdrop: linear-gradient(140deg, #faf5ef 0%, #f5e5e1 57%, #e6eeed 100%);
+  --app-surface: linear-gradient(145deg, rgba(255, 253, 249, .96), rgba(255, 248, 244, .88) 60%, rgba(246, 250, 246, .90));
+  --app-surface-soft: linear-gradient(140deg, rgba(255, 253, 249, .86), rgba(251, 238, 237, .72) 65%, rgba(237, 245, 239, .74));
   --rose: #b8878d;
   --rose-deep: #8f5960;
   --rose-soft: #ead2d5;
   --sage: #8d9684;
   --frame: #171718;
   --champagne: #5d5124;
-  --shadow: 0 22px 46px -30px rgba(26, 26, 26, .42);
+  --shadow: 0 20px 46px -34px rgba(93, 65, 59, .32);
 }
 
 * {
@@ -23,7 +26,7 @@
 
 html {
   min-height: 100%;
-  background: var(--dust);
+  background: #faf5ef;
 }
 
 body {
@@ -32,9 +35,10 @@ body {
   min-height: 100dvh;
   color: var(--ink);
   background:
-    radial-gradient(circle at 10% 0%, rgba(234, 210, 213, .44), transparent 35%),
-    radial-gradient(circle at 90% 20%, rgba(141, 150, 132, .18), transparent 32%),
-    var(--dust);
+    radial-gradient(ellipse 75vw 65vh at 4% 0%, rgba(255, 255, 255, .68), transparent 75%),
+    radial-gradient(ellipse 65vw 55vh at 95% 95%, rgba(179, 201, 183, .25), transparent 75%),
+    var(--app-backdrop);
+  background-attachment: fixed;
   font-family: Montserrat, Arial, sans-serif;
 }
 
@@ -427,6 +431,9 @@ p {
   justify-content: space-between;
   padding: 10px 2px 16px;
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 253, 249, .38);
+  background: linear-gradient(180deg, rgba(250, 245, 239, .68), rgba(250, 245, 239, .10));
 }
 
 .brand-icon {
@@ -469,8 +476,8 @@ p {
 .pack-card,
 .stat-card,
 .task-row {
-  border: 1px solid rgba(26, 26, 26, .05);
-  background: rgba(255, 253, 249, .86);
+  border: 1px solid rgba(255, 255, 255, .76);
+  background: var(--app-surface);
   box-shadow: var(--shadow);
 }
 
@@ -512,7 +519,7 @@ p {
   padding: 16px;
   border: 1px solid rgba(184, 135, 141, .18);
   border-radius: 24px;
-  background: rgba(255, 253, 249, .8);
+  background: var(--app-surface-soft);
   box-shadow: var(--shadow-soft);
 }
 
@@ -631,7 +638,7 @@ p {
 }
 
 .stat-card.urgent {
-  background: rgba(234, 210, 213, .58);
+  background: linear-gradient(145deg, rgba(248, 226, 224, .94), rgba(255, 247, 241, .87));
 }
 
 .stat-button {
@@ -703,7 +710,7 @@ p {
 
 .chip.active {
   color: var(--paper);
-  background: var(--frame);
+  background: var(--rose-deep);
 }
 
 .recommend-card {
@@ -736,7 +743,7 @@ p {
   padding: 14px;
   border: 1px solid rgba(26, 26, 26, .06);
   border-radius: 24px;
-  background: rgba(255, 253, 249, .78);
+  background: var(--app-surface);
   box-shadow: 0 12px 28px rgba(59, 55, 49, .06);
 }
 
@@ -925,7 +932,7 @@ p {
   place-items: center;
   border-radius: 999px;
   color: var(--paper);
-  background: var(--frame);
+  background: var(--rose-deep);
   font-size: 1.35rem;
 }
 
@@ -1177,7 +1184,7 @@ p {
   padding: 6px;
   border-radius: 999px;
   background: rgba(255, 255, 255, .54);
-  box-shadow: inset 0 0 0 1px rgba(26, 26, 26, .05);
+  box-shadow: inset 0 0 0 1px rgba(190, 139, 114, .18);
 }
 
 .shop-tabs button {
@@ -1192,7 +1199,7 @@ p {
 
 .shop-tabs button.active {
   color: var(--paper);
-  background: var(--ink);
+  background: var(--rose-deep);
 }
 
 .pack-card {
@@ -1388,7 +1395,7 @@ select {
   padding: 20px;
   border: 1px solid rgba(26, 26, 26, .05);
   border-radius: 28px;
-  background: rgba(255, 253, 249, .82);
+  background: var(--app-surface-soft);
   box-shadow: var(--shadow);
 }
 
@@ -1423,7 +1430,7 @@ select {
   padding: 13px 15px;
   border: 1px solid var(--soft);
   border-radius: 18px;
-  background: rgba(255, 253, 249, .68);
+  background: var(--app-surface-soft);
 }
 
 .room-list button {
@@ -1466,8 +1473,11 @@ select {
   transform: translateX(-50%);
   padding: 8px 10px;
   border-radius: 999px;
-  background: var(--frame);
-  box-shadow: 0 18px 42px -24px rgba(26, 26, 26, .8);
+  border: 1px solid rgba(255, 255, 255, .90);
+  background: rgba(255, 253, 249, .93);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: 0 18px 42px -24px rgba(93, 65, 59, .42);
 }
 
 .bottom-nav-item {
@@ -1477,7 +1487,7 @@ select {
   place-items: center;
   gap: 2px;
   border-radius: 999px;
-  color: rgba(255, 253, 249, .52);
+  color: #6d6b62;
   font-size: .58rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -1488,7 +1498,7 @@ select {
 }
 
 .bottom-nav-item.active:not(.add) {
-  background: var(--rose);
+  background: linear-gradient(145deg, #b8878d, #8f5960);
 }
 
 .bottom-nav-item.add {
@@ -1496,10 +1506,10 @@ select {
   height: 54px;
   place-self: center;
   margin-top: -34px;
-  border: 3px solid var(--frame);
-  color: var(--ink);
-  background: var(--paper);
-  box-shadow: 0 10px 24px -18px rgba(0, 0, 0, .85);
+  border: 3px solid #fffdf9;
+  color: #694953;
+  background: linear-gradient(145deg, #fff4eb, #eac7c1);
+  box-shadow: 0 10px 24px -18px rgba(93, 65, 59, .38);
 }
 
 .bottom-nav-item.add span {
@@ -1676,7 +1686,7 @@ select {
   padding: 24px clamp(18px, 5vw, 64px) 44px;
   isolation: isolate;
   overflow: hidden;
-  background: linear-gradient(140deg, #faf5ef 0%, #f5e5e1 57%, #e6eeed 100%);
+  background: var(--app-backdrop);
 }
 .access-preview__glow {
   position: absolute;
@@ -1760,4 +1770,30 @@ select {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Keep all CuraCasa pages visually connected to the welcome screen. */
+.app-shell, .landing-page, .setup-screen { background: transparent; }
+.hero-card { background: var(--app-surface-soft); }
+.activity-card, .task-edit-card, .task-sheet, .calendar-log-row,
+.icon-picker-menu, .pack-card, .stat-card, .settings-card, .form-card,
+.calendar-panel, .empty-state, .recommend-card, .task-row {
+  border-color: rgba(255, 255, 255, .78);
+  background: var(--app-surface);
+}
+.task-row.warning, .task-row.overdue, .due-card.warning, .due-card.overdue {
+  border-color: rgba(184, 135, 141, .40);
+  background: linear-gradient(145deg, rgba(255, 245, 241, .94), rgba(245, 219, 216, .80));
+}
+.search-box, .shop-tabs, .icon-picker-trigger,
+input, textarea, select {
+  background: rgba(255, 253, 249, .86);
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible,
+button:focus-visible, a:focus-visible {
+  outline: 2px solid #8f5960;
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-aurora span, .landing-bg span { animation: none; }
 }
