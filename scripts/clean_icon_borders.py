@@ -20,15 +20,8 @@ def clean(path: Path) -> None:
 
     h, w = rgb.shape[:2]
 
-    # Sample the flat pink background safely outside the rounded card.
-    patch = max(5, int(min(w, h) * 0.025))
-    corners = np.concatenate(
-        [rgb[:patch, :patch].reshape(-1, 3),
-         rgb[:patch, -patch:].reshape(-1, 3),
-         rgb[-patch:, :patch].reshape(-1, 3),
-         rgb[-patch:, -patch:].reshape(-1, 3)]
-    )
-    pink = np.median(corners, axis=0).astype(np.float32)
+    # Standard backdrop: some source JPGs were flattened onto black instead of pink.
+    pink = np.array([184, 135, 141], dtype=np.float32)
 
     red = rgb[:, :, 0]
     green = rgb[:, :, 1]
