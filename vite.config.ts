@@ -31,7 +31,7 @@ function curacasaSeo(): Plugin {
   return {
     name: "curacasa-seo",
     transformIndexHtml(html) {
-      const iconUrl = siteUrl ? new URL("chore-icons/casa.jpg", siteUrl).href : null;
+      const iconUrl = siteUrl ? new URL("brand/icon-512.png", siteUrl).href : null;
       const seoHead = [
         indexable && siteUrl
           ? `<link rel="canonical" href="${escapeHtml(siteUrl.href)}" />`
