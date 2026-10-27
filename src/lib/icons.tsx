@@ -3,7 +3,7 @@ import { CalendarDays, Check, Home, NotebookText, Plus, Settings, Store } from "
 export const choreIconImages = {
   casa: "/chore-icons/casa.jpg",
   cucina: "/chore-icons/cucina.jpg",
-  bagno: "/chore-icons/vasca.jpg",
+  bagno: "/chore-icons/bagno.svg",
   vasca: "/chore-icons/vasca.jpg",
   letto: "/chore-icons/letto.jpg",
   soggiorno: "/chore-icons/soggiorno.jpg",
