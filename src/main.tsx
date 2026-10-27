@@ -19,7 +19,7 @@ function MissingClerkConfig() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {clerkPublishableKey ? (
-      <ClerkProvider publishableKey={clerkPublishableKey} afterSignOutUrl="/">
+      <ClerkProvider publishableKey={clerkPublishableKey} afterSignOutUrl={import.meta.env.BASE_URL}>
         <HashRouter>
           <App />
         </HashRouter>

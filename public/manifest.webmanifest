@@ -2,14 +2,14 @@
   "name": "CuraCasa V2",
   "short_name": "CuraCasa",
   "description": "Faccende, scadenze e calendario per la cura della casa.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#faf7f2",
   "theme_color": "#faf7f2",
   "icons": [
     {
-      "src": "/chore-icons/casa.jpg",
+      "src": "chore-icons/casa.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
