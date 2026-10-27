@@ -1,7 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="CuraCasa">
 <rect width="256" height="256" rx="55" fill="#fffaf6"/>
+<g transform="translate(-28 -27) scale(1.22)">
 <g fill="none" stroke="#b48b76" stroke-linecap="round" stroke-linejoin="round" stroke-width="17">
 <path d="M44 122 128 48 212 122"/><path d="M72 134 V207 H185 V134"/>
 </g>
 <path d="M96 145 C96 132 106 124 118 124 C124 124 130 128 134 133 C139 128 146 124 153 124 C165 124 175 132 175 145 C175 159 156 177 135 192 C113 176 96 159 96 145Z" fill="#c88670"/>
+</g>
 </svg>
