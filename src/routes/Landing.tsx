@@ -44,25 +44,25 @@ export function Landing() {
               </Link>
             ) : (
               <>
-            <Show when="signed-out">
-              <SignInButton mode="modal">
-                <button className="landing-cta landing-cta--primary" type="button">
-                  <span>Accedi</span>
-                  <ArrowRight size={17} />
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="landing-cta landing-cta--ghost" type="button">
-                  Crea account
-                </button>
-              </SignUpButton>
-            </Show>
-            <Show when="signed-in">
-              <Link className="landing-cta landing-cta--primary" to="/app">
-                <span>Vai alla dashboard</span>
-                <ArrowRight size={17} />
-              </Link>
-            </Show>
+                <Show when="signed-out">
+                  <SignInButton mode="modal">
+                    <button className="landing-cta landing-cta--primary" type="button">
+                      <span>Accedi</span>
+                      <ArrowRight size={17} />
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button className="landing-cta landing-cta--ghost" type="button">
+                      Crea account
+                    </button>
+                  </SignUpButton>
+                </Show>
+                <Show when="signed-in">
+                  <Link className="landing-cta landing-cta--primary" to="/app">
+                    <span>Vai alla dashboard</span>
+                    <ArrowRight size={17} />
+                  </Link>
+                </Show>
               </>
             )}
           </div>
