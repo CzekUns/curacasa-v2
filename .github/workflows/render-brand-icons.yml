@@ -1,8 +1,17 @@
 name: Render CuraCasa PWA brand icons
 on:
+  push:
+    branches: [design/logo-system-and-airy-hero]
+    paths:
+      - 'public/brand/*.svg'
+      - 'scripts/generate_brand_icons.py'
+      - '.github/workflows/render-brand-icons.yml'
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: render-brand-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   render:
     if: github.actor != 'github-actions[bot]'
