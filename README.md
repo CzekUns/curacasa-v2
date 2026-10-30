@@ -151,3 +151,29 @@ il workflow **Render CuraCasa PWA brand icons** sul branch di lavoro.
   memorizzata nella chiave `curacasa_v2_theme`, separatamente dai dati
   delle pulizie.
 - Per regressione: `npm run test:logic` (Node.js 22), oltre alla build.
+
+
+## Palette Pinterest 2026
+
+Nella sezione **Shop → Temi** sono disponibili cinque palette gratuite:
+
+- **Classico:** colori originali, predefinito.
+- **Cipria:** avorio, cipria e salvia.
+- **Giada:** versione naturale ispirata al Jade `#AEB8A0` di Pinterest.
+- **Ghiaccio:** versione ariosa ispirata al Cool Blue `#D7EFFF`.
+- **Corallo:** versione calda ispirata al Persimmon `#FF5C34`.
+
+Fonte ufficiale: [Pinterest Palette 2026](https://business.pinterest.com/it/pinterest-palette/)
+(pubblicata il 14 gennaio 2026). Le combinazioni e le tonalità per
+pulsanti e superfici sono interpretazioni CuraCasa, non palette ufficiali
+complete fornite da Pinterest.
+
+**Invariante architetturale:** ogni tema usa lo stesso gradiente
+`140deg / 0%, 57%, 100%`, le stesse card e la stessa struttura di pagina.
+Cambiano soltanto i colori delle variabili CSS e delle anteprime.
+Le CTA dei nuovi temi usano tonalità più scure per contrasto almeno 4,5:1
+con il testo bianco.
+
+La scelta si salva nella chiave `curacasa_v2_theme` di localStorage,
+indipendentemente da `curacasa_v2_data`. I temi esistenti restano validi.
+La suite `npm run test:logic` verifica l'intero catalogo e la persistenza.
