@@ -1,39 +1,45 @@
-# CuraCasa — Libreria icone personali
+# CuraCasa — Icone personali, versione minimal
 
-## Scopo
+La libreria delle faccende personalizzate comprende **42 SVG minimalisti**:
+24 simboli a tema pulizie e 18 generici. Il tratto è intenzionalmente
+semplice, ispirato alle prime icone approvate: stella, cuore, sole, fiore,
+goccia, panno, sapone, spugna e altri simboli riconoscibili anche piccoli.
 
-Le icone dei **preset dello Store** rappresentano faccende specifiche
-(aspirapolvere, bagno, condizionatore, ecc.) e restano riservate ai preset.
+## Principi visivi
 
-Chi crea una faccenda personalizzata deve poter scegliere un simbolo **neutro**
-e non rischiare di usare immagini progettate per una faccenda diversa.
+- **Un solo colore per disegno**, controllato da `currentColor`.
+- Niente fondi incorporati nello sprite SVG, niente gradienti, dettagli
+  complessi o ombre nel disegno.
+- In ogni scheda faccenda il simbolo è centrato sulla **stessa tile 48 × 48 px**
+  delle icone WebP dei preset, con fondo bianco; il pittogramma SVG ha la
+  stessa area interna 40 × 40 px delle WebP.
+- Le tre famiglie di tinte sono `--personal-rose`,
+  `--personal-sage`, `--personal-accent`, definite per **ciascuna delle
+  cinque palette** (Classico, Cipria, Giada, Ghiaccio e Corallo).
+- L'identificativo dell'icona `personale-*` non cambia quando si applica
+  una palette diversa. Tutte le faccende già salvate continuano a mostrare
+  il simbolo associato.
+- I preset mantengono le loro immagini dedicate WebP/SVG senza variazioni.
 
-## Come funziona
+## Selezione nell'app
 
-- In **Aggiungi faccenda**, il campo titolo suggerisce
-  **«Inserisci un titolo»** invece di una faccenda già esistente.
-- Il selettore **Icona personale** offre **42 simboli**, divisi in due sezioni. La prima contiene **24 icone a tema pulizie**, tutte nello stesso stile vettoriale crema/salvia/rosa antico: goccia, bolle, schiuma, spruzzo, spugna, panno, guanto, saponetta, spazzolina, secchiello, piumino, detergente, vetro lucido, riciclo, profumo, aria fresca, polvere, asciutto, lavaggio, microfibra, superficie lucida, flacone, tergivetro e movimento. La seconda contiene i **18 simboli astratti originali**:
-  scintilla, stella, cuore, fiore, sole, luna, orologio, bandierina,
-  segnalibro, etichetta, nastro, campanella, lampadina, bersaglio,
-  onda, spunta, cerchio e piuma.
-- Ogni simbolo ha lo stesso fondo crema e la stessa famiglia cromatica
-  avorio/rosa antico/verde oliva; con disegni nuovi, stilizzati e riconoscibili, senza riutilizzare
-  i file illustrati delle faccende dello Store.
-- Il predefinito per una nuova faccenda è **Scintilla**.
-- In **Modifica faccenda** si può scegliere un simbolo personale.
-  Le faccende già esistenti **mantengono il proprio disegno** finché
-  non se ne seleziona uno diverso (anche se era uno dei preset).
-- Le icone sono definite in `public/personal-icons/symbols.svg`,
-  un unico sprite SVG vettoriale. I primi 18 disegni e i loro ID non sono stati alterati. Gli ID `personale-*` sono distinti da
-  quelli dello Store, senza duplicare file WebP o dover eseguire download.
-- La selezione è persistita nello stesso campo `icon` delle faccende;
-  non modifica la struttura dei dati né crea nuove dipendenze.
-- Il file di anteprima `public/personal-icons/preview.html` consente
-  di vedere tutti i 42 simboli, suddivisi per categoria, prima di ulteriori iterazioni.
+Il componente `PersonalIconPicker` occupa lo spazio di **un solo pulsante
+56 × 56 px**. Al tocco compare un popup simile a una tastiera emoji:
 
-## Futuro
+- massimo 264 px di larghezza;
+- sei simboli per riga, scorrimento interno limitato a 220 px;
+- nessun titolo sotto le icone né sezioni ingombranti;
+- tocchi un simbolo e il popup si richiude;
+- clic fuori o Escape chiude il popup;
+- i nomi rimangono disponibili con `aria-label` per tecnologie assistive.
 
-I set di illustrazioni faccende possono continuare a essere venduti o
-distribuiti nello Store indipendentemente dal set personale. Se in futuro
-aggiungiamo nuovi stili, potremo applicare le loro palette senza cambiare
-gli ID delle icone e perdere associazioni già salvate.
+Il campo **Titolo della faccenda** continua a funzionare normalmente.
+
+## Anteprima e test
+
+`public/personal-icons/preview.html` presenta le 42 forme senza nomi
+visibili e permette di alternare le cinque palette per verificare
+il cambio colore. I controlli automatici verificano che lo sprite resti
+monocromatico, che non incorpori sfondi, e che il selettore rimanga compatto.
+
+Non sono stati aggiunti servizi, dipendenze o database.
