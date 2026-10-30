@@ -1,5 +1,6 @@
 import { classifyChoreLevel, type ChoreLevel } from "./chore-levels.ts";
 import { normalizeRoomDetails, type RoomDetails } from "./rooms.ts";
+import { getRoomRule, type ChoreRoomRule } from "./chore-rooms.ts";
 
 export type ChoreType = "ordinaria" | "straordinaria";
 
@@ -12,6 +13,8 @@ export type Chore = {
   /** Cleaning depth, separate from routine/extraordinary frequency. */
   level?: ChoreLevel;
   room: string;
+  /** Preset-assigned location scope; defaults to legacy room for old saved chores. */
+  roomRule?: ChoreRoomRule;
   frequency: number;
   estimatedMinutes: number;
   notes: string;
@@ -118,7 +121,7 @@ export function loadData(): AppData {
     const chores = Array.isArray(parsed.chores)
       ? parsed.chores.map((chore) => {
           const icon = LEGACY_ICON_MAP[chore.icon] || chore.icon;
-          return { ...chore, icon, level: classifyChoreLevel({ ...chore, icon }) };
+          return { ...chore, icon, roomRule: getRoomRule(chore), level: classifyChoreLevel({ ...chore, icon }) };
         })
       : [];
     const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
@@ -223,6 +226,7 @@ export function importPresets(data: AppData, presets: PresetChore[]): { data: Ap
       id: id("chore"),
       presetKey: key,
       level: classifyChoreLevel(preset),
+      roomRule: getRoomRule(preset),
       notes: preset.notes || "",
       createdAt: stamp,
       updatedAt: stamp,
