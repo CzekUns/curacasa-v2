@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Lato:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap");
 
 :root {
   color-scheme: light;
@@ -2195,3 +2195,11 @@ a:focus-visible, button:focus-visible { outline-color: var(--theme-focus); }
 .reminder-settings__hour { display: grid; gap: 7px; max-width: 260px; }
 .reminder-settings__hour select { min-height: 44px; padding: 8px 12px; border: 1px solid var(--soft); border-radius: 13px; }
 .reminder-settings__enabled { display: flex; align-items: center; gap: 7px; color: #446752; font-size: .8rem; font-weight: 800; }
+
+/* CuraCasa brand typography: Lato on headings and display labels. */
+h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, .preview-screen h2, .stat-card strong, .progress-jewel strong { font-family: Lato, Arial, sans-serif; }
+.curacasa-brand__name { font-weight: 700; letter-spacing: -.03em; }
+.curacasa-brand__name span:first-child { color: #394841; }
+.curacasa-brand__name span:last-child { color: #c9958e; }
+.curacasa-brand__symbol { background: transparent; box-shadow: none; }
+.landing-hero-mark { background: transparent; box-shadow: none; }
