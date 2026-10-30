@@ -31,7 +31,7 @@ self.addEventListener("push", (event) => {
     try { return event.data ? event.data.json() : null; } catch { return null; }
   })();
   if (!payload || typeof payload !== "object") return;
-  const count = Number(payload.count);
+  const count = Number(payload.data?.count);
   if (!Number.isSafeInteger(count) || count < 1 || count > 1000) return;
   const title = "CuraCasa · Promemoria";
   const body = count === 1
@@ -42,7 +42,7 @@ self.addEventListener("push", (event) => {
       body,
       icon: new URL("brand/icon-192.png", self.registration.scope).href,
       badge: new URL("brand/favicon-48.png", self.registration.scope).href,
-      tag: "curacasa-due-" + String(payload.day || "").slice(0, 10),
+      tag: "curacasa-due-" + String(payload.data?.day || "").slice(0, 10),
       data: { path: "#/app/faccende" },
     }),
   );
