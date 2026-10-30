@@ -37,7 +37,12 @@ test("SVGs are single-color currentColor drawings with NO baked-in background", 
 
 test("The same white tile footprint as WebP presets, colored per active theme", () => {
   assert.ok(styles.includes(".icon-tile:has(> .chore-icon-personal)"));
-  assert.match(styles, /\.icon-tile:has\(> \.chore-icon-personal\)\s*\{[^}]*background:\s*#fff/);
+  const customStart = styles.indexOf(".icon-tile:has(> .chore-icon-personal) {");
+  const innerStart = styles.indexOf(".chore-icon-personal {");
+  const outer = styles.slice(customStart, styles.indexOf("}", customStart));
+  const inner = styles.slice(innerStart, styles.indexOf("}", innerStart));
+  assert.ok(outer.includes("background: transparent"), "No frame around the personal glyph");
+  assert.ok(inner.includes("background: #fff"), "White belongs to the icon itself");
   for (const theme of ["classico", "cipria", "giada", "ghiaccio", "corallo"]) {
     const block = styles.match(new RegExp(`:root\\[data-theme="${theme}"\\] \\{([^}]*--personal-rose:[^}]*)\\}`));
     assert.ok(block, `Missing dynamic icon colors in ${theme}`);
