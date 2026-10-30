@@ -196,28 +196,54 @@
     </g>
   </symbol>
   <symbol id="personale-detergente" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M40 19h18v10H40Zm4 10h10v6H44Zm-7 6h24q11 0 11 11v29q0 8-9 8H34q-9 0-9-8V46q0-11 12-11Z"/><path d="M40 54h18" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+    <!-- Lucide: flask-conical -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" />
+  <path d="M6.453 15h11.094" />
+  <path d="M8.5 2h7" />
     </g>
   </symbol>
   <symbol id="personale-vetro" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <rect x="24" y="19" width="48" height="59" rx="5" fill="none" stroke="currentColor" stroke-width="7"/><path d="M48 21v54M25 48h44" fill="none" stroke="currentColor" stroke-width="4"/><path d="m59 27 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/>
+    <!-- Lucide: square-sparkles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M11 15H7" />
+  <path d="M15.41 2.49a.6.6 0 011.18 0l.63 3.334a1.2 1.2 0 00.956.955l3.334.631a.6.6 0 010 1.18l-3.334.63a1.2 1.2 0 00-.955.956l-.631 3.334a.6.6 0 01-1.18 0l-.63-3.334a1.2 1.2 0 00-.956-.955L10.49 8.59a.6.6 0 010-1.18l3.334-.63a1.2 1.2 0 00.955-.956z" />
+  <path d="M21 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6" />
+  <path d="M9 13v4" />
     </g>
   </symbol>
   <symbol id="personale-riciclo" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="m47 16 12 8-9 11v-7C35 28 28 34 24 44l-7-5q7-19 30-21Zm30 24 4 14-13 7 3-8c-1-8-6-14-16-18l5-8q19 7 21 21ZM29 76l-13-8 9-13v9q10 10 27 4l3 10q-22 8-32-2Z"/>
+    <!-- Lucide: recycle -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
+  <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12" />
+  <path d="m14 16-3 3 3 3" />
+  <path d="M8.293 13.596 7.196 9.5 3.1 10.598" />
+  <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843" />
+  <path d="m13.378 9.633 4.096 1.098 1.097-4.096" />
     </g>
   </symbol>
   <symbol id="personale-profumo" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M45 77V46M45 62q-20-7-15-22M45 62q19-7 20-22" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M43 48C23 37 31 18 42 18c7 0 11 4 12 8 11-12 25 2 15 15-6 8-17 10-26 7Z"/>
+    <!-- Lucide: flower -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="3" />
+  <path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" />
+  <path d="M12 7.5V9" />
+  <path d="M7.5 12H9" />
+  <path d="M16.5 12H15" />
+  <path d="M12 16.5V15" />
+  <path d="m8 8 1.88 1.88" />
+  <path d="M14.12 9.88 16 8" />
+  <path d="m8 16 1.88-1.88" />
+  <path d="M14.12 14.12 16 16" />
     </g>
   </symbol>
   <symbol id="personale-aria" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M18 33h44c15 0 17-14 8-17-7-3-12 1-12 6M18 50h58c13 0 14 17 2 20-7 2-13-2-12-8M26 67h23" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <!-- Lucide: wind -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12.8 19.6A2 2 0 1 0 14 16H2" />
+  <path d="M17.5 8a2.5 2.5 0 1 1 2 4H2" />
+  <path d="M9.8 4.4A2 2 0 1 1 11 8H2" />
     </g>
   </symbol>
   <symbol id="personale-granelli" viewBox="0 0 96 96">
