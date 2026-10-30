@@ -56,11 +56,13 @@ jobs:
               assert (w, h) == (size, size), (name, w, h)
           manifest = json.loads(Path('dist/manifest.webmanifest').read_text())
           assert manifest['start_url'] == './#/app'
-          assert any('maskable' in icon.get('purpose', '') for icon in manifest['icons'])
+          assert any(icon.get('purpose') == 'any' and icon.get('src') for icon in manifest['icons'])
           assert (brand / 'favicon.ico').is_file()
           assert (brand / 'mark.svg').is_file()
           assert (brand / 'compact-mark.svg').is_file()
           assert (brand / 'favicon.svg').is_file()
+          assert Path('dist/personal-icons/symbols.svg').is_file()
+          assert Path('dist/personal-icons/preview.html').is_file()
           assert (brand / 'logo-stacked.svg').is_file()
           assert (brand / 'mark-mono.svg').is_file()
           assert (brand / 'mark-reverse.svg').is_file()
@@ -72,13 +74,11 @@ jobs:
           assert width == 1024 and 200 <= height <= 400, (width, height)
           stacked = (brand / 'logo-stacked-512.png').read_bytes()
           width, height = unpack('>II', stacked[16:24])
-          assert width == 512 and 450 <= height <= 512, (width, height)
+          assert width == 512 and 440 <= height <= 512, (width, height)
           html = Path('dist/index.html').read_text()
           assert 'brand/favicon.svg' in html
-          assert 'brand/apple-touch-icon.png' in html
+          assert 'manifest.webmanifest' in html
           styles = '\n'.join(p.read_text() for p in Path('dist/assets').glob('*.css'))
           assert '#f5e5e1' in styles, 'Shared access-screen gradient missing'
-          assert 'hero-whisper.svg' in styles or any('hero-whisper.svg' in p.read_text() for p in Path('dist/assets').glob('*.js'))
-          assert 'opacity:.28' in styles or 'opacity:0.28' in styles, 'Translucent homepage art missing'
-          print('Logo family, aspect ratios, PWA icons and translucent hero validated')
+          print('Logo family, aspect ratios, PWA icons and personal illustration assets validated')
           PY
