@@ -1,11 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 480" role="img" aria-label="CuraCasa">
- <g transform="translate(110 2) scale(1.1)">
-<g fill="none" stroke="#C58D6D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M99 47 C140 24 184 40 209 77 C236 119 218 167 184 193 C147 221 98 207 75 179 C69 172 64 163 60 154" /></g>
-<g fill="none" stroke="#D7A78C" stroke-width="7.6" stroke-linecap="round" stroke-linejoin="round"><path d="M87 124 L137 69 L187 124" /><path d="M99 129 V166 H176 V129" /></g>
-<g fill="#CD937A"><path d="M160 90 C160 83 165 79 171 83 C174 79 180 80 181 86 C183 93 171 101 171 101 C171 101 160 95 160 90 Z"/></g>
-<g fill="none" stroke="#75846A" stroke-linecap="round" stroke-linejoin="round">
-  <g stroke-width="6"><path d="M60 149 C56 128 60 111 63 93 C67 74 75 62 89 55" /><path d="M58 146 C47 125 38 112 38 87 C37 78 34 71 30 67" /><path d="M61 144 C70 123 86 112 99 97" /></g>
-  <g stroke-width="4.1"><path d="M64 106 C50 79 64 50 92 48 C98 48 103 47 108 47 C103 79 89 98 64 106 Z"/><path d="M64 106 C73 88 88 70 103 52"/><path d="M71 93 L65 76 M81 81 L79 63 M89 71 L100 71 M77 87 L91 87"/><path d="M60 131 C73 112 89 104 104 82 C104 111 85 129 60 131 Z"/><path d="M60 131 C73 118 87 101 101 85"/></g>
-</g></g>
- <text x="250" y="385" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-4"><tspan fill="#66755F">Cura</tspan><tspan fill="#C58D6D">Casa</tspan></text>
- </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 420" role="img" aria-label="CuraCasa"><g transform="translate(124 6) scale(1.2)"><g fill="none" stroke="#394841" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M26 89 91 34Q96 30 101 34L166 89"/><path d="M39 83V153Q39 165 51 165H141Q153 165 153 153V83"/></g><path d="M136 65V50H151V79Z" fill="#394841"/><path d="M97 139C86 130 67 119 67 105C67 92 81 88 90 96L97 103C106 90 123 94 127 107C131 121 111 134 97 139Z" fill="#C9958E"/><path d="M154 13Q157 30 174 33Q157 36 154 53Q152 36 135 33Q152 30 154 13Z" fill="#C9958E"/></g><text x="240" y="355" text-anchor="middle" font-family="Lato,Arial,sans-serif" font-size="75" font-weight="700"><tspan fill="#394841">Cura</tspan><tspan fill="#C9958E">Casa</tspan></text></svg>
