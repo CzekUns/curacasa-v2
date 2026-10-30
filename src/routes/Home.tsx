@@ -1,220 +1,85 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarDays, Check, Clock, Download, ListChecks, Sparkles } from "lucide-react";
-import { ChoreIcon } from "../lib/icons";
-import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
-import { canInstallApp, requestAppInstall } from "../lib/pwa";
-import { addLog, daysAgo, dueFor, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor } from "../lib/store";
+import { CalendarDays, Check, Clock } from "lucide-react";
+import { RoomBadge } from "../components/RoomBadge";
+import { RoomManager } from "../components/RoomManager";
+import { daysAgo, hasCompletedToday, loadData, saveData, statusFor, type AppData } from "../lib/store";
+import { normalizeRoomDetails } from "../lib/rooms";
 
 export function Home() {
   const [data, setData] = useState(loadData);
-  const [showInstall, setShowInstall] = useState(canInstallApp);
-  const { feedback, announce } = useActionFeedback();
-  const [recentlyDoneId, setRecentlyDoneId] = useState<string | null>(null);
-  const dueSectionRef = useRef<HTMLElement | null>(null);
   const todayKey = new Date().toDateString();
-  const doneToday = new Set(data.logs.filter((log) => new Date(log.completedAt).toDateString() === todayKey).map((log) => log.choreId)).size;
-  const due = data.chores
-    .filter((chore) => !hasCompletedToday(data, chore.id) && statusFor(chore, data.logs) !== "normal")
-    .sort((a, b) => {
-      const priority = { overdue: 0, warning: 1, soon: 2, normal: 3 };
-      return priority[statusFor(a, data.logs)] - priority[statusFor(b, data.logs)];
-    });
-  const recommended = due[0] || data.chores.find((chore) => !hasCompletedToday(data, chore.id));
-  const doneThisWeek = data.logs.filter((log) => daysAgo(log.completedAt)! <= 7).length;
+  const doneToday = new Set(data.logs
+    .filter((log) => new Date(log.completedAt).toDateString() === todayKey)
+    .map((log) => log.choreId)).size;
+  const doneThisWeek = data.logs.filter((log) => {
+    const age = daysAgo(log.completedAt);
+    return age !== null && age >= 0 && age < 7;
+  }).length;
+  const dueCount = data.chores.filter((chore) =>
+    !hasCompletedToday(data, chore.id) && statusFor(chore, data.logs) !== "normal").length;
+  const roomDetails = normalizeRoomDetails(data.rooms, data.roomDetails);
 
-  function markDone(choreId: string) {
-    const current = loadData();
-    const next = addLog(current, choreId);
-    setData(next);
-    if (next === current) return;
+  function saveRooms(next: AppData) {
     saveData(next);
-    setRecentlyDoneId(choreId);
-    announce("Faccenda completata!");
+    setData(next);
   }
-
-  useEffect(() => {
-    if (!recentlyDoneId) return;
-    const timer = window.setTimeout(() => setRecentlyDoneId(null), 900);
-    return () => window.clearTimeout(timer);
-  }, [recentlyDoneId]);
 
   useEffect(() => {
     const refresh = () => setData(loadData());
     const onVisible = () => { if (document.visibilityState === "visible") refresh(); };
     window.addEventListener("focus", refresh);
+    window.addEventListener("curacasa:data-changed", refresh);
     document.addEventListener("visibilitychange", onVisible);
-    const interval = window.setInterval(refresh, 60_000);
     return () => {
       window.removeEventListener("focus", refresh);
+      window.removeEventListener("curacasa:data-changed", refresh);
       document.removeEventListener("visibilitychange", onVisible);
-      window.clearInterval(interval);
     };
   }, []);
 
-  useEffect(() => {
-    function syncInstallState() {
-      setShowInstall(canInstallApp());
-    }
-
-    syncInstallState();
-    window.addEventListener("curacasa-install-ready", syncInstallState);
-    return () => window.removeEventListener("curacasa-install-ready", syncInstallState);
-  }, []);
-
-  const recommendedLast = recommended ? lastLog(recommended, data.logs) : null;
-
-  function scrollToDue() {
-    dueSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function dueLabel(choreId: string) {
-    const chore = data.chores.find((item) => item.id === choreId);
-    if (!chore) return "Da controllare";
-    const due = dueFor(chore, data.logs);
-    if (due.status === "overdue") return `Scaduta da ${-due.daysUntil!} giorn${due.daysUntil === -1 ? "o" : "i"}`;
-    if (due.status === "warning") return "Da fare oggi";
-    if (due.daysUntil !== null) return `Tra ${due.daysUntil} giorn${due.daysUntil === 1 ? "o" : "i"}`;
-    return "Senza scadenza";
-  }
-
   return (
-    <div className="page-stack">
-      <ActionFeedback feedback={feedback} />
-      <section className="hero-card">
-        <div>
-          <p className="eyebrow">Riepilogo semplice</p>
-          <h1>Casa sotto controllo, con calma.</h1>
-          <p>Qui trovi cosa e stato fatto, cosa torna in scadenza e il prossimo gesto utile.</p>
-          <Link className="pill-button" to="/app/faccende">
-            Vai alle faccende
+    <div className="page-stack home-room-page">
+      <section className="home-room-hero" aria-labelledby="home-rooms-title">
+        <p className="eyebrow">La tua casa, un pensiero in meno</p>
+        <h1 id="home-rooms-title">Le tue stanze</h1>
+        <p className="home-room-subtitle">Gli ambienti della tua casa, a colpo d'occhio.</p>
+        <div className="home-room-grid">
+          {data.rooms.map((name) => (
+            <div className="home-room-item" key={name}>
+              <RoomBadge name={name} detail={roomDetails[name]} />
+              <strong>{name}</strong>
+            </div>
+          ))}
+          {!data.rooms.length ? (
+            <p className="home-room-empty">Aggiungi la prima stanza per configurare la tua casa.</p>
+          ) : null}
+        </div>
+        <div className="home-room-actions">
+          <RoomManager data={data} onChange={saveRooms} />
+        </div>
+      </section>
+
+      <section className="home-overview" aria-label="Riepilogo faccende">
+        <h2>Oggi, a casa tua</h2>
+        <div className="home-overview-grid">
+          <Link className="home-overview-stat" to="/app/calendario">
+            <Check size={19} />
+            <strong>{doneToday}</strong>
+            <span>Faccende fatte oggi</span>
+          </Link>
+          <Link className="home-overview-stat" to="/app/calendario">
+            <CalendarDays size={19} />
+            <strong>{doneThisWeek}</strong>
+            <span>Questa settimana</span>
+          </Link>
+          <Link className="home-overview-stat home-overview-stat--due" to="/app/faccende">
+            <Clock size={19} />
+            <strong>{dueCount}</strong>
+            <span>Da guardare</span>
           </Link>
         </div>
       </section>
-
-      {showInstall ? (
-        <section className="install-card">
-          <div>
-            <p className="eyebrow">Schermata Home</p>
-            <h2>Installa CuraCasa</h2>
-            <span>Aprila come app, senza passare dal browser.</span>
-          </div>
-          <button
-            type="button"
-            onClick={async () => {
-              await requestAppInstall();
-              setShowInstall(canInstallApp());
-            }}
-          >
-            <Download size={17} />
-            Installa
-          </button>
-        </section>
-      ) : null}
-
-      <section className="stats-grid">
-        <Link to="/app/faccende" className="stat-card">
-          <ListChecks size={19} />
-          <strong>{data.chores.length}</strong>
-          <span>Faccende registrate</span>
-        </Link>
-        <Link to="/app/calendario" className="stat-card">
-          <CalendarDays size={19} />
-          <strong>{doneToday}</strong>
-          <span>Gia fatte oggi</span>
-        </Link>
-        <Link to="/app/calendario" className="stat-card">
-          <Clock size={19} />
-          <strong>{doneThisWeek}</strong>
-          <span>Fatte questa settimana</span>
-        </Link>
-        <button type="button" className="stat-card urgent stat-button" onClick={scrollToDue}>
-          <Sparkles size={19} />
-          <strong>{due.length}</strong>
-          <span>Da guardare</span>
-        </button>
-      </section>
-
-      <section className="section-block">
-        <div className="section-title">
-          <h2>Stanze rapide</h2>
-          <Link to="/app/opzioni">Modifica</Link>
-        </div>
-        <div className="chip-row">
-          <span className="chip active">Tutta casa</span>
-          {data.rooms.map((room) => (
-            <span className="chip" key={room}>
-              {room}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section className="section-block" ref={dueSectionRef}>
-        <div className="section-title">
-          <h2>Da guardare</h2>
-          <span>{due.length ? `${due.length} attive` : "Tutto in ordine"}</span>
-        </div>
-        {due.length ? (
-          <div className="due-list">
-            {due.map((chore) => {
-              const last = lastLog(chore, data.logs);
-              const status = statusFor(chore, data.logs);
-              return (
-                <article className={`due-card ${status} ${recentlyDoneId === chore.id ? "is-just-done" : ""}`} key={chore.id}>
-                  <span className="icon-tile">
-                    <ChoreIcon name={chore.icon} size={40} />
-                  </span>
-                  <div>
-                    <strong>{chore.title}</strong>
-                    <span>
-                      {chore.room || "Tutta casa"} - {relativeDays(daysAgo(last?.completedAt))}
-                    </span>
-                  </div>
-                  <em>{dueLabel(chore.id)}</em>
-                  <button type="button" onClick={() => markDone(chore.id)} aria-label={`Completa ${chore.title}`}>
-                    <Check size={16} />
-                  </button>
-                </article>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="soft-note">Nessuna faccenda in scadenza al momento.</div>
-        )}
-      </section>
-
-      {recommended ? (
-        <section className={`recommend-card ${recentlyDoneId === recommended.id ? "is-just-done" : ""}`}>
-          <span className="icon-tile">
-            <ChoreIcon name={recommended.icon} size={40} />
-          </span>
-          <div>
-            <p className="eyebrow">Attivita consigliata</p>
-            <h2>{recommended.title}</h2>
-            <span>
-              {recommended.room || "Tutta casa"} - {relativeDays(daysAgo(recommendedLast?.completedAt))}
-            </span>
-          </div>
-          <button type="button" onClick={() => markDone(recommended.id)} aria-label="Segna fatta">
-            <Sparkles size={18} />
-          </button>
-        </section>
-      ) : (
-        <section className="empty-state">
-          <ListChecks size={24} />
-          <h2>{data.chores.length ? "Tutto fatto per oggi!" : "Nessuna faccenda"}</h2>
-          <p>{data.chores.length ? "Le attività completate restano consultabili nel calendario." : "Aggiungi la prima faccenda o scegli un set dallo Shop."}</p>
-          <div className="empty-actions">
-            <Link className="pill-button" to="/app/aggiungi">
-              Aggiungi faccenda
-            </Link>
-            <Link className="secondary-action" to="/app/shop">
-              Apri Shop
-            </Link>
-          </div>
-        </section>
-      )}
     </div>
   );
 }
