@@ -114,8 +114,12 @@
     </g>
   </symbol>
   <symbol id="personale-bolle" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <circle cx="41" cy="57" r="21"/><circle cx="67" cy="30" r="12"/><circle cx="25" cy="26" r="8"/>
+    <!-- Lucide: bubbles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M7.001 15.085A1.5 1.5 0 0 1 9 16.5" />
+  <circle cx="18.5" cy="8.5" r="3.5" />
+  <circle cx="7.5" cy="16.5" r="5.5" />
+  <circle cx="7.5" cy="4.5" r="2.5" />
     </g>
   </symbol>
   <symbol id="personale-schiuma" viewBox="0 0 96 96">
@@ -124,8 +128,18 @@
     </g>
   </symbol>
   <symbol id="personale-spruzzo" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M17 65 43 39l17 17-26 26Z"/><path d="m54 26 12-14M64 39l17-5M64 51l14 9" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <!-- Lucide: spray-can -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 3h.01" />
+  <path d="M7 5h.01" />
+  <path d="M11 7h.01" />
+  <path d="M3 7h.01" />
+  <path d="M7 9h.01" />
+  <path d="M3 11h.01" />
+  <rect width="4" height="4" x="15" y="5" />
+  <path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2" />
+  <path d="m13 14 8-2" />
+  <path d="m13 19 8-2" />
     </g>
   </symbol>
   <symbol id="personale-spugna" viewBox="0 0 96 96">
@@ -139,8 +153,12 @@
     </g>
   </symbol>
   <symbol id="personale-guanto" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M33 79 21 54q-4-8 3-11 5-2 10 8l-5-25q-2-9 6-10 6 0 8 9l5 20-2-25q0-9 8-9 7 1 7 9v24l3-20q1-8 8-7 7 1 6 10l-2 30q6-12 13-8 7 5 1 14L71 79Z"/>
+    <!-- Lucide: hand -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+  <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" />
+  <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" />
+  <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
     </g>
   </symbol>
   <symbol id="personale-sapone" viewBox="0 0 96 96">
@@ -149,8 +167,12 @@
     </g>
   </symbol>
   <symbol id="personale-spazzolina" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M21 29h54v23H21Z"/><path d="M26 56v20M36 56v20M46 56v20M56 56v20M66 56v20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    <!-- Lucide: brush-cleaning -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="m16 22-1-4" />
+  <path d="M19 14a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2h-3a1 1 0 0 1-1-1V4a2 2 0 0 0-4 0v5a1 1 0 0 1-1 1H6a2 2 0 0 0-2 2v1a1 1 0 0 0 1 1" />
+  <path d="M19 14H5l-1.973 6.767A1 1 0 0 0 4 22h16a1 1 0 0 0 .973-1.233z" />
+  <path d="m8 22 1-4" />
     </g>
   </symbol>
   <symbol id="personale-secchiello" viewBox="0 0 96 96">
@@ -159,8 +181,18 @@
     </g>
   </symbol>
   <symbol id="personale-piumino" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M25 81 58 35" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><path d="M50 49C25 42 28 20 41 17c9 1 15 7 17 15 4-13 15-17 22-12 0 11-5 19-15 27 15-2 20 5 17 15-13 8-24 3-32-13Z"/>
+    <!-- Lucide: broom-sparkles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M11 2v2" />
+  <path d="M12 3h-2" />
+  <path d="M13.5 10.5 22 2" />
+  <path d="M14.734 13.841a2 2 0 00-.314-2.42L12.58 9.58a2 2 0 00-2.421-.314l-7.657 4.461A1 1 0 002.3 15.3l6.403 6.403a1 1 0 001.571-.204z" />
+  <path d="M20 15v4" />
+  <path d="M22 17h-4" />
+  <path d="M4 4v4" />
+  <path d="m5 18 2-2" />
+  <path d="M6 6H2" />
+  <path d="m7.699 10.7 5.602 5.601" />
     </g>
   </symbol>
   <symbol id="personale-detergente" viewBox="0 0 96 96">
