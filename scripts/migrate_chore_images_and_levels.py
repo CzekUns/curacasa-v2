@@ -95,6 +95,10 @@ export function ChoreLevelTag({ level }: { level: ChoreLevel }) {
 """
 (ROOT / "src/components/ChoreLevelTag.tsx").write_text(component, encoding="utf-8")
 
+replace_once("tsconfig.app.json",
+    '"resolveJsonModule": true,',
+    '"resolveJsonModule": true,\n    "allowImportingTsExtensions": true,')
+
 replace_once("src/lib/store.ts",
     'export type ChoreType = "ordinaria" | "straordinaria";',
     'import { classifyChoreLevel, type ChoreLevel } from "./chore-levels.ts";\n\nexport type ChoreType = "ordinaria" | "straordinaria";')
