@@ -108,4 +108,149 @@
 <circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
 <path d="M25 72C15 41 34 18 71 18 78 51 57 77 25 72Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M22 80c11-21 28-36 48-57" fill="none" stroke="#656b59" stroke-width="3" stroke-linecap="round"/><path d="m39 59-1-22M50 47l-3-20M44 55l22 1M56 42l14 1" stroke="#fffaf3" stroke-width="2.6" stroke-linecap="round"/>
 </symbol>
+<!-- Cleaning-themed personal symbols; same palette, visual scale and soft outlines. -->
+<symbol id="personale-goccia" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M48 16C43 28 25 46 25 59a23 23 0 0 0 46 0C71 46 53 28 48 16Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M35 54c0-7 6-16 11-22" fill="none" stroke="#fffaf3" stroke-width="4" stroke-linecap="round"/><circle cx="56" cy="70" r="4" fill="#d9a38d"/>
+</symbol>
+<symbol id="personale-bolle" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<circle cx="44" cy="56" r="24" fill="#a7b29a" stroke="#656b59" stroke-width="2.7"/><circle cx="69" cy="34" r="12" fill="#e8c4b9" stroke="#656b59" stroke-width="2.3"/><circle cx="24" cy="31" r="9" fill="#cfb39d" stroke="#656b59" stroke-width="2"/><path d="M34 44c4-5 9-6 13-5M64 29l4-2M20 27l3-2" stroke="#fffaf3" stroke-width="3" stroke-linecap="round" fill="none"/>
+</symbol>
+<symbol id="personale-schiuma" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M17 70c0-13 7-18 17-19-1-14 8-22 19-20 10 1 14 7 16 15 12-2 20 8 15 24Z" fill="#e8c4b9" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><circle cx="28" cy="38" r="6" fill="#a7b29a" stroke="#656b59" stroke-width="1.7"/><circle cx="66" cy="23" r="6" fill="#cfb39d"/><circle cx="79" cy="34" r="3" fill="#d9a38d"/><path d="M29 65h41" stroke="#fffaf3" stroke-width="4" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-spruzzo" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M18 66l28-27 19 19-28 23Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M51 26 70 12M60 35l21-5M60 44l18 8" stroke="#d9a38d" stroke-width="4.8" stroke-linecap="round"/><circle cx="71" cy="65" r="4" fill="#e8c4b9"/><circle cx="27" cy="33" r="4" fill="#cfb39d"/><path d="m24 75 8-8" stroke="#fffaf3" stroke-width="3.2" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-spugna" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M22 37c0-6 5-11 11-11h37c6 0 9 5 9 11v31c0 7-5 11-12 11H28c-8 0-10-5-10-12Z" fill="#cfb39d" stroke="#656b59" stroke-width="2.8"/><path d="M24 35c7-8 18-9 29-7 12 3 17 0 21 9v11H24Z" fill="#e8c4b9" opacity=".85"/><circle cx="35" cy="53" r="5" fill="#fffaf3" opacity=".9"/><circle cx="61" cy="61" r="7" fill="#fffaf3" opacity=".8"/><circle cx="56" cy="43" r="3" fill="#fffaf3"/><path d="M28 70h24" stroke="#656b59" stroke-width="2.2" opacity=".33" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-panno" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M25 28c14-4 30-2 47 5l5 37c-17 0-33-5-54-1Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M24 69c10-10 22-17 40-22l13 23c-19 4-33 9-52 4Z" fill="#e8c4b9" stroke="#656b59" stroke-width="2.4" stroke-linejoin="round"/><path d="M34 63c12-9 20-12 34-14" stroke="#fffaf3" stroke-width="3.4" stroke-linecap="round"/><path d="M35 35c10-1 18 1 26 4" stroke="#fffaf3" stroke-width="2.8" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-guanto" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M31 78c-4-12-8-22-12-29-4-7 4-12 9-6l8 8-7-27c-2-8 8-10 11-3l7 26-3-32c-1-9 9-10 11-2l5 31 2-24c1-8 10-6 10 2l-2 30 5-12c3-8 12-4 10 4L73 79Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="M33 67h34M38 74h25" stroke="#fffaf3" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="23" r="5" fill="#e8c4b9"/>
+</symbol>
+<symbol id="personale-sapone" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<rect x="17" y="38" width="62" height="34" rx="15" fill="#e8c4b9" stroke="#656b59" stroke-width="2.8"/><path d="M34 54h28M43 62h13" stroke="#fffaf3" stroke-width="3.6" stroke-linecap="round"/><circle cx="29" cy="25" r="8" fill="#a7b29a" stroke="#656b59" stroke-width="1.8"/><circle cx="48" cy="20" r="4" fill="#cfb39d"/><circle cx="67" cy="28" r="5" fill="#fffaf3" stroke="#a7b29a" stroke-width="2"/>
+</symbol>
+<symbol id="personale-spazzolina" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M17 31h48c8 0 12 6 12 13v10H23c-5 0-6-5-6-10Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M24 55v20M32 55v21M40 55v19M48 55v22M56 55v19M64 55v19M72 55v16" stroke="#cfb39d" stroke-width="5" stroke-linecap="round"/><path d="M24 40h41" stroke="#fffaf3" stroke-width="3.2" stroke-linecap="round"/><circle cx="77" cy="27" r="4" fill="#e8c4b9"/>
+</symbol>
+<symbol id="personale-secchiello" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M26 40h45l-6 38H33Z" fill="#e8c4b9" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M33 39v-7c0-11 7-18 16-18s16 7 16 18v7" fill="none" stroke="#839078" stroke-width="4.4" stroke-linecap="round"/><path d="M33 53h31" stroke="#fffaf3" stroke-width="3.4" stroke-linecap="round"/><path d="M39 61h18" stroke="#fffaf3" stroke-width="2.4" opacity=".8" stroke-linecap="round"/><circle cx="69" cy="33" r="5" fill="#a7b29a" stroke="#656b59" stroke-width="1.6"/>
+</symbol>
+<symbol id="personale-piumino" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M32 80 64 32" stroke="#656b59" stroke-width="5.5" stroke-linecap="round"/><path d="M52 48C29 34 34 19 40 15c14 0 20 7 22 18 3-17 12-21 18-19 5 12 0 21-12 30 17-5 21 2 19 11-9 9-19 8-32 2Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="M48 28 62 46 75 29M43 49l16 7" stroke="#fffaf3" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="22" cy="29" r="4" fill="#d9a38d"/>
+</symbol>
+<symbol id="personale-detergente" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M39 18h21v8H39z" fill="#839078" stroke="#656b59" stroke-width="2.2"/><path d="M43 26h14v7H43z" fill="#cfb39d"/><path d="M31 35c0-5 6-8 10-8h18c7 0 11 5 11 12v34c0 6-5 10-11 10H39c-6 0-10-4-10-10Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8"/><path d="M29 47h41v20H29Z" fill="#e8c4b9" opacity=".9"/><path d="m49 52 2 5 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="#fffaf3"/><path d="M59 19h15" stroke="#656b59" stroke-width="3.5" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-vetro" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<rect x="22" y="21" width="52" height="59" rx="7" fill="#a7b29a" stroke="#656b59" stroke-width="2.8"/><rect x="28" y="27" width="40" height="47" rx="3" fill="#fffaf3" opacity=".9"/><path d="M48 29v44M29 51h38" stroke="#cfb39d" stroke-width="2.4"/><path d="m42 39 3 6 7 2-7 2-3 7-3-7-7-2 7-2Z" fill="#d9a38d"/><path d="M59 60l5 4" stroke="#839078" stroke-width="2.5" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-riciclo" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="m48 19 13 3-8 10" fill="#a7b29a" stroke="#656b59" stroke-width="2.3" stroke-linejoin="round"/><path d="M25 42c6-17 18-23 33-19" fill="none" stroke="#a7b29a" stroke-width="7" stroke-linecap="round"/><path d="m71 41 10 10-14 4" fill="#e8c4b9" stroke="#656b59" stroke-width="2.3" stroke-linejoin="round"/><path d="M71 36c9 12 5 28-6 35" fill="none" stroke="#e8c4b9" stroke-width="7" stroke-linecap="round"/><path d="m28 65-8 12-6-14" fill="#cfb39d" stroke="#656b59" stroke-width="2.3" stroke-linejoin="round"/><path d="M59 76c-15 6-27 3-37-13" fill="none" stroke="#cfb39d" stroke-width="7" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-profumo" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M42 76V41M54 76V45" fill="none" stroke="#839078" stroke-width="4.5" stroke-linecap="round"/><path d="M33 76c-6-12-7-23 4-32M62 76c9-14 7-22-3-30" fill="none" stroke="#a7b29a" stroke-width="3.5" stroke-linecap="round"/><path d="M32 26c-2 9 9 13 17 7 9-7 6-14 3-18 15 5 17 19 5 28-13 8-34 0-25-17Z" fill="#e8c4b9" stroke="#656b59" stroke-width="2.5"/><circle cx="69" cy="27" r="5" fill="#cfb39d"/><circle cx="23" cy="52" r="4" fill="#d9a38d"/>
+</symbol>
+<symbol id="personale-aria" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M17 37h45c15 0 20-17 9-22-7-3-14 2-12 9" fill="none" stroke="#a7b29a" stroke-width="7" stroke-linecap="round"/><path d="M15 54h59c13 0 13 15 3 19-8 3-13-2-12-8" fill="none" stroke="#e8c4b9" stroke-width="7" stroke-linecap="round"/><path d="M26 70h24" stroke="#cfb39d" stroke-width="5" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-granelli" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M48 17 55 37 76 44 55 51 48 73 40 51 19 44 40 37Z" fill="#e8c4b9" stroke="#656b59" stroke-width="2.6" stroke-linejoin="round"/><circle cx="20" cy="23" r="4" fill="#a7b29a"/><circle cx="78" cy="69" r="5" fill="#d9a38d"/><circle cx="28" cy="75" r="3.5" fill="#cfb39d"/><path d="m68 15 2 5 5 2-5 2-2 5-2-5-5-2 5-2Z" fill="#839078"/>
+</symbol>
+<symbol id="personale-asciutto" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M46 20C40 30 26 46 26 56a21 21 0 0 0 42 0c0-10-14-26-22-36Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.7"/><path d="M23 76 75 23" fill="none" stroke="#d9a38d" stroke-width="7" stroke-linecap="round"/><path d="M23 76 75 23" fill="none" stroke="#fffaf3" stroke-width="2.5" stroke-linecap="round"/><circle cx="71" cy="71" r="4" fill="#cfb39d"/>
+</symbol>
+<symbol id="personale-lavaggio" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M18 49h60l-6 20c-2 8-9 12-21 12H43c-12 0-19-5-21-14Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="M18 49c3-6 11-11 24-11h15c11 0 17 4 21 11" fill="#e8c4b9" stroke="#656b59" stroke-width="2.5"/><path d="M29 56c8 5 25 5 36 0" stroke="#fffaf3" stroke-width="3" stroke-linecap="round"/><circle cx="31" cy="27" r="8" fill="#fffaf3" stroke="#839078" stroke-width="2.4"/><circle cx="52" cy="22" r="6" fill="#cfb39d" stroke="#656b59" stroke-width="1.7"/><circle cx="68" cy="30" r="4" fill="#e8c4b9"/>
+</symbol>
+<symbol id="personale-microfibra" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M16 35 58 19 80 39 38 57Z" fill="#e8c4b9" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="M16 35v27l23 17V57Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="M39 57v22l41-17V39Z" fill="#cfb39d" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="m25 39 22-9M26 55l9 7M49 66l20-9" stroke="#fffaf3" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-lucido" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M20 58h55v16H20Z" fill="#cfb39d" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="M20 58 31 35h35l9 23Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.7" stroke-linejoin="round"/><path d="m48 18 4 10 11 4-11 4-4 12-4-12-11-4 11-4Z" fill="#e8c4b9" stroke="#656b59" stroke-width="1.8"/><path d="M28 65h38" stroke="#fffaf3" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+<symbol id="personale-flacone" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<rect x="37" y="25" width="22" height="10" rx="3" fill="#cfb39d" stroke="#656b59" stroke-width="2.3"/><path d="M42 25v-8h13M55 17h12" stroke="#656b59" stroke-width="3" stroke-linecap="round"/><rect x="26" y="35" width="45" height="47" rx="10" fill="#e8c4b9" stroke="#656b59" stroke-width="2.8"/><path d="M28 51h41v18H28Z" fill="#a7b29a" opacity=".8"/><path d="M40 58h17M43 65h11" stroke="#fffaf3" stroke-width="3" stroke-linecap="round"/><circle cx="68" cy="23" r="4" fill="#a7b29a"/>
+</symbol>
+<symbol id="personale-tergivetro" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<path d="M18 27h61v15H18Z" fill="#a7b29a" stroke="#656b59" stroke-width="2.8" stroke-linejoin="round"/><path d="M21 37h55" stroke="#fffaf3" stroke-width="3.2" stroke-linecap="round"/><path d="M45 42v35c0 7 9 8 9 0V42" fill="#e8c4b9" stroke="#656b59" stroke-width="2.8"/><circle cx="23" cy="58" r="5" fill="#cfb39d"/><path d="m71 58 3 7 8 2-8 3-3 7-3-7-8-3 8-2Z" fill="#d9a38d"/>
+</symbol>
+<symbol id="personale-movimento" viewBox="0 0 96 96">
+<rect width="96" height="96" rx="20" fill="#faf5ed"/>
+<ellipse cx="48" cy="78" rx="29" ry="5" fill="#d5bda9" opacity=".13"/>
+<circle cx="48" cy="43" r="35" fill="#fffaf2" opacity=".66"/>
+<circle cx="48" cy="48" r="26" fill="#e8c4b9" opacity=".73"/><path d="M65 29A25 25 0 1 0 71 64" fill="none" stroke="#656b59" stroke-width="5" stroke-linecap="round"/><path d="m65 20 1 13-13-3" fill="none" stroke="#656b59" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="m40 42 7 7 15-17" fill="none" stroke="#fffaf3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="72" cy="71" r="4" fill="#a7b29a"/>
+</symbol>
 </svg>
