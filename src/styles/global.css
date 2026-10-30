@@ -1974,7 +1974,10 @@ button:focus-visible, a:focus-visible {
 }
 html, body { transition: background-color .25s ease; }
 .app-header {
-  background: linear-gradient(180deg, var(--header-tint), transparent);
+  /* Fully opaque sticky header: content must not show through while scrolling. */
+  background: var(--page-base, #faf5ef);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .bottom-nav { background: var(--nav-surface); }
 .bottom-nav-item { color: var(--nav-muted); }
