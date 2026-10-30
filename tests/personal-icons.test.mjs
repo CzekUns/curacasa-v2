@@ -55,7 +55,7 @@ test("Custom SVGs inherit the exact rose frame and dimensions of preset WebP til
   assert.ok(styles.includes("width: 40px !important") && styles.includes("height: 40px !important"),
     "SVG and WebP render at the same inset size");
   for (const theme of ["classico", "cipria", "giada", "ghiaccio", "corallo"]) {
-    const start = styles.indexOf(`:root[data-theme="${theme}"]`);
+    const start = styles.lastIndexOf(`:root[data-theme="${theme}"]`);
     assert.ok(start >= 0, `Missing theme ${theme}`);
     const themeBlock = styles.slice(start, styles.indexOf("}", start));
     assert.ok(themeBlock.includes("--personal-rose:"));
