@@ -2090,6 +2090,25 @@ a:focus-visible, button:focus-visible { outline-color: var(--theme-focus); }
 .theme-card__sample-panel > span { width: 24%; height: 21px; border-radius: 8px; }
 .theme-card__sample-panel > span:first-child { height: 37px; }
 .theme-card__sample-panel > span:nth-child(2) { height: 30px; }
+.shop-themes__intro a {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--rose-deep);
+  font-size: .73rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.theme-card__source {
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--app-surface-soft);
+  color: var(--rose-deep);
+  font-size: .61rem;
+  font-weight: 800;
+  letter-spacing: .035em;
+}
 .theme-card h2 { font-size: 1.55rem; }
 .theme-card p { min-height: 55px; color: var(--muted); font-size: .78rem; line-height: 1.5; }
 .theme-card button {
