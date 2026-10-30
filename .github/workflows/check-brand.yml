@@ -61,6 +61,8 @@ jobs:
           assert (brand / 'mark.svg').is_file()
           assert (brand / 'compact-mark.svg').is_file()
           assert (brand / 'favicon.svg').is_file()
+          assert Path('dist/personal-icons/symbols.svg').is_file()
+          assert Path('dist/personal-icons/preview.html').is_file()
           assert (brand / 'logo-stacked.svg').is_file()
           assert (brand / 'mark-mono.svg').is_file()
           assert (brand / 'mark-reverse.svg').is_file()
