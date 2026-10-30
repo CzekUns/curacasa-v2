@@ -177,3 +177,23 @@ con il testo bianco.
 La scelta si salva nella chiave `curacasa_v2_theme` di localStorage,
 indipendentemente da `curacasa_v2_data`. I temi esistenti restano validi.
 La suite `npm run test:logic` verifica l'intero catalogo e la persistenza.
+
+
+## Classico fedele al CSS originale
+
+Il tema **Classico** non deriva da una palette scelta arbitrariamente:
+i token sono stati confrontati direttamente con
+[`simoneapps/curacasa-v2/src/styles/global.css`](https://github.com/simoneapps/curacasa-v2/blob/main/src/styles/global.css).
+
+I colori di origine sono **antracite `#171718`**, **rosa antico `#B8878D`**,
+**rosa chiaro `#EAD2D5`**, **salvia `#8D9684`**, **avorio `#FAF7F2`**,
+**grigio-verde `#E6EEED`**, bianco crema `#FFFDF9` e
+rosa profondo `#8F5960`, con `#1A1A1A` per il testo principale.
+
+Il Classico riprende anche il contrasto della barra di navigazione antracite,
+i chip attivi scuri e gli accenti della prima UI. **Non ripristina il vecchio
+layout**, come richiesto: tutte le schermate conservano le proporzioni,
+le posizioni e le attuali sfumature del sistema grafico moderno.
+
+La suite `tests/classico-original.test.mjs` impedisce alterazioni
+accidentali della palette autentica.

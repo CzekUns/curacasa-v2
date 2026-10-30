@@ -1869,18 +1869,39 @@ button:focus-visible, a:focus-visible {
   --theme-finish: #819982;
   --theme-finish-light: #e7f1e3;
 }
+/* Classico uses the real source colors from
+   simoneapps/curacasa-v2/src/styles/global.css (main, original CSS).
+   Only the palette changes: shapes, positions and gradient stops stay shared. */
 :root[data-theme="classico"] {
+  --ink: #1a1a1a;
+  --muted: rgba(26, 26, 26, .58);
+  --soft: rgba(26, 26, 26, .08);
+  --silk: #faf7f2;
+  --paper: #fffdf9;
+  --dust: #e6eeed;
+  --rose: #b8878d;
+  --rose-deep: #8f5960;
+  --rose-soft: #ead2d5;
+  --sage: #8d9684;
+  --frame: #171718;
+  --champagne: #5d5124;
+  --shadow: 0 22px 46px -30px rgba(26, 26, 26, .42);
+
+  --page-base: #e6eeed;
   --app-backdrop: linear-gradient(140deg, #e6eeed 0%, #ead2d5 57%, #faf7f2 100%);
-  --app-surface: linear-gradient(145deg, rgba(255,253,249,.94), rgba(244,247,246,.88) 60%, rgba(251,247,243,.90));
-  --app-surface-soft: linear-gradient(140deg, rgba(255,253,249,.86), rgba(232,238,235,.72) 65%, rgba(250,244,244,.74));
-  --nav-surface: rgba(23, 23, 24, .93);
-  --nav-muted: rgba(255,253,249,.74);
+  --app-surface: linear-gradient(145deg, rgba(255,253,249,.96), rgba(255,253,249,.86) 60%, rgba(255,253,249,.80));
+  --app-surface-soft: linear-gradient(140deg, rgba(255,253,249,.88), rgba(234,210,213,.42) 65%, rgba(230,238,237,.78));
+
+  --nav-surface: #171718;
+  --nav-muted: rgba(255, 253, 249, .52);
   --header-tint: rgba(230, 238, 237, .68);
   --theme-cta: #b8878d;
-  --theme-cta-hover: #9e6c72;
+  --theme-cta-hover: #8f5960;
   --theme-focus: #8f5960;
-  --theme-finish: #778c7d;
-  --theme-finish-light: #e6efea;
+  --theme-finish: #8d9684;
+  --theme-finish-light: #e6eeed;
+  --aura-secondary: rgba(141, 150, 132, .32);
+  --aura-right: rgba(141, 150, 132, .18);
 }
 :root[data-theme="cipria"] {
   --app-backdrop: linear-gradient(140deg, #faf5ef 0%, #f5e5e1 57%, #e6eeed 100%);
@@ -2142,4 +2163,25 @@ a:focus-visible, button:focus-visible { outline-color: var(--theme-focus); }
     animation: none !important;
   }
   html, body { transition: none !important; }
+}
+
+
+/* Classico: restore original source accents at their current UI positions.
+   These selectors only replace colors, never dimensions or layout. */
+:root[data-theme="classico"] .chip.active {
+  background: var(--frame);
+}
+:root[data-theme="classico"] .round-link {
+  background: var(--frame);
+}
+:root[data-theme="classico"] .shop-tabs button.active {
+  background: var(--ink);
+}
+:root[data-theme="classico"] .bottom-nav-item.active:not(.add) {
+  background: linear-gradient(145deg, var(--rose), var(--rose-deep));
+}
+:root[data-theme="classico"] .bottom-nav-item.add {
+  border-color: var(--frame);
+  color: var(--ink);
+  background: linear-gradient(145deg, var(--paper), var(--silk));
 }

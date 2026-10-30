@@ -17,7 +17,7 @@ export const THEMES: ThemeOption[] = [
   {
     id: "classico",
     label: "Classico",
-    description: "I colori originali di CuraCasa: rosa antico, salvia e avorio.",
+    description: "Palette autentica del primo CuraCasa: rosa antico, salvia, avorio e antracite.",
     colors: ["#e6eeed", "#ead2d5", "#faf7f2", "#b8878d"],
   },
   {
