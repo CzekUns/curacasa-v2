@@ -13,7 +13,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 10,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Aspirapolvere",
@@ -23,7 +26,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 20,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Scopa",
@@ -33,7 +39,10 @@
           "room": "Tutta casa",
           "frequency": 3,
           "estimatedMinutes": 12,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Lavare pavimento",
@@ -43,7 +52,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 25,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Mocio e secchio",
@@ -53,7 +65,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 20,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Paletta e briciole",
@@ -63,7 +78,10 @@
           "room": "Tutta casa",
           "frequency": 2,
           "estimatedMinutes": 5,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Spolverare",
@@ -73,7 +91,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Svuotare pattumiera",
@@ -83,7 +104,10 @@
           "room": "Cucina",
           "frequency": 2,
           "estimatedMinutes": 5,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Annaffiare piante",
@@ -93,7 +117,10 @@
           "room": "Balcone",
           "frequency": 4,
           "estimatedMinutes": 8,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     },
@@ -110,7 +137,11 @@
           "room": "Bagno",
           "frequency": 7,
           "estimatedMinutes": 25,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire doccia",
@@ -120,7 +151,11 @@
           "room": "Bagno",
           "frequency": 7,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire box doccia",
@@ -130,7 +165,11 @@
           "room": "Bagno",
           "frequency": 30,
           "estimatedMinutes": 25,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire vasca",
@@ -140,7 +179,11 @@
           "room": "Bagno",
           "frequency": 14,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire WC",
@@ -150,7 +193,11 @@
           "room": "Bagno",
           "frequency": 4,
           "estimatedMinutes": 8,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire lavandino",
@@ -160,7 +207,11 @@
           "room": "Bagno",
           "frequency": 4,
           "estimatedMinutes": 8,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire sifone lavandino",
@@ -170,7 +221,11 @@
           "room": "Bagno",
           "frequency": 90,
           "estimatedMinutes": 20,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire mattonelle",
@@ -180,7 +235,11 @@
           "room": "Bagno",
           "frequency": 30,
           "estimatedMinutes": 25,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Pulire tubi esterni",
@@ -190,7 +249,11 @@
           "room": "Bagno",
           "frequency": 60,
           "estimatedMinutes": 15,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Cambiare asciugamani",
@@ -200,7 +263,11 @@
           "room": "Bagno",
           "frequency": 7,
           "estimatedMinutes": 5,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "bagno"
+          }
         },
         {
           "title": "Manutenzione addolcitore",
@@ -210,7 +277,10 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 10,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Caricare sale addolcitore",
@@ -220,7 +290,10 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 8,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     },
@@ -237,7 +310,11 @@
           "room": "Cucina",
           "frequency": 3,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Pulire forno",
@@ -247,7 +324,11 @@
           "room": "Cucina",
           "frequency": 45,
           "estimatedMinutes": 35,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Pulire frigorifero",
@@ -257,7 +338,11 @@
           "room": "Cucina",
           "frequency": 30,
           "estimatedMinutes": 25,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Pulire cappa",
@@ -267,7 +352,11 @@
           "room": "Cucina",
           "frequency": 30,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Cambiare filtro cappa",
@@ -277,7 +366,11 @@
           "room": "Cucina",
           "frequency": 90,
           "estimatedMinutes": 15,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Lavastoviglie manutenzione",
@@ -287,7 +380,11 @@
           "room": "Cucina",
           "frequency": 30,
           "estimatedMinutes": 15,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Sale lavastoviglie",
@@ -297,7 +394,11 @@
           "room": "Cucina",
           "frequency": 30,
           "estimatedMinutes": 5,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Macchina caffe",
@@ -307,7 +408,11 @@
           "room": "Cucina",
           "frequency": 14,
           "estimatedMinutes": 10,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "cucina"
+          }
         },
         {
           "title": "Pulire tavolo",
@@ -317,7 +422,10 @@
           "room": "Cucina",
           "frequency": 2,
           "estimatedMinutes": 5,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     },
@@ -334,7 +442,11 @@
           "room": "Camera",
           "frequency": 7,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "camera"
+          }
         },
         {
           "title": "Biancheria letto",
@@ -344,7 +456,11 @@
           "room": "Camera",
           "frequency": 14,
           "estimatedMinutes": 12,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "camera"
+          }
         },
         {
           "title": "Controllare materasso",
@@ -354,7 +470,11 @@
           "room": "Camera",
           "frequency": 90,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "camera"
+          }
         },
         {
           "title": "Sistemare cuscini",
@@ -364,7 +484,10 @@
           "room": "Camera",
           "frequency": 14,
           "estimatedMinutes": 8,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Sistemare armadio",
@@ -374,7 +497,11 @@
           "room": "Camera",
           "frequency": 30,
           "estimatedMinutes": 30,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "camera"
+          }
         },
         {
           "title": "Fare lavatrice",
@@ -384,7 +511,10 @@
           "room": "Bagno",
           "frequency": 7,
           "estimatedMinutes": 10,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire tappeto",
@@ -394,7 +524,10 @@
           "room": "Soggiorno",
           "frequency": 14,
           "estimatedMinutes": 12,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     },
@@ -411,7 +544,11 @@
           "room": "Soggiorno",
           "frequency": 7,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "salone"
+          }
         },
         {
           "title": "Sistemare divano",
@@ -421,7 +558,11 @@
           "room": "Soggiorno",
           "frequency": 7,
           "estimatedMinutes": 8,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "salone"
+          }
         },
         {
           "title": "Pulire specchio",
@@ -431,7 +572,10 @@
           "room": "Tutta casa",
           "frequency": 14,
           "estimatedMinutes": 10,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire mensole",
@@ -441,7 +585,10 @@
           "room": "Soggiorno",
           "frequency": 14,
           "estimatedMinutes": 15,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Spolverare pareti",
@@ -451,7 +598,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 20,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire battiscopa",
@@ -461,7 +611,10 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire maniglie",
@@ -471,7 +624,10 @@
           "room": "Tutta casa",
           "frequency": 14,
           "estimatedMinutes": 8,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire porta",
@@ -481,7 +637,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 15,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire lampadario",
@@ -491,7 +650,10 @@
           "room": "Soggiorno",
           "frequency": 90,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     },
@@ -508,7 +670,10 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 30,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire finestra",
@@ -518,7 +683,10 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 25,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire infissi",
@@ -528,7 +696,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 30,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire tapparelle",
@@ -538,7 +709,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 30,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire tapparella grande",
@@ -548,7 +722,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 35,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Lavare tende",
@@ -558,7 +735,10 @@
           "room": "Tutta casa",
           "frequency": 90,
           "estimatedMinutes": 30,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire tende da esterno",
@@ -568,7 +748,11 @@
           "room": "Balcone",
           "frequency": 90,
           "estimatedMinutes": 35,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "type",
+            "kind": "balcone"
+          }
         },
         {
           "title": "Pulire zanzariera",
@@ -578,7 +762,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 20,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Sistemare balcone",
@@ -588,7 +775,11 @@
           "room": "Balcone",
           "frequency": 14,
           "estimatedMinutes": 20,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "type",
+            "kind": "balcone"
+          }
         },
         {
           "title": "Pulire mobiletti esterni",
@@ -598,7 +789,11 @@
           "room": "Balcone",
           "frequency": 30,
           "estimatedMinutes": 25,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "type",
+            "kind": "balcone"
+          }
         }
       ]
     },
@@ -615,7 +810,10 @@
           "room": "Tutta casa",
           "frequency": 90,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Controllare caldaia",
@@ -625,7 +823,10 @@
           "room": "Tutta casa",
           "frequency": 90,
           "estimatedMinutes": 10,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire condizionatore",
@@ -635,7 +836,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire filtro condizionatore",
@@ -645,7 +849,10 @@
           "room": "Tutta casa",
           "frequency": 60,
           "estimatedMinutes": 20,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Controllare deumidificatore",
@@ -655,7 +862,10 @@
           "room": "Tutta casa",
           "frequency": 14,
           "estimatedMinutes": 10,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Cambiare batterie telecomando",
@@ -665,7 +875,10 @@
           "room": "Tutta casa",
           "frequency": 180,
           "estimatedMinutes": 5,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     },
@@ -682,7 +895,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 20,
-          "level": "pro"
+          "level": "pro",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Pulire accessori Dyson",
@@ -692,7 +908,10 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 20,
-          "level": "super"
+          "level": "super",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Passare Folletto",
@@ -702,7 +921,10 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 20,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Passare scopa elettrica",
@@ -712,7 +934,10 @@
           "room": "Tutta casa",
           "frequency": 4,
           "estimatedMinutes": 12,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         },
         {
           "title": "Avviare robot aspirapolvere",
@@ -722,7 +947,10 @@
           "room": "Tutta casa",
           "frequency": 3,
           "estimatedMinutes": 5,
-          "level": "base"
+          "level": "base",
+          "roomRule": {
+            "mode": "any"
+          }
         }
       ]
     }
