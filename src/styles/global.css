@@ -2303,21 +2303,16 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
 .chore-icon-personal {
   display: block;
   flex: 0 0 auto;
-  overflow: visible;
-  /* A true 1px outline hugging the 40px white icon, not a 48px frame. */
-  border: 1px solid rgba(184, 135, 141, .7);
+  overflow: hidden;
+  /* Exactly like a preset WebP: a white 40px image inside the shared
+     pink 48px .icon-tile. No separate thin border around the SVG. */
+  border: 0;
   border-radius: 13px;
   background: #fff;
   color: var(--personal-rose);
 }
 .chore-icon-personal[data-tone="sage"] { color: var(--personal-sage); }
 .chore-icon-personal[data-tone="accent"] { color: var(--personal-accent); }
-.icon-tile:has(> .chore-icon-personal) {
-  /* Keep the same outer footprint as preset WebP tiles, but no extra frame. */
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-}
 /* The emoji picker already has its own button boundaries: no nested outlines. */
 .personal-icon-picker__trigger .chore-icon-personal,
 .personal-icon-picker__choice .chore-icon-personal {
