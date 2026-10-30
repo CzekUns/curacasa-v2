@@ -36,8 +36,10 @@ export function normalizeRoomDetails(rooms: string[], saved?: RoomDetails): Room
       ? previous.kind : guessRoomKind(name);
     const colors = used.get(kind) ?? new Set<number>();
     const proposed = previous?.color;
+    // Spread new/legacy rooms across palette slots rather than making all five defaults the same color.
+    const candidates = Array.from({ length: ROOM_COLOR_COUNT }, (_, offset) => (index + offset) % ROOM_COLOR_COUNT);
     let color = Number.isInteger(proposed) && proposed! >= 0 && proposed! < ROOM_COLOR_COUNT && !colors.has(proposed!)
-      ? proposed! : Array.from({ length: ROOM_COLOR_COUNT }, (_, i) => i).find((i) => !colors.has(i));
+      ? proposed! : candidates.find((i) => !colors.has(i));
     if (color === undefined) color = index % ROOM_COLOR_COUNT; // Legacy: do not drop a ninth room.
     colors.add(color);
     used.set(kind, colors);
