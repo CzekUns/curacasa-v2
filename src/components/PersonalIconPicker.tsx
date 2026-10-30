@@ -33,29 +33,37 @@ export function PersonalIconPicker({ value, onChange }: PersonalIconPickerProps)
         <ChevronDown size={18} className={`personal-icon-picker__chevron ${expanded ? "is-open" : ""}`} aria-hidden="true" />
       </button>
       <p className="personal-icon-picker__hint">
-        Simboli neutri, esclusivi delle faccende che crei tu. Le immagini dello Store restano riservate ai preset.
+        Scegli un simbolo delicato, anche a tema pulizie. I disegni dello Store restano riservati ai preset.
       </p>
       {expanded ? (
-        <div id={`${pickerId}-options`} className="personal-icon-picker__grid" role="group" aria-label="Scegli un'icona personale">
+        <div id={`${pickerId}-options`} className="personal-icon-picker__groups" role="group" aria-label="Scegli un'icona personale">
           {legacy && (
             <div className="personal-icon-picker__legacy">
               <span className="icon-tile"><ChoreIcon name={value} size={38}/></span>
               <span>Icona attuale mantenuta finché non scegli un nuovo simbolo.</span>
             </div>
           )}
-          {personalIconOptions.map((icon) => (
-            <button
-              type="button"
-              key={icon.value}
-              className={`personal-icon-picker__choice ${icon.value === value ? "is-selected" : ""}`}
-              aria-pressed={icon.value === value}
-              title={icon.label}
-              onClick={() => { onChange(icon.value); setExpanded(false); }}
-            >
-              <span className="icon-tile"><ChoreIcon name={icon.value} size={40} /></span>
-              <span>{icon.label}</span>
-              {icon.value === value ? <Check className="personal-icon-picker__check" size={14} aria-hidden="true" /> : null}
-            </button>
+          {(["Pulizie", "Generiche"] as const).map((group) => (
+            <section className="personal-icon-picker__section" key={group} aria-label={group === "Pulizie" ? "A tema pulizie" : "Simboli generici"}>
+              <h3>{group === "Pulizie" ? "A tema pulizie" : "Simboli generici"}</h3>
+              <div className="personal-icon-picker__grid">
+                {personalIconOptions.filter((icon) => icon.group === group).map((icon) => (
+                  <button
+                    type="button"
+                    key={icon.value}
+                    className={`personal-icon-picker__choice ${icon.value === value ? "is-selected" : ""}`}
+                    aria-pressed={icon.value === value}
+                    aria-label={icon.label}
+                    title={icon.label}
+                    onClick={() => { onChange(icon.value); setExpanded(false); }}
+                  >
+                    <span className="icon-tile"><ChoreIcon name={icon.value} size={40} /></span>
+                    <span>{icon.label}</span>
+                    {icon.value === value ? <Check className="personal-icon-picker__check" size={14} aria-hidden="true" /> : null}
+                  </button>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       ) : null}
