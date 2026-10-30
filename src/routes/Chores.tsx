@@ -21,7 +21,7 @@ import { ChoreLevelTag } from "../components/ChoreLevelTag";
 import { ChoreRoomRulePicker } from "../components/ChoreRoomRulePicker";
 import { CompletionRoomDialog } from "../components/CompletionRoomDialog";
 import { eligibleRoomNames, getRoomRule, locationRuleLabel, roomRuleToLegacy, type ChoreRoomRule } from "../lib/chore-rooms";
-import { classifyChoreLevel } from "../lib/chore-levels";
+import { CHORE_LEVEL_LABELS, classifyChoreLevel, type ChoreLevel } from "../lib/chore-levels";
 import { PersonalIconPicker } from "../components/PersonalIconPicker";
 import { ChoreIcon, choreIconOptions, isPersonalIconName, defaultPersonalIcon, type ChoreIconName } from "../lib/icons";
 import { addLog, daysAgo, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor, type ChoreType } from "../lib/store";
@@ -29,6 +29,7 @@ import { addLog, daysAgo, hasCompletedToday, lastLog, loadData, relativeDays, sa
 export function Chores() {
   const [data, setData] = useState(loadData);
   const [room, setRoom] = useState("");
+  const [category, setCategory] = useState<ChoreLevel | "">("");
   const [query, setQuery] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
@@ -52,7 +53,8 @@ export function Chores() {
   const chores = data.chores.filter((chore) => {
     const roomOk = !room || eligibleRoomNames(data.rooms, data.roomDetails, getRoomRule(chore)).includes(room);
     const queryOk = !query || chore.title.toLowerCase().includes(query.toLowerCase());
-    return roomOk && queryOk;
+    const categoryOk = !category || classifyChoreLevel(chore) === category;
+    return roomOk && queryOk && categoryOk;
   });
 
   function markDone(choreId: string) {
@@ -172,7 +174,22 @@ export function Chores() {
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Cerca faccenda" />
       </label>
 
-      <div className="chip-row">
+      <div className="chore-filter-label" id="chore-category-label">Categoria</div>
+      <div className="chip-row chore-category-filters" role="group" aria-labelledby="chore-category-label">
+        <button className={`chip ${category === "" ? "active" : ""}`}
+          aria-pressed={category === ""} type="button" onClick={() => setCategory("")}>
+          Tutte
+        </button>
+        {(Object.keys(CHORE_LEVEL_LABELS) as ChoreLevel[]).map((item) => (
+          <button className={`chip ${category === item ? "active" : ""}`}
+            aria-pressed={category === item} key={item} type="button" onClick={() => setCategory(item)}>
+            {CHORE_LEVEL_LABELS[item]}
+          </button>
+        ))}
+      </div>
+
+      <div className="chore-filter-label" id="chore-room-label">Stanze</div>
+      <div className="chip-row" role="group" aria-labelledby="chore-room-label">
         {rooms.map((item) => (
           <button
             className={`chip ${room === item ? "active" : ""}`}
