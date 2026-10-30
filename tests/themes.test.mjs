@@ -79,3 +79,28 @@ for (const [id, expected] of Object.entries({
     assert.ok(contrast("#ffffff", expected) >= 4.5, `${id} white CTA text contrast too weak`);
   });
 }
+
+test("Bottom navigation selected buttons and center add use palette colors", () => {
+  // Both controls must read the selected theme, not the hard-coded Cipria shades.
+  const active = css.match(/\\.bottom-nav-item\\.active:not\\(\\.add\\)\\s*\\{([^}]*)\\}/)?.[1];
+  const addButton = css.match(/\\.bottom-nav-item\\.add\\s*\\{([^}]*)\\}/)?.[1];
+  assert.ok(active && addButton, "Navigation button rules must exist");
+  assert.match(active, /background:\\s*linear-gradient\\(145deg,\\s*var\\(--theme-cta\\),\\s*var\\(--theme-cta-hover\\)\\)/);
+  assert.match(addButton, /color:\\s*var\\(--rose-deep\\)/);
+  assert.match(addButton, /background:\\s*linear-gradient\\(145deg,\\s*var\\(--paper\\),\\s*var\\(--rose-soft\\)\\)/);
+  assert.match(addButton, /border:\\s*3px solid var\\(--nav-surface\\)/);
+
+  // Existing dark dock and light central + are intentional in Classico.
+  assert.ok(css.includes(':root[data-theme="classico"] .bottom-nav-item.active:not(.add)'));
+  assert.ok(css.includes(':root[data-theme="classico"] .bottom-nav-item.add'));
+  assert.ok(css.includes(".bottom-nav { background: var(--nav-surface); }"));
+  assert.ok(css.includes(".bottom-nav-item { color: var(--nav-muted); }"));
+
+  for (const id of ["classico", "giada", "ghiaccio", "corallo"]) {
+    const themeBlock = css.match(new RegExp(`:root\\\\[data-theme="${id}"\\\\] \\\\{([\\\\s\\\\S]*?)\\\\n\\\\}`))?.[1];
+    assert.ok(themeBlock, `Missing ${id} CSS palette`);
+    for (const variable of ["rose-deep", "rose-soft", "nav-surface", "theme-cta", "theme-cta-hover"]) {
+      assert.ok(themeBlock.includes(`--${variable}:`), `Missing ${variable} for ${id}`);
+    }
+  }
+});
