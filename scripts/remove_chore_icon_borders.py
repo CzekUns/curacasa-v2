@@ -83,3 +83,5 @@ for name, reason in skipped:
     print(f"  {name}: {reason}")
 if not changed:
     raise SystemExit("No compatible icons found; no files were edited")
+
+# Trigger image-border cleanup on main.
