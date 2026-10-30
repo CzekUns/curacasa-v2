@@ -1,86 +1,107 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>Icone personali · CuraCasa</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Playfair+Display:wght@500&display=swap');
-    :root { color-scheme:light; font: 14px/1.65 Montserrat,Arial,sans-serif; color:#314136; background:#faf5ef; }
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100dvh;background:linear-gradient(140deg,#faf5ef,#f5e5e1 57%,#e6eeed)}
-    main{width:min(100% - 36px,950px);margin:0 auto;padding:40px 0 80px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:36px}
-    header img{width:164px;max-width:50%}
-    a{color:#845a65;font-weight:800}
-    .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:#935f68}
-    h1{font:500 clamp(34px,6vw,58px)/1.15 'Playfair Display',Georgia,serif;margin:12px 0}
-    p{max-width:670px;color:#657268}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:15px;margin-top:36px}
-    .card{background:rgba(255,253,249,.9);border:1px solid #ffffffdd;border-radius:25px;padding:16px 12px;display:grid;justify-items:center;gap:6px;box-shadow:0 16px 35px -30px #7b6256}
-    svg{width:95px;height:95px;display:block}
-    .card strong{font-size:.83rem}
-    .card small{color:#7b7b70}
-    .section-title{margin:36px 0 4px;font:500 26px/1.3 'Playfair Display',Georgia,serif;color:#34483e}
-    .section-title small{margin-left:8px;font:700 12px Montserrat,Arial,sans-serif;color:#935f68}
-    .note{margin-top:38px;background:#fffdfaaf;border:1px solid #ffffffb9;padding:22px;border-radius:22px}
-    .note b{color:#314136}
-    footer{margin-top:28px;font-size:.75rem;color:#6d716a}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex"/>
+<title>Icone personali · CuraCasa</title>
+<style>
+:root {
+  font-family:Montserrat,Arial,sans-serif;
+  color-scheme:light;
+  --personal-rose:#b8878d;--personal-sage:#8d9684;--personal-accent:#8f5960;
+  --bg1:#e6eeed;--bg2:#ead2d5;--bg3:#faf7f2;
+}
+:root[data-theme="cipria"] {--personal-rose:#c58d6d;--personal-sage:#7f977f;--personal-accent:#a96d79;--bg1:#faf5ef;--bg2:#f5e5e1;--bg3:#e6eeed}
+:root[data-theme="giada"] {--personal-rose:#85a595;--personal-sage:#6f8c69;--personal-accent:#446752;--bg1:#eff3ea;--bg2:#dbe6d7;--bg3:#f5f3ec}
+:root[data-theme="ghiaccio"] {--personal-rose:#7ea5c6;--personal-sage:#799bb9;--personal-accent:#315f7a;--bg1:#f5faff;--bg2:#d7efff;--bg3:#e4e8f3}
+:root[data-theme="corallo"] {--personal-rose:#de8667;--personal-sage:#c59a79;--personal-accent:#ad4128;--bg1:#fff7f0;--bg2:#ffe2d5;--bg3:#f6ceb8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:linear-gradient(140deg,var(--bg1),var(--bg2) 57%,var(--bg3))}
+main{width:min(100% - 28px,900px);margin:auto;padding:28px 0 65px}
+header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:30px}
+header img{width:155px;max-width:50%}
+a{color:#664c52;font-size:.78rem;font-weight:700}
+h1{font-family:Georgia,serif;font-size:clamp(1.9rem,5vw,3.4rem);font-weight:500;line-height:1.1;letter-spacing:-.02em;margin:0 0 10px}
+p{max-width:610px;font-size:.84rem;line-height:1.6;color:#525c52}
+.theme-row{display:flex;flex-wrap:wrap;gap:7px;margin:20px 0 28px}
+.theme-row button{border:1px solid #e2d5ca;border-radius:20px;background:#fff;color:#414943;padding:7px 12px;font-size:.75rem;cursor:pointer}
+.theme-row button[aria-pressed="true"]{outline:2px solid var(--personal-accent);outline-offset:1px;font-weight:800}
+.icon-group{margin-bottom:25px}
+.icon-group h2{font-size:.8rem;margin:0 0 12px;font-weight:750;color:#54574c}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:9px}
+.glyph-tile{display:grid;place-items:center;aspect-ratio:1;border-radius:16px;background:white;border:1px solid #e8e3db;box-shadow:0 8px 16px -14px rgba(33,38,31,.28);color:var(--personal-rose)}
+.glyph-tile[data-tone="sage"]{color:var(--personal-sage)}
+.glyph-tile[data-tone="accent"]{color:var(--personal-accent)}
+.glyph-tile svg{width:80%;height:80%;display:block}
+.note{padding:15px;border-radius:16px;background:#fffdf9cc;font-size:.77rem;color:#555e55}
+@media(max-width:600px){.grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}.glyph-tile{border-radius:11px}.theme-row{margin-top:18px}}
+</style>
 </head>
-<body><main>
-<header><img src="../brand/logo.svg" alt="CuraCasa"><a href="../#/app/aggiungi">Torna all'app</a></header>
-<span class="eyebrow">Identità visiva · Libreria personale</span>
-<h1>42 simboli per le tue faccende.</h1>
-<p>Una famiglia di 18 icone astratte e 24 nuovi simboli dedicati alle pulizie. Il tratto resta identico: crema, salvia, rosa antico, contorni arrotondati e dettagli delicati. Nessuna illustrazione WebP dei preset viene riutilizzata.</p>
-<h2 class="section-title">A tema pulizie <small>24 icone</small></h2>
-<div class="grid">
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-goccia"/></svg><strong>Goccia</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-bolle"/></svg><strong>Bollicine</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-schiuma"/></svg><strong>Schiuma</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-spruzzo"/></svg><strong>Spruzzo</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-spugna"/></svg><strong>Spugna</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-panno"/></svg><strong>Panno</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-guanto"/></svg><strong>Guanto</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-sapone"/></svg><strong>Saponetta</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-spazzolina"/></svg><strong>Spazzolina</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-secchiello"/></svg><strong>Secchiello</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-piumino"/></svg><strong>Piumino</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-detergente"/></svg><strong>Detergente</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-vetro"/></svg><strong>Vetro lucido</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-riciclo"/></svg><strong>Riciclo</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-profumo"/></svg><strong>Profumo</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-aria"/></svg><strong>Aria fresca</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-granelli"/></svg><strong>Polvere</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-asciutto"/></svg><strong>Asciutto</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-lavaggio"/></svg><strong>Lavaggio</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-microfibra"/></svg><strong>Microfibra</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-lucido"/></svg><strong>Superficie lucida</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-flacone"/></svg><strong>Flacone</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-tergivetro"/></svg><strong>Tergivetro</strong><small>Pulizie</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-movimento"/></svg><strong>Movimento</strong><small>Pulizie</small></article>
+<body>
+<main>
+<header><img src="../brand/logo.svg" alt="CuraCasa"/><a href="../#/app/aggiungi">Torna all'app</a></header>
+<h1>Icone personali</h1>
+<p>42 simboli SVG essenziali, senza sfondi nel disegno. Prova una palette: i colori cambiano, i simboli restano identici.</p>
+<div class="theme-row" role="group" aria-label="Anteprima palette">
+  <button type="button" data-theme="classico" aria-pressed="true">Classico</button>
+  <button type="button" data-theme="cipria" aria-pressed="false">Cipria</button>
+  <button type="button" data-theme="giada" aria-pressed="false">Giada</button>
+  <button type="button" data-theme="ghiaccio" aria-pressed="false">Ghiaccio</button>
+  <button type="button" data-theme="corallo" aria-pressed="false">Corallo</button>
 </div>
-<h2 class="section-title">Simboli generici <small>18 icone</small></h2>
-<div class="grid">
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-scintilla"/></svg><strong>Scintilla</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-stella"/></svg><strong>Stella</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-cuore"/></svg><strong>Cuore</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-fiore"/></svg><strong>Fiore</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-sole"/></svg><strong>Sole</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-luna"/></svg><strong>Luna</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-orologio"/></svg><strong>Orologio</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-bandierina"/></svg><strong>Bandierina</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-segnalibro"/></svg><strong>Segnalibro</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-etichetta"/></svg><strong>Etichetta</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-nastro"/></svg><strong>Nastro</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-campanella"/></svg><strong>Campanella</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-lampadina"/></svg><strong>Lampadina</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-bersaglio"/></svg><strong>Bersaglio</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-onda"/></svg><strong>Onda</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-check"/></svg><strong>Spunta</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-cerchio"/></svg><strong>Cerchio</strong><small>Personale</small></article>
-<article class="card"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-piuma"/></svg><strong>Piuma</strong><small>Personale</small></article>
-</div>
-<section class="note"><b>Scelta progettuale.</b> Le illustrazioni dei preset continuano a essere dedicate alle attività predefinite. Le nuove faccende possono usare entrambe le sezioni di questa libreria; quelle create in passato conservano l'icona originale finché non la cambi.</section>
-<footer>Anteprima grafica CuraCasa — i simboli sono vettoriali e funzionano anche offline nella PWA installata.</footer>
-</main></body></html>
+<section class="icon-group" aria-label="A tema pulizie"><h2>A tema pulizie</h2><div class="grid"><div class="glyph-tile" role="img" aria-label="Goccia" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-goccia"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Bollicine" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-bolle"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Schiuma" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-schiuma"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Spruzzo" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-spruzzo"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Spugna" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-spugna"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Panno" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-panno"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Guanto" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-guanto"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Saponetta" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-sapone"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Spazzolina" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-spazzolina"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Secchiello" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-secchiello"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Piumino" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-piumino"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Detergente" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-detergente"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Vetro lucido" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-vetro"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Riciclo" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-riciclo"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Profumo" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-profumo"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Aria fresca" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-aria"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Polvere" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-granelli"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Asciutto" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-asciutto"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Lavaggio" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-lavaggio"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Microfibra" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-microfibra"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Superficie lucida" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-lucido"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Flacone" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-flacone"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Tergivetro" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-tergivetro"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Movimento" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-movimento"/></svg></div></div></section>
+<section class="icon-group" aria-label="Simboli generici"><h2>Simboli generici</h2><div class="grid"><div class="glyph-tile" role="img" aria-label="Scintilla" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-scintilla"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Stella" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-stella"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Cuore" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-cuore"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Fiore" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-fiore"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Sole" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-sole"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Luna" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-luna"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Orologio" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-orologio"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Bandierina" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-bandierina"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Segnalibro" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-segnalibro"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Etichetta" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-etichetta"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Nastro" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-nastro"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Campanella" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-campanella"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Lampadina" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-lampadina"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Bersaglio" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-bersaglio"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Onda" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-onda"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Spunta" data-tone="rose"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-check"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Cerchio" data-tone="sage"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-cerchio"/></svg></div>
+<div class="glyph-tile" role="img" aria-label="Piuma" data-tone="accent"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="symbols.svg#personale-piuma"/></svg></div></div></section>
+<p class="note">Nell'app la griglia si apre come un piccolo selettore emoji, senza titoli sotto le icone. Ogni simbolo appare al centro della stessa tile bianca utilizzata per i preset.</p>
+</main>
+<script>
+const themeButtons = document.querySelectorAll(".theme-row button");
+for (const button of themeButtons) {
+  button.addEventListener("click", () => {
+    document.documentElement.dataset.theme = button.dataset.theme;
+    for (const option of themeButtons) option.setAttribute("aria-pressed", String(option === button));
+  });
+}
+</script>
+</body>
+</html>
