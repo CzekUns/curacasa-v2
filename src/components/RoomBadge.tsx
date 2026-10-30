@@ -14,10 +14,12 @@ export function RoomBadge({
   detail,
   name,
   small = false,
+  tiny = false,
 }: {
   detail: RoomDetail;
   name: string;
   small?: boolean;
+  tiny?: boolean;
 }) {
   const Icon = roomIcons[detail.kind] ?? House;
   const color = Math.min(7, Math.max(0, detail.color));
