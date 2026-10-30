@@ -5,10 +5,7 @@ import { Link } from "react-router-dom";
 import { forceAppUpdate } from "../lib/pwa";
 import { isDemoMode } from "../lib/demo";
 import { ReminderSettings } from "../components/ReminderSettings";
-import { createDefaultData, downloadJson, loadData, saveData, type AppData } from "../lib/store";
-import { RoomBadge } from "../components/RoomBadge";
-import { RoomManager } from "../components/RoomManager";
-import { normalizeRoomDetails } from "../lib/rooms";
+import { createDefaultData, downloadJson, loadData, saveData } from "../lib/store";
 
 function ClerkAccountInfo() {
   const { user } = useUser();
@@ -26,11 +23,6 @@ function ClerkAccountInfo() {
 
 export function Settings() {
   const [data, setData] = useState(loadData);
-
-  function updateRooms(next: AppData) {
-    saveData(next);
-    setData(next);
-  }
 
   async function importBackup(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -51,20 +43,6 @@ export function Settings() {
       <section className="page-heading">
         <p className="eyebrow">Impostazioni</p>
         <h1>Backup e account</h1>
-      </section>
-
-      <section className="settings-card">
-        <h2>Stanze</h2>
-        <p>Configura gli ambienti anche dalla Home. Ogni stanza ha un tipo, una nota e un colore.</p>
-        <div className="room-list room-list--identity">
-          {data.rooms.map((room) => (
-            <article key={room}>
-              <RoomBadge name={room} detail={normalizeRoomDetails(data.rooms, data.roomDetails)[room]} small />
-              <strong>{room}</strong>
-            </article>
-          ))}
-        </div>
-        <RoomManager data={data} onChange={updateRooms} label="Gestisci stanze" startInManager />
       </section>
 
       <section className="settings-card">
