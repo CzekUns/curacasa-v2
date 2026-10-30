@@ -79,3 +79,35 @@ for (const [id, expected] of Object.entries({
     assert.ok(contrast("#ffffff", expected) >= 4.5, `${id} white CTA text contrast too weak`);
   });
 }
+
+test("Bottom navigation selected buttons and center add use palette colors", () => {
+  // Check the actual base rules, rather than a theme-specific selector.
+  const activeSelector = ".bottom-nav-item.active:not(.add) {";
+  const addSelector = ".bottom-nav-item.add {";
+  const activeAt = css.indexOf(activeSelector);
+  const addAt = css.indexOf(addSelector);
+  assert.ok(activeAt >= 0 && addAt >= 0, "Navigation buttons must exist");
+  const active = css.slice(activeAt, css.indexOf("}", activeAt));
+  const addButton = css.slice(addAt, css.indexOf("}", addAt));
+
+  assert.ok(active.includes("linear-gradient(145deg, var(--theme-cta), var(--theme-cta-hover))"));
+  assert.ok(addButton.includes("color: var(--rose-deep)"));
+  assert.ok(addButton.includes("linear-gradient(145deg, var(--paper), var(--rose-soft))"));
+  assert.ok(addButton.includes("border: 3px solid var(--nav-surface)"));
+
+  // Classico deliberately retains its original dark bar and ivory central action.
+  assert.ok(css.includes(':root[data-theme="classico"] .bottom-nav-item.active:not(.add)'));
+  assert.ok(css.includes(':root[data-theme="classico"] .bottom-nav-item.add'));
+  assert.ok(css.includes(".bottom-nav { background: var(--nav-surface); }"));
+  assert.ok(css.includes(".bottom-nav-item { color: var(--nav-muted); }"));
+
+  for (const id of ["classico", "giada", "ghiaccio", "corallo"]) {
+    const selector = `:root[data-theme="${id}"] {`;
+    const start = css.indexOf(selector);
+    assert.ok(start >= 0, `Missing ${id} CSS palette`);
+    const themeBlock = css.slice(start, css.indexOf("}", start));
+    for (const variable of ["rose-deep", "rose-soft", "nav-surface", "theme-cta", "theme-cta-hover"]) {
+      assert.ok(themeBlock.includes(`--${variable}:`), `Missing ${variable} for ${id}`);
+    }
+  }
+});
