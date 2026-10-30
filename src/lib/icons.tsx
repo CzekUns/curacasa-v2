@@ -200,11 +200,16 @@ export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = 
 
 export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number }) {
   if (name && isPersonalIconName(name)) {
+    // The glyph is one color; its tone comes from the active app palette.
+    // Stable grouping across themes without storing any new user data.
+    const index = personalIconOptions.findIndex((icon) => icon.value === name);
+    const tone = ["rose", "sage", "accent"][index % 3];
     return (
       <svg
         aria-hidden="true"
         focusable="false"
         className="chore-icon-img chore-icon-personal"
+        data-tone={tone}
         viewBox="0 0 96 96"
         height={size}
         width={size}
