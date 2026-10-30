@@ -58,8 +58,8 @@
           }
         },
         {
-          "title": "Mocio e secchio",
-          "description": "Preparare e usare mocio e secchio per i pavimenti.",
+          "title": "Lavare pavimento 2",
+          "description": "Versione con illustrazione di mocio e secchio; stessa faccenda di Lavare pavimento.",
           "icon": "mocio-secchio",
           "type": "ordinaria",
           "room": "Tutta casa",
@@ -144,8 +144,8 @@
           }
         },
         {
-          "title": "Pulire doccia",
-          "description": "Pulire vetri, piatto e rubinetteria della doccia.",
+          "title": "Pulire soffione doccia",
+          "description": "Pulire il soffione e i suoi ugelli; il box doccia è una faccenda distinta.",
           "icon": "doccia",
           "type": "ordinaria",
           "room": "Bagno",
@@ -449,8 +449,8 @@
           }
         },
         {
-          "title": "Biancheria letto",
-          "description": "Gestire biancheria del letto e ricambi.",
+          "title": "Lavare biancheria da letto",
+          "description": "Lavare lenzuola, federe e altri tessili del letto; distinto dal cambio delle lenzuola.",
           "icon": "biancheria-letto",
           "type": "ordinaria",
           "room": "Camera",
@@ -676,8 +676,8 @@
           }
         },
         {
-          "title": "Pulire finestra",
-          "description": "Pulire finestra, telaio e tende vicine.",
+          "title": "Pulire vetri 2",
+          "description": "Seconda illustrazione per la pulizia dei vetri delle finestre.",
           "icon": "finestra-tende",
           "type": "straordinaria",
           "room": "Tutta casa",
@@ -715,8 +715,8 @@
           }
         },
         {
-          "title": "Pulire tapparella grande",
-          "description": "Pulizia accurata di una tapparella grande.",
+          "title": "Pulire tapparelle 2",
+          "description": "Seconda illustrazione per la pulizia delle tapparelle.",
           "icon": "tapparella-grande",
           "type": "straordinaria",
           "room": "Tutta casa",
@@ -895,7 +895,7 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 20,
-          "level": "pro",
+          "level": "speciale",
           "roomRule": {
             "mode": "any"
           }
@@ -908,7 +908,7 @@
           "room": "Tutta casa",
           "frequency": 30,
           "estimatedMinutes": 20,
-          "level": "super",
+          "level": "speciale",
           "roomRule": {
             "mode": "any"
           }
@@ -921,7 +921,7 @@
           "room": "Tutta casa",
           "frequency": 7,
           "estimatedMinutes": 20,
-          "level": "base",
+          "level": "speciale",
           "roomRule": {
             "mode": "any"
           }
@@ -934,7 +934,7 @@
           "room": "Tutta casa",
           "frequency": 4,
           "estimatedMinutes": 12,
-          "level": "base",
+          "level": "speciale",
           "roomRule": {
             "mode": "any"
           }
@@ -947,7 +947,7 @@
           "room": "Tutta casa",
           "frequency": 3,
           "estimatedMinutes": 5,
-          "level": "base",
+          "level": "speciale",
           "roomRule": {
             "mode": "any"
           }
