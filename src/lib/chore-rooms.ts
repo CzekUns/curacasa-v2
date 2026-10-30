@@ -11,10 +11,12 @@ export function roomRuleFromLegacy(room?: string): ChoreRoomRule {
   if (!raw || raw.toLocaleLowerCase("it-IT") === "tutta casa" || raw.toLocaleLowerCase("it-IT") === "tutta la casa") {
     return { mode: "any" };
   }
-  const kind = guessRoomKind(raw);
-  if (kind !== "altro") {
-    // A known room type in older data must include newly created rooms of that type.
-    return { mode: "type", kind };
+  // Only the canonical names used by historical presets indicate a room category.
+  // "Bagno di servizio" written manually by an older user means one specific bathroom.
+  const normalized = raw.toLocaleLowerCase("it-IT");
+  if (["cucina", "bagno", "camera", "soggiorno", "salone", "balcone"].includes(normalized)) {
+    const kind = guessRoomKind(raw);
+    if (kind !== "altro") return { mode: "type", kind };
   }
   return { mode: "specific", names: [raw] };
 }
