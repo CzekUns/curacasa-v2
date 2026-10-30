@@ -1,15 +1,13 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Check } from "lucide-react";
-import { ChoreIcon, choreIconOptions, type ChoreIconName } from "../lib/icons";
+import { PersonalIconPicker } from "../components/PersonalIconPicker";
+import { defaultPersonalIcon, type PersonalIconName } from "../lib/icons";
 import { loadData, saveData, type Chore, type ChoreType } from "../lib/store";
 
 export function AddChore() {
   const navigate = useNavigate();
   const [data] = useState(loadData);
-  const [selectedIcon, setSelectedIcon] = useState<ChoreIconName>("casa");
-  const [iconMenuOpen, setIconMenuOpen] = useState(false);
-  const selectedIconOption = choreIconOptions.find((icon) => icon.value === selectedIcon) || choreIconOptions[0];
+  const [selectedIcon, setSelectedIcon] = useState<PersonalIconName>(defaultPersonalIcon);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -44,7 +42,7 @@ export function AddChore() {
       <form className="form-card" onSubmit={submit}>
         <label>
           Titolo
-          <input name="title" required placeholder="Pulizia filtri condizionatore" />
+          <input name="title" required placeholder="Inserisci un titolo" />
         </label>
         <label>
           Descrizione
@@ -58,44 +56,7 @@ export function AddChore() {
               <option value="straordinaria">Straordinaria</option>
             </select>
           </label>
-          <div className="icon-picker-field">
-            <span>Icona</span>
-            <input name="icon" type="hidden" value={selectedIcon} />
-            <button
-              aria-expanded={iconMenuOpen}
-              className="icon-picker-trigger"
-              type="button"
-              onClick={() => setIconMenuOpen((open) => !open)}
-            >
-              <span className="icon-tile">
-                <ChoreIcon name={selectedIcon} size={42} />
-              </span>
-              <strong>{selectedIconOption.label}</strong>
-            </button>
-            {iconMenuOpen ? (
-              <div className="icon-picker-menu" role="listbox">
-                {choreIconOptions.map((icon) => (
-                  <button
-                    aria-selected={icon.value === selectedIcon}
-                    className={`icon-picker-option ${icon.value === selectedIcon ? "active" : ""}`}
-                    key={icon.value}
-                    role="option"
-                    type="button"
-                    onClick={() => {
-                      setSelectedIcon(icon.value);
-                      setIconMenuOpen(false);
-                    }}
-                  >
-                    <span className="icon-tile">
-                      <ChoreIcon name={icon.value} size={40} />
-                    </span>
-                    <span>{icon.label}</span>
-                    {icon.value === selectedIcon ? <Check aria-hidden="true" size={16} /> : null}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
+          <PersonalIconPicker value={selectedIcon} onChange={setSelectedIcon} />
         </div>
         <div className="form-grid">
           <label>
