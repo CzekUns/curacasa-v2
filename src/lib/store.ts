@@ -138,7 +138,7 @@ export function lastLog(chore: Chore, logs: ChoreLog[]) {
 
 /** Civil-day distance, immune to daylight-saving changes. */
 export function civilDayNumber(key: string): number {
-  const match = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(key);
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key);
   if (!match) return Number.NaN;
   const [year, month, day] = match.slice(1).map(Number);
   const ms = Date.UTC(year, month - 1, day);
