@@ -4,7 +4,8 @@ import { Check, Clock, Pencil, Play, Search, Square, X } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreLevelTag } from "../components/ChoreLevelTag";
 import { classifyChoreLevel } from "../lib/chore-levels";
-import { ChoreIcon, choreIconOptions, type ChoreIconName } from "../lib/icons";
+import { PersonalIconPicker } from "../components/PersonalIconPicker";
+import { ChoreIcon, choreIconOptions, isPersonalIconName, defaultPersonalIcon, type ChoreIconName } from "../lib/icons";
 import { addLog, daysAgo, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor, type ChoreType } from "../lib/store";
 
 export function Chores() {
@@ -13,8 +14,7 @@ export function Chores() {
   const [query, setQuery] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
-  const [selectedIcon, setSelectedIcon] = useState<ChoreIconName>("casa");
-  const [iconMenuOpen, setIconMenuOpen] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState<ChoreIconName>(defaultPersonalIcon);
   const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [manualMinutes, setManualMinutes] = useState("");
@@ -68,7 +68,6 @@ export function Chores() {
     if (hasCompletedToday(loadData(), choreId)) return;
     setDetailId(choreId);
     setEditingId(null);
-    setIconMenuOpen(false);
     setTimerStartedAt(null);
     setElapsedSeconds(0);
     setManualMinutes("");
@@ -86,8 +85,9 @@ export function Chores() {
   function startEdit(choreId: string, icon: string) {
     setEditingId(choreId);
     setDetailId(null);
-    setSelectedIcon((choreIconOptions.some((option) => option.value === icon) ? icon : "casa") as ChoreIconName);
-    setIconMenuOpen(false);
+    // Preserve current preset or legacy art until the user chooses a neutral symbol.
+    setSelectedIcon((choreIconOptions.some((option) => option.value === icon) || isPersonalIconName(icon)
+      ? icon : defaultPersonalIcon) as ChoreIconName);
   }
 
   function submitEdit(event: FormEvent<HTMLFormElement>, choreId: string) {
@@ -118,7 +118,6 @@ export function Chores() {
     saveData(next);
     setData(next);
     setEditingId(null);
-    setIconMenuOpen(false);
   }
 
   useEffect(() => {
@@ -210,8 +209,7 @@ export function Chores() {
                         type="button"
                         onClick={() => {
                           setEditingId(null);
-                          setIconMenuOpen(false);
-                        }}
+                                              }}
                       >
                         <X size={17} />
                       </button>
@@ -232,46 +230,7 @@ export function Chores() {
                           <option value="straordinaria">Straordinaria</option>
                         </select>
                       </label>
-                      <div className="icon-picker-field">
-                        <span>Icona</span>
-                        <input name="icon" type="hidden" value={selectedIcon} />
-                        <button
-                          aria-expanded={iconMenuOpen}
-                          className="icon-picker-trigger"
-                          type="button"
-                          onClick={() => setIconMenuOpen((open) => !open)}
-                        >
-                          <span className="icon-tile">
-                            <ChoreIcon name={selectedIcon} size={42} />
-                          </span>
-                          <strong>
-                            {choreIconOptions.find((icon) => icon.value === selectedIcon)?.label || "Icona"}
-                          </strong>
-                        </button>
-                        {iconMenuOpen ? (
-                          <div className="icon-picker-menu" role="listbox">
-                            {choreIconOptions.map((icon) => (
-                              <button
-                                aria-selected={icon.value === selectedIcon}
-                                className={`icon-picker-option ${icon.value === selectedIcon ? "active" : ""}`}
-                                key={icon.value}
-                                role="option"
-                                type="button"
-                                onClick={() => {
-                                  setSelectedIcon(icon.value);
-                                  setIconMenuOpen(false);
-                                }}
-                              >
-                                <span className="icon-tile">
-                                  <ChoreIcon name={icon.value} size={40} />
-                                </span>
-                                <span>{icon.label}</span>
-                                {icon.value === selectedIcon ? <Check aria-hidden="true" size={16} /> : null}
-                              </button>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
+                      <PersonalIconPicker key={chore.id} value={selectedIcon} onChange={setSelectedIcon} />
                     </div>
                     <div className="form-grid">
                       <label>
