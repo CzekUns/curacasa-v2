@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import {
   ChoreIcon, choreIconOptions, personalIconOptions,
-  isPersonalIconName, type ChoreIconName, type PersonalIconName,
+  type ChoreIconName, type PersonalIconName,
 } from "../lib/icons";
 
 type PersonalIconPickerProps = {
