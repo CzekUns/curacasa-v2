@@ -28,7 +28,9 @@ export function AddChore() {
       updatedAt: stamp,
     };
     if (!chore.title) return;
-    saveData({ ...data, chores: [...data.chores, chore] });
+    // Use the latest saved list, not the snapshot from when the form opened.
+    const latest = loadData();
+    saveData({ ...latest, chores: [...latest.chores, chore] });
     navigate("/app/faccende");
   }
 
