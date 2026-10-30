@@ -105,7 +105,8 @@ async function writeSubscription(req, env, owner) {
       chores_json=excluded.chores_json,
       timezone=excluded.timezone,
       notify_hour=excluded.notify_hour,
-      updated_at=excluded.updated_at`)
+      updated_at=excluded.updated_at
+    WHERE reminder_devices.owner = excluded.owner`)
     .bind(endpoint, owner, JSON.stringify(body.subscription), JSON.stringify(body.chores),
       body.timezone, body.hour, new Date().toISOString()).run();
   return reply(req, env, { registered: true });
