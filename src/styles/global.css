@@ -2185,3 +2185,13 @@ a:focus-visible, button:focus-visible { outline-color: var(--theme-focus); }
   color: var(--ink);
   background: linear-gradient(145deg, var(--paper), var(--silk));
 }
+
+/* Notification preferences, using the currently selected palette. */
+.reminder-settings { gap: 14px; }
+.reminder-settings__head { display: flex; align-items: flex-start; gap: 12px; }
+.reminder-settings__head > svg { flex: 0 0 auto; color: var(--rose-deep); margin-top: 5px; }
+.reminder-settings__head h2 { margin-bottom: 6px; }
+.reminder-settings__head p { color: var(--muted); line-height: 1.6; font-size: .84rem; }
+.reminder-settings__hour { display: grid; gap: 7px; max-width: 260px; }
+.reminder-settings__hour select { min-height: 44px; padding: 8px 12px; border: 1px solid var(--soft); border-radius: 13px; }
+.reminder-settings__enabled { display: flex; align-items: center; gap: 7px; color: #446752; font-size: .8rem; font-weight: 800; }
