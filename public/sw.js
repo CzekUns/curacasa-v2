@@ -1,4 +1,4 @@
-const CACHE_NAME = "curacasa-v2-shell-v1";
+const CACHE_NAME = "curacasa-v2-shell-v2";
 
 self.addEventListener("install", () => {
   self.skipWaiting();
