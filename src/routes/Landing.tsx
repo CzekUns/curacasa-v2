@@ -71,7 +71,7 @@ export function Landing() {
 
         <div className="landing-hero-art" aria-hidden="true">
           <img
-            src={`${import.meta.env.BASE_URL}brand/hero-whisper.svg`}
+            src={`${import.meta.env.BASE_URL}brand/hero-whisper-v2.svg`}
             alt=""
             width="1200"
             height="820"
