@@ -19,7 +19,7 @@ type ShopTab = "collections" | "activities" | "themes";
 export function Shop() {
   const [packs, setPacks] = useState<ChorePack[]>([]);
   const [status, setStatus] = useState("Caricamento collezioni...");
-  const [activeTab, setActiveTab] = useState<ShopTab>("collections");
+  const [activeTab, setActiveTab] = useState<ShopTab>("activities");
   const [data, setData] = useState(loadData);
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>(getTheme);
   const { feedback, announce } = useActionFeedback();
@@ -109,10 +109,10 @@ export function Shop() {
       </section>
 
       <div className="shop-tabs shop-tabs--three" role="tablist" aria-label="Shop CuraCasa">
-        <button aria-selected={activeTab === "collections"} className={activeTab === "collections" ? "active" : ""}
-          onClick={() => setActiveTab("collections")} role="tab" type="button">Collezioni</button>
         <button aria-selected={activeTab === "activities"} className={activeTab === "activities" ? "active" : ""}
           onClick={() => setActiveTab("activities")} role="tab" type="button">Faccende</button>
+        <button aria-selected={activeTab === "collections"} className={activeTab === "collections" ? "active" : ""}
+          onClick={() => setActiveTab("collections")} role="tab" type="button">Collezioni</button>
         <button aria-selected={activeTab === "themes"} className={activeTab === "themes" ? "active" : ""}
           onClick={() => setActiveTab("themes")} role="tab" type="button">Temi</button>
       </div>
