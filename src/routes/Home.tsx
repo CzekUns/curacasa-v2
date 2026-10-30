@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { CalendarDays, Check, Clock } from "lucide-react";
 import { RoomBadge } from "../components/RoomBadge";
 import { RoomManager } from "../components/RoomManager";
+import { CuracoinBalance } from "../components/CuracoinBalance";
 import { daysAgo, hasCompletedToday, loadData, saveData, statusFor, type AppData } from "../lib/store";
 import { normalizeRoomDetails } from "../lib/rooms";
 
@@ -59,6 +60,8 @@ export function Home() {
           <RoomManager data={data} onChange={saveRooms} />
         </div>
       </section>
+
+      <CuracoinBalance />
 
       <section className="home-overview" aria-label="Riepilogo faccende">
         <h2>Oggi, a casa tua</h2>
