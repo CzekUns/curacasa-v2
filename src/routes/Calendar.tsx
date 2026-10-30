@@ -1,5 +1,9 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { CalendarPlus, Clock, Pencil, Play, Square, X } from "lucide-react";
+import { CalendarPlus, Clock, House, Pencil, Play, Square, X } from "lucide-react";
+import { RoomSelection } from "../components/RoomSelection";
+import { RoomBadge } from "../components/RoomBadge";
+import { eligibleRoomNames, getRoomRule } from "../lib/chore-rooms";
+import { normalizeRoomDetails } from "../lib/rooms";
 import { ChoreIcon } from "../lib/icons";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { addLog, dayKey, hasCompletedOnDay, loadData, monthKey, saveData, type ChoreLog } from "../lib/store";
@@ -34,12 +38,14 @@ export function Calendar() {
   const [addStatus, setAddStatus] = useState("");
   const [month, setMonth] = useState(monthKey());
   const [selectedDay, setSelectedDay] = useState(dayKey(new Date()));
-  const [addRoom, setAddRoom] = useState("");
+  const [addRooms, setAddRooms] = useState<string[]>([]);
+  const [addChoreId, setAddChoreId] = useState("");
+  const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
   const [addManualMinutes, setAddManualMinutes] = useState("");
   const [addElapsedSeconds, setAddElapsedSeconds] = useState(0);
   const [addTimerStartedAt, setAddTimerStartedAt] = useState<number | null>(null);
   const [editingLogId, setEditingLogId] = useState<string | null>(null);
-  const [editRoom, setEditRoom] = useState("");
+  const [editRooms, setEditRooms] = useState<string[]>([]);
   const [editNote, setEditNote] = useState("");
   const [editManualMinutes, setEditManualMinutes] = useState("");
   const [editElapsedSeconds, setEditElapsedSeconds] = useState(0);
@@ -57,6 +63,7 @@ export function Calendar() {
 
   const selectedLogs = data.logs.filter((log) => dayKey(log.completedAt) === selectedDay);
   const selectedCountLabel = selectedLogs.length === 1 ? "1 faccenda" : `${selectedLogs.length} faccende`;
+  const addChore = data.chores.find((item) => item.id === addChoreId);
 
   useEffect(() => {
     if (!addTimerStartedAt) return;
@@ -81,22 +88,23 @@ export function Calendar() {
 
   function stopEditingLog() {
     setEditingLogId(null);
-    setEditRoom("");
+    setEditRooms([]);
     setEditNote("");
     setEditManualMinutes("");
     setEditElapsedSeconds(0);
     setEditTimerStartedAt(null);
   }
 
-  function roomLabel(log: ChoreLog) {
-    return log.rooms?.[0] || "Tutta la casa";
-  }
-
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const choreId = String(form.get("choreId") || "");
+    const choreId = addChoreId;
     if (!choreId) return;
+    const currentChore = data.chores.find((item) => item.id === choreId);
+    if (currentChore && eligibleRoomNames(data.rooms, data.roomDetails, getRoomRule(currentChore)).length && !addRooms.length) {
+      setAddStatus("Seleziona una stanza o tutte le stanze disponibili prima di registrare la faccenda.");
+      return;
+    }
     const durationSeconds = durationSecondsFrom(addManualMinutes, addElapsedSeconds, addTimerStartedAt);
     const current = loadData();
     const next = addLog(current, choreId, {
@@ -104,7 +112,7 @@ export function Calendar() {
       durationMinutes: Math.ceil(durationSeconds / 60),
       durationSeconds,
       note: String(form.get("note") || ""),
-      rooms: addRoom ? [addRoom] : [],
+      rooms: addRooms,
     });
     setData(next);
     if (next === current) {
@@ -115,7 +123,8 @@ export function Calendar() {
     setAddStatus("");
     announce("Faccenda registrata nel calendario!");
     event.currentTarget.reset();
-    setAddRoom("");
+    setAddRooms([]);
+    setAddChoreId("");
     setAddManualMinutes("");
     setAddElapsedSeconds(0);
     setAddTimerStartedAt(null);
@@ -133,7 +142,7 @@ export function Calendar() {
 
   function startEditLog(log: ChoreLog) {
     setEditingLogId(log.id);
-    setEditRoom(log.rooms?.[0] || "");
+    setEditRooms(log.rooms || []);
     setEditNote(log.note || "");
     setEditManualMinutes("");
     setEditElapsedSeconds(logDurationSeconds(log));
@@ -153,7 +162,7 @@ export function Calendar() {
               durationMinutes: Math.ceil(durationSeconds / 60),
               durationSeconds,
               note: String(form.get("note") || ""),
-              rooms: editRoom ? [editRoom] : [],
+              rooms: editRooms,
             }
           : log,
       ),
@@ -209,6 +218,7 @@ export function Calendar() {
                   setSelectedDay(key);
                   setAddStatus("");
                   stopEditingLog();
+                  setExpandedLogId(null);
                 }}
               >
                 <strong>{date.getDate()}</strong>
@@ -239,11 +249,28 @@ export function Calendar() {
                     </span>
                     <div>
                       <strong>{chore?.title || "Faccenda"}</strong>
-                      <span>
-                        {roomLabel(log)}
-                        {logDurationSeconds(log) ? ` - ${timerText(logDurationSeconds(log))}` : ""}
-                        {log.note ? ` - ${log.note}` : ""}
-                      </span>
+                      <button type="button" className="calendar-log-location-toggle"
+                        aria-expanded={expandedLogId === log.id}
+                        onClick={() => setExpandedLogId(expandedLogId === log.id ? null : log.id)}>
+                        {log.rooms?.length ? (
+                          <span className="calendar-log-room-icons">
+                            {(() => {
+                              const rule = chore ? getRoomRule(chore) : { mode: "any" as const };
+                              const allowed = eligibleRoomNames(data.rooms, data.roomDetails, rule);
+                              const allHouse = rule.mode === "any" && allowed.length > 0 &&
+                                allowed.every((name) => log.rooms?.includes(name));
+                              return allHouse ? <House size={15} /> : log.rooms.map((name) => {
+                                const details = normalizeRoomDetails(
+                                  [...new Set([...data.rooms, name])], data.roomDetails);
+                                return <RoomBadge key={name} name={name} detail={details[name]} tiny />;
+                              });
+                            })()}
+                          </span>
+                        ) : <span>Luoghi non indicati</span>}
+                        <span className="calendar-log-room-chevron">{expandedLogId === log.id ? "▴" : "▾"}</span>
+                      </button>
+                      {logDurationSeconds(log) ? <span>{timerText(logDurationSeconds(log))}</span> : null}
+                      {log.note ? <span>{log.note}</span> : null}
                     </div>
                     <div className="task-actions">
                       <button type="button" onClick={() => startEditLog(log)} aria-label={`Modifica ${chore?.title || "faccenda"}`}>
@@ -254,6 +281,18 @@ export function Calendar() {
                       </button>
                     </div>
                   </article>
+                  {expandedLogId === log.id && editingLogId !== log.id ? (
+                    <div className="calendar-log-room-detail">
+                      <strong>Luoghi in cui è stata svolta</strong>
+                      {log.rooms?.length ? log.rooms.map((name) => {
+                        const details = normalizeRoomDetails([...new Set([...data.rooms, name])], data.roomDetails);
+                        return <div key={name} className="calendar-log-room-line">
+                          <RoomBadge name={name} detail={details[name]} small />
+                          <span>{name}</span>
+                        </div>;
+                      }) : <p>Non specificati</p>}
+                    </div>
+                  ) : null}
                   {editingLogId === log.id ? (
                     <form className="task-edit-card" onSubmit={(event) => submitEditLog(event, log.id)}>
                       <div className="form-title">
@@ -263,17 +302,10 @@ export function Calendar() {
                           <X size={17} />
                         </button>
                       </div>
-                      <label>
-                        Stanza
-                        <select value={editRoom} onChange={(event) => setEditRoom(event.target.value)}>
-                          <option value="">Tutta la casa</option>
-                          {data.rooms.map((room) => (
-                            <option key={room} value={room}>
-                              {room}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
+                      <RoomSelection rooms={data.rooms} roomDetails={data.roomDetails}
+                        rule={chore ? getRoomRule(chore) : { mode: "any" }}
+                        selected={editRooms} onChange={setEditRooms}
+                        title="Dove è stata svolta?" />
                       <div className="form-grid">
                         <label>
                           Durata
@@ -327,7 +359,8 @@ export function Calendar() {
         </div>
         <label>
           Faccenda
-          <select name="choreId" required>
+          <select name="choreId" required value={addChoreId}
+            onChange={(event) => { setAddChoreId(event.target.value); setAddRooms([]); setAddStatus(""); }}>
             <option value="">Scegli</option>
             {data.chores.map((chore) => (
               <option key={chore.id} value={chore.id} disabled={hasCompletedOnDay(data, chore.id, selectedDay)}>
@@ -336,17 +369,10 @@ export function Calendar() {
             ))}
           </select>
         </label>
-        <label>
-          Stanza
-          <select value={addRoom} onChange={(event) => setAddRoom(event.target.value)}>
-            <option value="">Tutta la casa</option>
-            {data.rooms.map((room) => (
-              <option key={room} value={room}>
-                {room}
-              </option>
-            ))}
-          </select>
-        </label>
+        {addChore ? (
+          <RoomSelection rooms={data.rooms} roomDetails={data.roomDetails}
+            rule={getRoomRule(addChore)} selected={addRooms} onChange={setAddRooms} />
+        ) : null}
         <div className="form-grid">
           <label>
             Durata
