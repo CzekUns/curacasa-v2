@@ -1,0 +1,17 @@
+{
+  "name": "curacasa-reminders-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --test-scheduled",
+    "deploy": "wrangler deploy",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@clerk/backend": "3.26.4",
+    "@mmmike/web-push": "1.5.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
