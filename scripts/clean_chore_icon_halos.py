@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
-"""Remove the baked-in pink/beige *outside* selected CuraCasa preset illustrations.
+"""Restore full-size CuraCasa chore art, then EXTEND its ivory background.
 
-Unlike the old JPG frame repair, this script makes the outside genuinely transparent,
-so switching to Giada/Ghiaccio/etc cannot reveal the old palette. It preserves
-the artwork and ivory panel inside a conservative rounded-rectangle mask.
+This replaces the previous alpha/rounded-mask crop. The illustration is never
+scaled, pasted onto a smaller panel, or made transparent. We start from the
+original files from BEFORE the destructive trim, preserving the original
+object size, then extend clean ivory pixels from inside the panel outwards.
 
-Rerunnable: a previously processed transparent image is left unchanged.
-Only the named source icons below are touched; there is no global CSS crop.
+The nearest interior pixel fills each exterior coordinate, maintaining the
+original card's natural off-white shade/gradient without hard-coded white.
+Only the listed assets are changed.
 """
+from io import BytesIO
 from pathlib import Path
-from PIL import Image, ImageChops, ImageDraw
+import subprocess
 
-ROOT = Path(__file__).resolve().parents[1] / "public" / "chore-icons"
+import numpy as np
+from PIL import Image, ImageDraw
+from scipy.ndimage import distance_transform_edt
+
+ROOT = Path(__file__).resolve().parents[1]
+PRE_CROP_REVISION = "527fa34aedd775a2b64cc9093b2e592b05ea63f3"
 TARGETS = (
     "addolcitore-manutenzione",
     "addolcitore-sale",
@@ -29,64 +37,60 @@ TARGETS = (
     "zanzariera",
 )
 
-# The existing ivory panel starts ~4-6% from the outer image edges.
-# Inset slightly more (7%) to ensure *none* of the pink or beige antialias remains.
-# The original illustrations are well inside these bounds.
-INSET = 0.07
+# A safe part of the original cream panel; NOT a crop of the final picture.
+# Everything inside this mask is copied pixel-for-pixel from the original.
+# Everything outside receives the nearest original cream pixel, never alpha.
+INSET = 0.075
 CORNER_RADIUS = 0.12
-OVERSAMPLE = 4
 
-changed = []
 for name in TARGETS:
-    path = ROOT / f"{name}.webp"
-    if not path.exists():
-        raise FileNotFoundError(path)
-    with Image.open(path) as src:
-        image = src.convert("RGBA")
-    width, height = image.size
-    if min(width, height) < 128:
-        raise ValueError(f"{name}: unexpected small illustration {image.size}")
-
-    old_alpha = image.getchannel("A")
-    corners = [old_alpha.getpixel(p) for p in ((0, 0), (width - 1, 0), (0, height - 1), (width - 1, height - 1))]
-    if max(corners) == 0:
-        print(f"Already transparent: {name}")
-        continue
-
-    # High-resolution mask gives smooth antialiased edges in the final WebP.
-    scale = OVERSAMPLE
-    high = Image.new("L", (width * scale, height * scale), 0)
-    draw = ImageDraw.Draw(high)
-    xy = (
-        round(width * INSET * scale),
-        round(height * INSET * scale),
-        round((width * (1 - INSET)) * scale) - 1,
-        round((height * (1 - INSET)) * scale) - 1,
+    rel = f"public/chore-icons/{name}.webp"
+    original_bytes = subprocess.check_output(
+        ["git", "show", f"{PRE_CROP_REVISION}:{rel}"], cwd=ROOT
     )
-    draw.rounded_rectangle(xy, radius=round(min(width, height) * CORNER_RADIUS * scale), fill=255)
-    mask = high.resize((width, height), Image.Resampling.LANCZOS)
-    alpha = ImageChops.multiply(old_alpha, mask)
+    with Image.open(BytesIO(original_bytes)) as source:
+        original = np.asarray(source.convert("RGB"), dtype=np.uint8)
+    height, width = original.shape[:2]
+    if min(height, width) < 128:
+        raise RuntimeError(f"Unexpected icon dimensions for {name}: {width}x{height}")
 
-    # Transparent pixels receive the artwork's own cream background RGB to
-    # prevent chromatic halos in WebP's lossy color interpolation at the edge.
-    # This does not change any opaque pixels in the image.
-    rgb = image.convert("RGB")
-    panel_color = rgb.getpixel((width // 2, round(height * 0.11)))
-    cream = Image.new("RGB", image.size, panel_color)
-    # For fully transparent pixels, paint RGB as the original panel colour.
-    white_zone = mask.point(lambda a: 255 if a == 0 else 0)
-    merged_rgb = Image.composite(cream, rgb, white_zone)
-    result = merged_rgb.convert("RGBA")
-    result.putalpha(alpha)
+    # Main panel: safely INSIDE the old round-corner edges and OUTSIDE
+    # all the illustrations. It is a seed region, not a smaller output card.
+    seed = Image.new("L", (width, height), 0)
+    draw = ImageDraw.Draw(seed)
+    left = round(width * INSET)
+    top = round(height * INSET)
+    right = round(width * (1 - INSET)) - 1
+    bottom = round(height * (1 - INSET)) - 1
+    draw.rounded_rectangle(
+        (left, top, right, bottom),
+        radius=round(min(width, height) * CORNER_RADIUS),
+        fill=255,
+    )
+    preserve = np.asarray(seed) == 255
 
-    # WebP supports an alpha plane; retain its transparency, not a new beige fill.
-    result.save(path, format="WEBP", quality=93, alpha_quality=100, method=6, exact=True)
-    with Image.open(path) as test:
-        rgba = test.convert("RGBA")
-        assert rgba.size == (width, height)
-        assert rgba.getpixel((0, 0))[3] == 0, name
-        assert rgba.getpixel((width - 1, height - 1))[3] == 0, name
-        assert rgba.getpixel((width // 2, height // 2))[3] == 255, name
-    changed.append(name)
+    # In the outside fringe, continue the colour already on the panel edge.
+    # Unlike replacing the whole exterior with one approximate solid colour,
+    # this respects small warm gradients in each original panel.
+    _, index = distance_transform_edt(~preserve, return_indices=True)
+    result = original.copy()
+    fringe = ~preserve
+    result[fringe] = original[index[0][fringe], index[1][fringe]]
 
-print(f"Cleaned {len(changed)} / {len(TARGETS)} selected icons:", ", ".join(changed))
+    assert np.array_equal(result[preserve], original[preserve]), name
+    assert result.shape == original.shape, name
+    assert np.all(result[0, 0] > 225), f"Corner should be ivory, not pink: {name}"
+
+    target = ROOT / rel
+    Image.fromarray(result, "RGB").save(
+        target, format="WEBP", quality=96, method=6
+    )
+    with Image.open(target) as image:
+        assert image.size == (width, height)
+        assert image.convert("RGBA").getpixel((0, 0))[3] == 255
+        assert image.convert("RGBA").getpixel((width - 1, height - 1))[3] == 255
+    print(f"RESTORED {name}: {width}x{height}, "
+          f"preserved artwork ({preserve.mean() * 100:.1f}% pixel area); "
+          "extended original ivory to edges")
+
+print(f"Done: {len(TARGETS)} full-size opaque illustrations restored.")
