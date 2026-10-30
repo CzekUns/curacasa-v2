@@ -1,11 +1,14 @@
 import { SignOutButton, useUser } from "@clerk/react";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Download, Plus, RefreshCw, Trash2, Upload } from "lucide-react";
+import { ChangeEvent, useState } from "react";
+import { Download, RefreshCw, Trash2, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { forceAppUpdate } from "../lib/pwa";
 import { isDemoMode } from "../lib/demo";
 import { ReminderSettings } from "../components/ReminderSettings";
-import { createDefaultData, downloadJson, loadData, saveData } from "../lib/store";
+import { createDefaultData, downloadJson, loadData, saveData, type AppData } from "../lib/store";
+import { RoomBadge } from "../components/RoomBadge";
+import { RoomManager } from "../components/RoomManager";
+import { normalizeRoomDetails } from "../lib/rooms";
 
 function ClerkAccountInfo() {
   const { user } = useUser();
@@ -24,19 +27,7 @@ function ClerkAccountInfo() {
 export function Settings() {
   const [data, setData] = useState(loadData);
 
-  function addRoom(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const room = String(form.get("room") || "").trim();
-    if (!room || data.rooms.some((item) => item.toLowerCase() === room.toLowerCase())) return;
-    const next = { ...data, rooms: [...data.rooms, room] };
-    saveData(next);
-    setData(next);
-    event.currentTarget.reset();
-  }
-
-  function removeRoom(room: string) {
-    const next = { ...data, rooms: data.rooms.filter((item) => item !== room) };
+  function updateRooms(next: AppData) {
     saveData(next);
     setData(next);
   }
@@ -64,22 +55,16 @@ export function Settings() {
 
       <section className="settings-card">
         <h2>Stanze</h2>
-        <form className="inline-form" onSubmit={addRoom}>
-          <input name="room" placeholder="Ingresso, studio, cameretta..." />
-          <button type="submit" aria-label="Aggiungi stanza">
-            <Plus size={18} />
-          </button>
-        </form>
-        <div className="room-list">
+        <p>Configura gli ambienti anche dalla Home. Ogni stanza ha un tipo, una nota e un colore.</p>
+        <div className="room-list room-list--identity">
           {data.rooms.map((room) => (
             <article key={room}>
+              <RoomBadge name={room} detail={normalizeRoomDetails(data.rooms, data.roomDetails)[room]} small />
               <strong>{room}</strong>
-              <button type="button" onClick={() => removeRoom(room)} aria-label={`Rimuovi ${room}`}>
-                <Trash2 size={16} />
-              </button>
             </article>
           ))}
         </div>
+        <RoomManager data={data} onChange={updateRooms} label="Gestisci stanze" />
       </section>
 
       <section className="settings-card">
