@@ -66,7 +66,7 @@ export function classifyChoreLevel(chore: {
     return chore.level;
   }
   // Preserve the Store identity when the owner edits the task's title.
-  const currentSignature = \`\${normalize(chore.title)}::\${normalize(chore.icon)}\`;
+  const currentSignature = normalize(chore.title) + "::" + normalize(chore.icon);
   return PRESET_LEVELS[chore.presetKey || ""] ??
     PRESET_LEVELS[currentSignature] ?? "tua";
 }
