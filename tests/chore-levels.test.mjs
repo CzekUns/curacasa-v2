@@ -1,0 +1,100 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity } from "../src/lib/chore-levels.ts";
+import { createDefaultData, importPresets, loadData, saveData } from "../src/lib/store.ts";
+
+const catalog = JSON.parse(readFileSync(new URL("../public/chore-packs.json", import.meta.url), "utf8"));
+const presets = catalog.packs.flatMap((pack) => pack.chores);
+const get = (icon) => presets.find((chore) => chore.icon === icon);
+const pairs = [
+  ["mocio-secchio", "Mocio e secchio", "Lavare pavimento 2"],
+  ["finestra-tende", "Pulire finestra", "Pulire vetri 2"],
+  ["tapparella-grande", "Pulire tapparella grande", "Pulire tapparelle 2"],
+  ["doccia", "Pulire doccia", "Pulire soffione doccia"],
+  ["biancheria-letto", "Biancheria letto", "Lavare biancheria da letto"],
+];
+
+test("Store offers exactly 67 separately selectable pills in BASE PRO SUPER SPECIALE", () => {
+  assert.equal(presets.length, 67);
+  const counts = { base: 0, pro: 0, super: 0, speciale: 0 };
+  const unique = new Set();
+  for (const chore of presets) {
+    assert.ok(Object.hasOwn(counts, chore.level), chore.title);
+    assert.equal(classifyChoreLevel(chore), chore.level, chore.title);
+    assert.ok(!unique.has(presetIdentity(chore)), chore.title);
+    unique.add(presetIdentity(chore));
+    counts[chore.level]++;
+  }
+  assert.deepEqual(counts, { base: 29, pro: 23, super: 10, speciale: 5 });
+  assert.deepEqual(Object.keys(CHORE_LEVEL_LABELS), ["base", "pro", "super", "speciale", "tua"]);
+});
+
+test("Legacy names keep their Store identity after renamed icon variants", () => {
+  for (const [icon, oldTitle, newTitle] of pairs) {
+    const preset = get(icon);
+    assert.equal(preset.title, newTitle);
+    assert.equal(presetIdentity(preset), presetIdentity({ title: oldTitle, icon }));
+    const saved = { ...preset, title: oldTitle, id: "legacy:" + icon };
+    const existing = { ...createDefaultData(), chores: [saved] };
+    assert.equal(importPresets(existing, [preset]).added, 0, icon);
+  }
+  // Two different images of the same action are still two independent Store pills.
+  const two = importPresets(createDefaultData(), [get("pavimento"), get("mocio-secchio")]);
+  assert.equal(two.added, 2);
+  assert.notEqual(two.data.chores[0].presetKey, two.data.chores[1].presetKey);
+  assert.equal(importPresets(two.data, [get("pavimento"), get("mocio-secchio")]).added, 0);
+});
+
+test("Existing Store-specials convert from their older levels without touching TUA chores", () => {
+  const specialIcons = ["dyson", "dyson-accessori", "folletto", "scopa-elettrica", "robot-aspirapolvere"];
+  for (const icon of specialIcons) {
+    const preset = get(icon);
+    assert.equal(preset.level, "speciale");
+    assert.equal(classifyChoreLevel({ ...preset, level: "base" }), "speciale");
+    assert.equal(classifyChoreLevel({ ...preset, level: "pro" }), "speciale");
+    assert.equal(classifyChoreLevel({ ...preset, level: "super" }), "speciale");
+    assert.equal(classifyChoreLevel({ ...preset, level: "pro", title: "Rinominata", presetKey: presetIdentity(preset) }), "speciale");
+    assert.equal(classifyChoreLevel({ ...preset, level: "tua" }), "tua");
+    assert.equal(classifyChoreLevel({ ...preset, level: undefined, title: "Mia macchina" }), "tua");
+  }
+});
+
+test("An old simoneapps backup is normalized without deleting logs or renaming the user's rooms", () => {
+  const raw = {
+    rooms: ["Bagno", "Soggiorno", "Bagno di servizio", "Studio privato"],
+    chores: [
+      { id: "one", title: "Passare Dyson", icon: "dyson", type: "ordinaria", room: "Soggiorno",
+        frequency: 7, estimatedMinutes: 12, description: "", notes: "", createdAt: "2026-01-01T12:00:00.000Z", updatedAt: "2026-01-01T12:00:00.000Z" },
+      { id: "two", title: "Mia faccenda", icon: "home", type: "ordinaria", room: "Bagno di servizio",
+        frequency: 7, estimatedMinutes: 5, description: "", notes: "", createdAt: "2026-01-01T12:00:00.000Z", updatedAt: "2026-01-01T12:00:00.000Z" },
+    ],
+    logs: [
+      { id: "log1", choreId: "one", completedAt: "2026-01-02T12:00:00.000Z", durationMinutes: 12, note: "Ok", rooms: ["Soggiorno"] },
+      { id: "log2", choreId: "one", completedAt: "2026-01-02T19:00:00.000Z", durationMinutes: 7, note: "Seconda volta", rooms: [] },
+    ],
+  };
+  const storage = new Map([["curacasa_v2_data", JSON.stringify(raw)]]);
+  const old = globalThis.localStorage;
+  globalThis.localStorage = {
+    getItem: (key) => storage.get(key) ?? null,
+    setItem: (key, value) => storage.set(key, String(value)),
+  };
+  try {
+    const loaded = loadData();
+    assert.deepEqual(loaded.rooms, raw.rooms);
+    assert.equal(loaded.roomDetails.Soggiorno.kind, "salone");
+    assert.equal(loaded.roomDetails["Studio privato"].kind, "altro");
+    assert.deepEqual(loaded.chores.map(c => c.id), ["one", "two"]);
+    assert.equal(loaded.chores[0].level, "speciale");
+    assert.equal(loaded.chores[1].level, "tua");
+    assert.equal(loaded.chores[1].icon, "casa");
+    assert.deepEqual(loaded.chores[1].roomRule, { mode: "specific", names: ["Bagno di servizio"] });
+    assert.equal(loaded.logs.length, 2);
+    assert.deepEqual(loaded.logs[1], raw.logs[1]);
+    saveData(loaded);
+    assert.equal(loadData().logs.length, 2);
+  } finally {
+    globalThis.localStorage = old;
+  }
+});
