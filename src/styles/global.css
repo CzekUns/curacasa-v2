@@ -2244,6 +2244,39 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
 }
 
 
+/* Explicit icon accents: Classico and Cipria must differ even though they
+   otherwise share some legacy UI variables. Every value is part of its theme. */
+:root {
+  --personal-rose: #b8878d;
+  --personal-sage: #8d9684;
+  --personal-accent: #8f5960;
+}
+:root[data-theme="classico"] {
+  --personal-rose: #b8878d;
+  --personal-sage: #8d9684;
+  --personal-accent: #8f5960;
+}
+:root[data-theme="cipria"] {
+  --personal-rose: #c58d6d;
+  --personal-sage: #7f977f;
+  --personal-accent: #a96d79;
+}
+:root[data-theme="giada"] {
+  --personal-rose: #85a595;
+  --personal-sage: #6f8c69;
+  --personal-accent: #446752;
+}
+:root[data-theme="ghiaccio"] {
+  --personal-rose: #7ea5c6;
+  --personal-sage: #799bb9;
+  --personal-accent: #315f7a;
+}
+:root[data-theme="corallo"] {
+  --personal-rose: #de8667;
+  --personal-sage: #c59a79;
+  --personal-accent: #ad4128;
+}
+
 /* Personal icons are single-color SVGs with transparent art. The existing
    48px chore tile is white, so a personal icon occupies exactly the same
    footprint as every preset WebP icon. These colors follow the active theme. */
@@ -2253,10 +2286,10 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
   overflow: visible;
   border-radius: 0;
   background: transparent;
-  color: var(--rose);
+  color: var(--personal-rose);
 }
-.chore-icon-personal[data-tone="sage"] { color: var(--sage); }
-.chore-icon-personal[data-tone="accent"] { color: var(--rose-deep); }
+.chore-icon-personal[data-tone="sage"] { color: var(--personal-sage); }
+.chore-icon-personal[data-tone="accent"] { color: var(--personal-accent); }
 .icon-tile:has(> .chore-icon-personal) {
   border-color: rgba(141, 150, 132, .20);
   background: #fff;
