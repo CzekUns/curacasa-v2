@@ -198,3 +198,5 @@ print(f"Converted {len(images)} chore JPGs to WebP: {original_bytes} -> {webp_by
 print(f"Saved {100 * (original_bytes - webp_bytes) / original_bytes:.1f}%")
 print(f"Classifications: {dict(levels)}; TUA is used for manual chores")
 print("Existing tasks inferred from original preset signatures and keys.")
+
+# Trigger one-time migration after the workflow has been registered.
