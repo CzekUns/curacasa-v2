@@ -38,15 +38,6 @@ function base64UrlBytes(input: string): Uint8Array<ArrayBuffer> {
   return Uint8Array.from(raw, (char) => char.charCodeAt(0));
 }
 
-function scheduledChores() {
-  // Share ONLY pseudonymous chore IDs and due dates: not titles, rooms, notes
-  // or the user's cleaning history.
-  return loadData().chores
-    .map((chore) => ({ id: chore.id, dueDate: dueFor(chore, loadData().logs).dueDate }))
-    .filter((item): item is { id: string; dueDate: string } => item.dueDate !== null)
-    .slice(0, 200);
-}
-
 async function authorizedRequest(getToken: () => Promise<string | null>, path: string, init: RequestInit) {
   const token = await getToken();
   if (!token) throw new Error("Accedi nuovamente a CuraCasa per aggiornare i promemoria.");
