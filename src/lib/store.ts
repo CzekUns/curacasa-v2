@@ -32,6 +32,8 @@ export type ChoreLog = {
   durationSeconds?: number;
   note: string;
   rooms: string[];
+  /** Awarded at creation; old imported logs have no coin entry. */
+  curaCoins?: number;
 };
 
 export type AppData = {
@@ -40,7 +42,120 @@ export type AppData = {
   roomDetails?: RoomDetails;
   chores: Chore[];
   logs: ChoreLog[];
+  /** Persistent local CuraCoin ledger. Missing in legacy backups. */
+  wallet?: CuraWallet;
 };
+
+export type LoginReward = {
+  sessionId: string;
+  awardedAt: string;
+};
+
+export type CuraWallet = {
+  balance: number;
+  lifetimeEarned: number;
+  /** One reward clock per Clerk user; authentication is still required. */
+  loginRewards: Record<string, LoginReward>;
+};
+
+export const LOGIN_REWARD_COINS = 30;
+export const LOGIN_REWARD_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
+
+export function emptyWallet(): CuraWallet {
+  return { balance: 0, lifetimeEarned: 0, loginRewards: {} };
+}
+
+export function getWallet(data: AppData): CuraWallet {
+  const saved = data.wallet;
+  if (!saved) return emptyWallet();
+  return {
+    balance: Number.isFinite(saved.balance) ? Math.max(0, Math.trunc(saved.balance)) : 0,
+    lifetimeEarned: Number.isFinite(saved.lifetimeEarned) ? Math.max(0, Math.trunc(saved.lifetimeEarned)) : 0,
+    loginRewards: saved.loginRewards && typeof saved.loginRewards === "object"
+      ? saved.loginRewards : {},
+  };
+}
+
+/** The number of distinct rooms recorded; a location-free completion earns 1. */
+export function coinsForCompletion(rooms: readonly string[]): number {
+  return Math.max(1, new Set(rooms.filter((room) => typeof room === "string" && room.trim())).size);
+}
+
+/**
+ * One-time bonus upon a real Clerk login, then only on a DIFFERENT session
+ * created at least 7 full days after the preceding bonus.
+ * Not awarded in demo mode or on page refresh/session restoration.
+ */
+export function grantLoginCoins(
+  data: AppData,
+  userId: string,
+  sessionId: string,
+  sessionStartedAt: string | Date,
+  awardedAt: Date = new Date(),
+): AppData {
+  const started = new Date(sessionStartedAt).getTime();
+  const current = awardedAt.getTime();
+  if (!userId || !sessionId || !Number.isFinite(started) || !Number.isFinite(current)
+    || started > current + 60_000) return data;
+
+  const wallet = getWallet(data);
+  const previous = wallet.loginRewards[userId];
+  if (previous) {
+    const last = new Date(previous.awardedAt).getTime();
+    if (!Number.isFinite(last) || current - last < LOGIN_REWARD_INTERVAL_MS
+      || sessionId === previous.sessionId
+      || started < last + LOGIN_REWARD_INTERVAL_MS) return data;
+  }
+
+  return {
+    ...data,
+    wallet: {
+      ...wallet,
+      balance: wallet.balance + LOGIN_REWARD_COINS,
+      lifetimeEarned: wallet.lifetimeEarned + LOGIN_REWARD_COINS,
+      loginRewards: {
+        ...wallet.loginRewards,
+        [userId]: { sessionId, awardedAt: awardedAt.toISOString() },
+      },
+    },
+  };
+}
+
+/** Adjust a new log's reward if its room list changes; historic logs remain at zero. */
+export function updateLogRoomsAndCoins(data: AppData, logId: string, rooms: string[]): AppData {
+  const log = data.logs.find((entry) => entry.id === logId);
+  if (!log) return data;
+  const wasRewarded = typeof log.curaCoins === "number";
+  const nextCoins = wasRewarded ? coinsForCompletion(rooms) : undefined;
+  const delta = (nextCoins ?? 0) - (log.curaCoins ?? 0);
+  const wallet = getWallet(data);
+  return {
+    ...data,
+    logs: data.logs.map((entry) => entry.id === logId ? { ...entry, rooms, ...(wasRewarded ? { curaCoins: nextCoins } : {}) } : entry),
+    ...(delta !== 0 ? { wallet: {
+      ...wallet,
+      balance: Math.max(0, wallet.balance + delta),
+      lifetimeEarned: Math.max(0, wallet.lifetimeEarned + delta),
+    } } : {}),
+  };
+}
+
+/** Removing a rewarded log reverses its earned coins; old logs are untouched. */
+export function removeLogAndCoins(data: AppData, logId: string): AppData {
+  const log = data.logs.find((entry) => entry.id === logId);
+  if (!log) return data;
+  const reversal = log.curaCoins ?? 0;
+  const wallet = getWallet(data);
+  return {
+    ...data,
+    logs: data.logs.filter((entry) => entry.id !== logId),
+    ...(reversal ? { wallet: {
+      ...wallet,
+      balance: Math.max(0, wallet.balance - reversal),
+      lifetimeEarned: Math.max(0, wallet.lifetimeEarned - reversal),
+    } } : {}),
+  };
+}
 
 const STORE_KEY = "curacasa_v2_data";
 
@@ -105,6 +220,7 @@ export function createDefaultData(): AppData {
       updatedAt: stamp,
     })),
     logs: [],
+    wallet: emptyWallet(),
   };
 }
 
@@ -130,6 +246,7 @@ export function loadData(): AppData {
       roomDetails: normalizeRoomDetails(rooms, parsed.roomDetails),
       chores,
       logs,
+      wallet: getWallet(parsed),
     };
   } catch {
     const data = createDefaultData();
@@ -259,8 +376,18 @@ export function addLog(data: AppData, choreId: string, payload?: Partial<ChoreLo
     durationSeconds: Number(payload?.durationSeconds || 0),
     note: payload?.note || "",
     rooms: payload?.rooms || [],
+    curaCoins: coinsForCompletion(payload?.rooms || []),
   };
-  return { ...data, logs: [log, ...data.logs] };
+  const wallet = getWallet(data);
+  return {
+    ...data,
+    logs: [log, ...data.logs],
+    wallet: {
+      ...wallet,
+      balance: wallet.balance + log.curaCoins!,
+      lifetimeEarned: wallet.lifetimeEarned + log.curaCoins!,
+    },
+  };
 }
 
 export function downloadJson(name: string, data: unknown) {
