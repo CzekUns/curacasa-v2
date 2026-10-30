@@ -97,7 +97,7 @@ export function ChoreLevelTag({ level }: { level: ChoreLevel }) {
 
 replace_once("src/lib/store.ts",
     'export type ChoreType = "ordinaria" | "straordinaria";',
-    'import { classifyChoreLevel, type ChoreLevel } from "./chore-levels";\n\nexport type ChoreType = "ordinaria" | "straordinaria";')
+    'import { classifyChoreLevel, type ChoreLevel } from "./chore-levels.ts";\n\nexport type ChoreType = "ordinaria" | "straordinaria";')
 replace_once("src/lib/store.ts",
     "  type: ChoreType;\n  room: string;",
     "  type: ChoreType;\n  /** Cleaning depth, separate from routine/extraordinary frequency. */\n  level?: ChoreLevel;\n  room: string;")
