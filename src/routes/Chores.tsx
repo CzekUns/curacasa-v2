@@ -1,3 +1,18 @@
+const COMPLETION_MESSAGES = [
+  "Un pensiero in meno!",
+  "Un piccolo passo, una casa più serena.",
+  "Ottimo, anche questa è fatta!",
+  "La casa prende forma, un gesto alla volta.",
+  "Hai fatto spazio alla tranquillità.",
+  "Brava! Ora goditi il risultato.",
+  "Un'altra cosa sistemata. Bene così!",
+  "La costanza fa la differenza.",
+  "Un angolo di casa più curato.",
+  "Ogni piccolo gesto conta.",
+  "Fatto! La tua casa ti ringrazia.",
+  "Una faccenda in meno, più tempo per te.",
+] as const;
+
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Clock, Pencil, Play, Search, Square, X } from "lucide-react";
@@ -65,7 +80,7 @@ export function Chores() {
     if (next === current) return;
     saveData(next);
     setRecentlyDoneId(pendingCompletion.id);
-    announce("Faccenda completata!");
+    announce(COMPLETION_MESSAGES[Math.floor(Math.random() * COMPLETION_MESSAGES.length)]);
   }
 
   function openDetail(choreId: string) {
