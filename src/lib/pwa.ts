@@ -20,7 +20,8 @@ export function initPwaInstallPrompt() {
   initialized = true;
 
   window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
+    // Do not suppress the browser's native install invitation.
+    // The permanent Home install card has been removed.
     installPrompt = event as InstallPromptEvent;
     window.dispatchEvent(new Event("curacasa-install-ready"));
   });
