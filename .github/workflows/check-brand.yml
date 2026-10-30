@@ -77,7 +77,7 @@ jobs:
           assert width == 512 and 440 <= height <= 512, (width, height)
           html = Path('dist/index.html').read_text()
           assert 'brand/favicon.svg' in html
-          assert 'brand/apple-touch-icon.png' in html
+          assert 'manifest.webmanifest' in html
           styles = '\n'.join(p.read_text() for p in Path('dist/assets').glob('*.css'))
           assert '#f5e5e1' in styles, 'Shared access-screen gradient missing'
           assert 'hero-whisper.svg' in styles or any('hero-whisper.svg' in p.read_text() for p in Path('dist/assets').glob('*.js'))
