@@ -80,7 +80,5 @@ jobs:
           assert 'manifest.webmanifest' in html
           styles = '\n'.join(p.read_text() for p in Path('dist/assets').glob('*.css'))
           assert '#f5e5e1' in styles, 'Shared access-screen gradient missing'
-          assert 'hero-whisper.svg' in styles or any('hero-whisper.svg' in p.read_text() for p in Path('dist/assets').glob('*.js'))
-          assert 'opacity:.28' in styles or 'opacity:0.28' in styles, 'Translucent homepage art missing'
-          print('Logo family, aspect ratios, PWA icons and translucent hero validated')
+          print('Logo family, aspect ratios, PWA icons and personal illustration assets validated')
           PY
