@@ -57,8 +57,8 @@ function curacasaSeo(): Plugin {
           : "",
       ].filter(Boolean).join("\n    ");
 
-      // The React app replaces the fallback after boot; crawlers and users
-      // without JavaScript still receive meaningful HTML, not an empty #root.
+      // Keep the fallback exclusive to browsers without JavaScript so app reloads
+      // never flash the public landing page before React starts.
       const fallback = `<main class="landing-page">
         <header class="landing-topbar"><span class="landing-logo"><img src="${escapeHtml(base)}brand/mark.svg" width="36" height="36" alt="" /> CuraCasa</span></header>
         <section class="landing-hero">
@@ -75,7 +75,7 @@ function curacasaSeo(): Plugin {
 
       return html
         .replace("<!-- curacasa:seo-head -->", seoHead)
-        .replace("<!-- curacasa:static-landing -->", fallback);
+        .replace("<!-- curacasa:static-landing -->", `<noscript>${fallback}</noscript>`);
     },
     generateBundle() {
       if (!indexable || !siteUrl) return;
@@ -109,3 +109,4 @@ export default defineConfig({
   plugins: [react(), curacasaSeo()],
   base,
 });
+
