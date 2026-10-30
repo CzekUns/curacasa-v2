@@ -64,7 +64,7 @@ export function Settings() {
             </article>
           ))}
         </div>
-        <RoomManager data={data} onChange={updateRooms} label="Gestisci stanze" />
+        <RoomManager data={data} onChange={updateRooms} label="Gestisci stanze" startInManager />
       </section>
 
       <section className="settings-card">
