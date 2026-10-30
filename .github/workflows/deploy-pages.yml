@@ -42,6 +42,9 @@ jobs:
           SEO_INDEXABLE: "false"
         run: npm run build
 
+      - name: Test app logic
+        run: npm run test:logic
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
