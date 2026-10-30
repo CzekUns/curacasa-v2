@@ -234,4 +234,30 @@ Casi da aggiungere/controllare con backup fittizi:
 - Log orfani, ID duplicati, stanza rimossa e titoli modificati: segnalare, non correggere distruttivamente.
 - Seconda migrazione dello **stesso backup** non deve aggiungere doppioni (idempotenza).
 
+## 10. Portafoglio CuraCoin (versione successiva: ottobre 2026)
+
+Dopo l'introduzione della gamificazione, il modello `AppData` aggiunge un campo opzionale `wallet`; `ChoreLog` aggiunge `curaCoins?: number`. La fonte attuale è `src/lib/store.ts`, non questo documento.
+
+```ts
+type CuraWallet = {
+  balance: number;
+  lifetimeEarned: number;
+  loginRewards: Record<string, {
+    sessionId: string; // Clerk, mai inventato dall'importazione
+    awardedAt: string; // data ISO dell'ultimo accredito a quell'account
+  }>;
+};
+```
+
+**Regole per l'agente migratore:**
+
+- Un backup simoneapps **non** contiene né `wallet` né `curaCoins`: creare `wallet: {balance:0,lifetimeEarned:0,loginRewards:{}}` oppure lasciarlo assente; `loadData()` normalizza automaticamente. **Non attribuire retroattivamente** CuraCoin ai log precedenti, anche se hanno il numero di stanze.
+- Conservare i log e gli ID esattamente come erano. Lasciare `curaCoins` **assente** sui log storici; significa che non hanno generato premi.
+- Nei nuovi completamenti l'app accredita **max(1, numero di stanze distinte selezionate)**; una registrazione senza luogo vale 1. L'azione è contabilizzata una sola volta, anche da calendario.
+- Nei nuovi log `curaCoins` fotografa il premio riconosciuto al momento della registrazione. La modifica delle stanze di quel log aggiorna il saldo per differenza e la cancellazione ne sottrae i crediti; non modificare il saldo quando si corregge un log storico senza `curaCoins`.
+- Il premio di **30 CuraCoin** avviene soltanto in presenza di un accesso Clerk autenticato; non deve essere ricreato, simulato o assegnato dall'importazione. Per i premi successivi servono **entrambe** le condizioni: sono trascorse 168 ore dall'ultimo bonus **e** l'utente ha effettuato un nuovo login con una sessione Clerk creata dopo la scadenza dei 7 giorni. Logout/login prima dei 7 giorni o semplice refresh della sessione non accredita nulla.
+- Un backup con wallet valido può già contenere premi: preservarlo integralmente ed evitare che l'importazione conceda subito 30 CuraCoin come effetto collaterale. L'app è attualmente frontend/localStorage: questa contabilità non è antifrode o sincronizzata tra dispositivi. Per un'economia monetizzabile occorre convalidare le operazioni su un backend.
+
+**Nota sulla datazione:** la nuova logica dei CuraCoin entra in vigore con la relativa pubblicazione. Non assumere che i salvataggi legacy abbiano già beneficiato di bonus o ricompense.
+
 **Regola finale:** la migrazione aggiorna la **struttura e la classificazione**, non riscrive la storia dell'utente. In caso di dubbio lasciare il dato intatto, documentare l'incertezza e richiedere una scelta esplicita prima di una trasformazione irreversibile.
