@@ -125,6 +125,9 @@ export function loadData(): AppData {
 
 export function saveData(data: AppData) {
   localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("curacasa:data-changed"));
+  }
 }
 
 export function lastLog(chore: Chore, logs: ChoreLog[]) {
@@ -133,15 +136,49 @@ export function lastLog(chore: Chore, logs: ChoreLog[]) {
     .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())[0];
 }
 
-export function statusFor(chore: Chore, logs: ChoreLog[]) {
-  const last = lastLog(chore, logs);
-  const days = daysAgo(last?.completedAt);
-  if (!chore.frequency || days === null) return "normal";
-  const ratio = days / chore.frequency;
-  if (ratio > 1.2) return "overdue";
-  if (ratio > 1) return "warning";
-  if (ratio > 0.7) return "soon";
-  return "normal";
+/** Civil-day distance, immune to daylight-saving changes. */
+export function civilDayNumber(key: string): number {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key);
+  if (!match) return Number.NaN;
+  const [year, month, day] = match.slice(1).map(Number);
+  const ms = Date.UTC(year, month - 1, day);
+  const check = new Date(ms);
+  if (check.getUTCFullYear() !== year || check.getUTCMonth() + 1 !== month || check.getUTCDate() !== day) {
+    return Number.NaN;
+  }
+  return Math.floor(ms / 86_400_000);
+}
+
+export type DueStatus = "normal" | "soon" | "warning" | "overdue";
+
+export function dueFor(chore: Chore, logs: ChoreLog[], today: Date = new Date()):
+  { status: DueStatus; daysUntil: number | null; dueDate: string | null } {
+  const frequency = Number(chore.frequency);
+  if (!Number.isInteger(frequency) || frequency <= 0) {
+    return { status: "normal", daysUntil: null, dueDate: null };
+  }
+  const latest = lastLog(chore, logs);
+  // Previously, never-completed chores were *always* normal.
+  // Use the creation date as the first-cycle anchor.
+  const anchor = latest?.completedAt ?? chore.createdAt;
+  if (!anchor || Number.isNaN(new Date(anchor).getTime())) {
+    return { status: "normal", daysUntil: null, dueDate: null };
+  }
+  const anchorDay = civilDayNumber(dayKey(anchor));
+  const todayDay = civilDayNumber(dayKey(today));
+  const dueDay = anchorDay + frequency;
+  const daysUntil = dueDay - todayDay;
+  const dueDate = new Date(dueDay * 86_400_000).toISOString().slice(0, 10);
+  if (daysUntil < 0) return { status: "overdue", daysUntil, dueDate };
+  if (daysUntil === 0) return { status: "warning", daysUntil, dueDate };
+  if (daysUntil <= Math.max(1, Math.ceil(frequency * .3))) {
+    return { status: "soon", daysUntil, dueDate };
+  }
+  return { status: "normal", daysUntil, dueDate };
+}
+
+export function statusFor(chore: Chore, logs: ChoreLog[]): DueStatus {
+  return dueFor(chore, logs).status;
 }
 
 /** Signature shared by Store activities and older imports with no presetKey. */

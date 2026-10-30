@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "curacasa-reminders",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-30",
+  "triggers": { "crons": ["0 * * * *"] },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "curacasa-reminders",
+      "database_id": "REPLACE_WITH_REAL_D1_DATABASE_ID"
+    }
+  ],
+  "vars": {
+    "ALLOWED_ORIGINS": "https://czekuns.github.io",
+    "VAPID_PUBLIC_KEY": "REPLACE_WITH_PUBLIC_VAPID_KEY",
+    "VAPID_SUBJECT": "mailto:REPLACE_WITH_YOUR_EMAIL"
+  }
+}

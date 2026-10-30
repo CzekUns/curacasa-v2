@@ -4,6 +4,7 @@ import { Download, Plus, RefreshCw, Trash2, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import { forceAppUpdate } from "../lib/pwa";
 import { isDemoMode } from "../lib/demo";
+import { ReminderSettings } from "../components/ReminderSettings";
 import { createDefaultData, downloadJson, loadData, saveData } from "../lib/store";
 
 function ClerkAccountInfo() {
@@ -96,6 +97,13 @@ export function Settings() {
           </button>
         </div>
       </section>
+
+      {isDemoMode ? (
+        <section className="settings-card reminder-settings">
+          <h2>Promemoria scadenze</h2>
+          <p>Le faccende in scadenza sono evidenziate nella Home. Le notifiche sul telefono richiedono un account Clerk e il servizio push configurato nella versione ufficiale.</p>
+        </section>
+      ) : <ReminderSettings />}
 
       <section className="settings-card">
         <h2>App installata</h2>
