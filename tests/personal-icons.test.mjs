@@ -92,3 +92,13 @@ test("Only the inconsistent symbols use canonical Lucide geometry", () => {
   assert.ok(license.includes("Lucide Icons and Contributors"));
   assert.ok(license.includes("Cole Bemis"));
 });
+
+test("Custom SVG chores retain the same rose border as preset WebP tiles", () => {
+  const presetTile = styles.match(/\\.icon-tile\\s*\\{([^}]*)\\}/)?.[1];
+  const personalTile = styles.match(/\\.icon-tile:has\\(> \\.chore-icon-personal\\)\\s*\\{([^}]*)\\}/)?.[1];
+  assert.ok(presetTile, "Preset icon tile styling must exist");
+  assert.match(presetTile, /border:\\s*1px solid rgba\\(184,\\s*135,\\s*141,\\s*\\.7\\)/);
+  assert.ok(personalTile, "Personal icon tile styling must exist");
+  assert.doesNotMatch(personalTile, /border(?:-color)?:/, "Custom icons must inherit the preset rose border");
+  assert.match(personalTile, /background:\\s*#fff/, "Custom icons keep their white tile");
+});
