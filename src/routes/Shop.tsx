@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Check, Palette, PackagePlus, Plus } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreIcon } from "../lib/icons";
+import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity } from "../lib/chore-levels";
 import { importPresets, loadData, presetSignature, saveData, type PresetChore } from "../lib/store";
 import { getTheme, setTheme, THEMES, type ThemeName } from "../lib/theme";
 
@@ -34,7 +35,7 @@ export function Shop() {
   }, []);
 
   const owned = useMemo(() => new Set(
-    data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore)].filter((key): key is string => !!key)),
+    data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore), presetIdentity(chore)].filter((key): key is string => !!key)),
   ), [data.chores]);
 
   const activities = useMemo(() => {
@@ -119,7 +120,7 @@ export function Shop() {
       {activeTab === "collections" && packs.length ? (
         <section className="pack-list" role="tabpanel" aria-label="Collezioni">
           {packs.map((pack) => {
-            const missing = pack.chores.filter((chore) => !owned.has(presetSignature(chore)));
+            const missing = pack.chores.filter((chore) => !owned.has(presetIdentity(chore)));
             const allOwned = missing.length === 0;
             return (
               <article className={`pack-card ${allOwned ? "shop-owned" : ""}`} key={pack.id}>
@@ -157,7 +158,7 @@ export function Shop() {
                   <ChoreIcon name={chore.icon} size={40} />
                 </span>
                 <div>
-                  <p className="eyebrow">{chore.packTitle}</p>
+                  <p className="eyebrow">{CHORE_LEVEL_LABELS[classifyChoreLevel(chore)]} · {chore.packTitle}</p>
                   <h2>{chore.title}</h2>
                   <span>{chore.description}</span>
                 </div>
