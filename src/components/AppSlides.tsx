@@ -1,0 +1,12 @@
+import { useEffect, useState } from "react";
+import { Check, CalendarDays, Home, ListChecks } from "lucide-react";
+import { Brand } from "./Brand";
+const names = ["Le tue stanze", "Le tue faccende", "Il tuo calendario"];
+export function AppSlides({initialSlide = 0, autoPlay = true}: {initialSlide?: number; autoPlay?: boolean}) {
+ const [slide,setSlide] = useState(initialSlide);
+ const [playing,setPlaying] = useState(false);
+ useEffect(()=>{const reduced=matchMedia("(prefers-reduced-motion: reduce)");setPlaying(autoPlay && !reduced.matches);const change=()=>setPlaying(autoPlay && !reduced.matches);reduced.addEventListener("change",change);return ()=>reduced.removeEventListener("change",change);},[autoPlay]);
+ useEffect(()=>{if(!playing)return;const timer=setInterval(()=>setSlide(s=>(s+1)%3),5000);return()=>clearInterval(timer);},[playing]);
+ return <div className={`cc-slides${autoPlay ? "" : " cc-slides--static"}`}><div className="cc-phone"><div className="cc-speaker"/><Brand compact/><p className="cc-kicker">LA TUA CASA, UN PENSIERO IN MENO</p><div className="cc-slide-body" key={slide}><h3>{names[slide]}</h3>{slide===0 ? <div className="cc-rooms">{["Cucina","Soggiorno","Camera","Bagno"].map((room,i)=><div key={room}><svg viewBox="0 0 96 96" aria-hidden="true"><use href={`${import.meta.env.BASE_URL}personal-icons/symbols.svg#personale-${["scintilla","cuore","luna","bolle"][i]}`}/></svg><strong>{room}</strong><span>{i===0 ? "2 faccende da guardare" : "Tutto al suo posto"}</span></div>)}</div> : slide===1 ? <div className="cc-sim-tasks">{["Pulisci il piano cucina","Spolvera le mensole","Cambia le lenzuola"].map((task,i)=><div className={i===0 ? "cc-sim-done" : ""} key={task}><span className="cc-sim-check"><Check size={16}/></span><div><strong>{task}</strong><small>{i===0 ? "Completata oggi" : "Da fare"}</small></div></div>)}</div> : <div className="cc-sim-calendar"><p>La tua settimana</p><div className="cc-week">{["L","M","M","G","V","S","D"].map((day,i)=><span className={i===3 ? "cc-day-active" : ""} key={i}>{day}<b>{12+i}</b></span>)}</div><div className="cc-calendar-event"><Check size={18}/><div><strong>Piano cucina</strong><small>Fatto oggi · Cucina</small></div></div><div className="cc-calendar-event"><CalendarDays size={18}/><div><strong>Le prossime attenzioni</strong><small>Ritrovale nel calendario</small></div></div></div>}</div><div className="cc-sim-nav" aria-hidden="true"><Home size={17}/><ListChecks size={17}/><CalendarDays size={17}/></div><small>Simulazione illustrativa dell’app</small></div></div>;
+}
+

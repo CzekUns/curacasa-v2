@@ -1,86 +1,35 @@
 import { Show, SignInButton, SignUpButton } from "@clerk/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Brand } from "../components/Brand";
-import { landingDescription, landingFeatures, landingTitle } from "../content/landing";
 import { isDemoMode } from "../lib/demo";
-
-const appDestination = `${import.meta.env.BASE_URL}#/app`;
-
+import { AppSlides } from "../components/AppSlides";
+import "../styles/landing.css";
+const destination = `${import.meta.env.BASE_URL}#/app`;
+const contact = "mailto:simonemazzellauns@gmail.com?subject=CuraCasa%20con%20il%20mio%20marchio";
+function Art({name, className = ""}: {name: string; className?: string}) {
+ const symbols: Record<string,string> = {spolverino:"piumino",lavatrice:"lavaggio",piante:"fiore","mocio-secchio":"secchiello"};
+ return name === "casa" ? <img className={className} src={`${import.meta.env.BASE_URL}brand/mark.svg`} alt=""/> : <svg className={className} viewBox="0 0 96 96" aria-hidden="true"><use href={`${import.meta.env.BASE_URL}personal-icons/symbols.svg#personale-${symbols[name] || "scintilla"}`}/></svg>;
+}
+function Start() {
+  if (isDemoMode) return <Link className="cc-button" to="/app">Crea il tuo account <ArrowRight size={17}/></Link>;
+  return <><Show when="signed-out"><SignUpButton mode="modal" forceRedirectUrl={destination}><button className="cc-button">Crea il tuo account <ArrowRight size={17}/></button></SignUpButton></Show><Show when="signed-in"><Link className="cc-button" to="/app">Apri CuraCasa <ArrowRight size={17}/></Link></Show></>;
+}
+function Phone() { return <AppSlides/>; }
+const benefits = [["casa","La tua casa","Organizza gli ambienti e le faccende di ogni stanza."],["spolverino","Le tue abitudini","Scegli attività e frequenze adatte alla tua quotidianità."],["lavatrice","I tuoi tempi","Calendario e cronometro, per organizzarti al tuo ritmo."],["piante","Più serenità","Ritrova quando hai pulito e cosa richiede attenzione."]];
+const stories = [
+ {title:<>Comincia dalle<br/>tue stanze.</>,label:"01 / LA TUA CASA",copy:"Una cucina, un bagno, il tuo angolo preferito. Crea gli ambienti della tua casa e organizza le faccende intorno agli spazi che vivi davvero.",detail:"Usa le attività disponibili oppure aggiungi quelle che servono a te."},
+ {title:<>Le faccende trovano<br/>il loro momento.</>,label:"02 / IL TUO RITMO",copy:"Imposta la frequenza delle pulizie e consulta le attività da guardare. Il calendario ti aiuta a orientarti tra quello che hai fatto e le prossime scadenze.",detail:"Per le attività che vuoi misurare, c’è il cronometro."},
+ {title:<>Non devi ricordarti<br/>proprio tutto.</>,label:"03 / UN PENSIERO IN MENO",copy:"Quando hai cambiato le lenzuola? E pulito i filtri? Registra le faccende completate e ritrova l’ultima volta che te ne sei occupato.",detail:"Una traccia semplice delle attenzioni che dedichi alla tua casa."}
+];
 export function Landing() {
-  return (
-    <main className="landing-page">
-      <div className="landing-bg" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
-
-      <header className="landing-topbar">
-        <Brand className="landing-brand-reveal" />
-        {isDemoMode ? (
-          <Link className="landing-mini-link" to="/app">Apri demo</Link>
-        ) : (
-          <>
-            <Show when="signed-in">
-              <Link className="landing-mini-link" to="/app">Apri app</Link>
-            </Show>
-            <Show when="signed-out">
-              <SignInButton mode="modal" forceRedirectUrl={appDestination}>
-                <button className="landing-mini-link" type="button">Accedi</button>
-              </SignInButton>
-            </Show>
-          </>
-        )}
-      </header>
-
-      <section className="landing-hero" aria-labelledby="landing-title">
-        <div className="landing-copy landing-reveal">
-          <div className="landing-hero-mark" aria-hidden="true">
-            <img src={`${import.meta.env.BASE_URL}brand/mark.svg`} width="90" height="90" alt="" />
-            <span className="landing-hero-glint" />
-          </div>
-          <h1 id="landing-title">{landingTitle}</h1>
-          <p className="landing-subtitle">{landingDescription}</p>
-          <div className="landing-actions">
-            {isDemoMode ? (
-              <Link className="landing-cta landing-cta--primary" to="/accesso">
-                Scopri l'accesso <ArrowRight size={17} />
-              </Link>
-            ) : (
-              <>
-                <Show when="signed-out">
-                  <SignUpButton mode="modal" forceRedirectUrl={appDestination}>
-                    <button className="landing-cta landing-cta--primary" type="button">
-                      Inizia gratis <ArrowRight size={17} />
-                    </button>
-                  </SignUpButton>
-                </Show>
-                <Show when="signed-in">
-                  <Link className="landing-cta landing-cta--primary" to="/app">
-                    Apri CuraCasa <ArrowRight size={17} />
-                  </Link>
-                </Show>
-              </>
-            )}
-          </div>
-          <ul className="landing-features" aria-label="Funzioni principali">
-            {landingFeatures.map((feature) => <li key={feature}>{feature}</li>)}
-          </ul>
-        </div>
-
-        <div className="landing-hero-art" aria-hidden="true">
-          <img
-            src={`${import.meta.env.BASE_URL}brand/hero-whisper-v2.svg`}
-            alt=""
-            width="1200"
-            height="820"
-            loading="eager"
-            decoding="async"
-            draggable={false}
-          />
-        </div>
-      </section>
-    </main>
-  );
+ const go = (id:string) => document.getElementById(id)?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"});
+ return <main className="cc-landing" id="inizio"><section className="cc-opening"><header className="cc-header"><Brand/><nav aria-label="Navigazione principale">{[["come-funziona","Come funziona"],["aziende","Per le aziende"],["prezzi","Prezzi"],["chi-siamo","Chi siamo"]].map(([id,label])=><button key={id} onClick={()=>go(id)}>{label}</button>)}</nav>{isDemoMode ? <Link className="cc-login" to="/app">Accedi</Link> : <><Show when="signed-out"><SignInButton mode="modal" forceRedirectUrl={destination}><button className="cc-login">Accedi</button></SignInButton></Show><Show when="signed-in"><Link className="cc-login" to="/app">Apri app</Link></Show></>}</header>
+ <div className="cc-hero"><div><p className="cc-kicker">PICCOLE ABITUDINI. PIÙ SERENITÀ.</p><h1>La tua casa,<br/><em>un pensiero<br/>in meno.</em></h1><p className="cc-intro">Organizza le faccende, ritrova le ultime pulizie e prenditi cura dei tuoi spazi. Una piccola abitudine alla volta.</p><Start/><p className="cc-under">Faccende · Calendario · Cronometro</p><button className="cc-text-link" onClick={()=>go("aziende")}>Vuoi offrirla ai tuoi clienti? <ArrowRight size={15}/></button></div><div className="cc-hero-art" id="simulazione"><div className="cc-circle"/><Art name="piante" className="cc-float cc-float-plant"/><Phone/><Art name="mocio-secchio" className="cc-float cc-float-mop"/><div className="cc-note"><Check size={18}/> Fatto, un pensiero in meno.</div></div></div></section>
+ <section className="cc-benefits cc-wrap"><p className="cc-kicker">BENVENUTO A CASA</p><h2>Un po’ di ordine.<br/>Molto più respiro.</h2><div className="cc-benefit-grid">{benefits.map(([icon,title,copy])=><article key={title}><Art name={icon}/><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
+ <div className="cc-wrap" id="come-funziona">{stories.map((story,i)=><section className={`cc-story cc-story-${i}`} key={story.label}><div className="cc-story-art"><AppSlides initialSlide={(i + 1) % 3} autoPlay={false}/></div><div className="cc-story-copy"><p className="cc-kicker">{story.label}</p><h2>{story.title}</h2><p>{story.copy}</p><p>{story.detail}</p><button className="cc-text-link" onClick={()=>go("simulazione")}>Guarda come funziona <ArrowRight size={15}/></button></div></section>)}</div>
+ <section className="cc-business" id="aziende"><div className="cc-wrap cc-business-grid"><div><p className="cc-kicker">CURACASA, CON IL TUO MARCHIO</p><h2>Il tuo logo.<br/>Una presenza nella<br/>casa dei tuoi clienti.</h2><p>Offri ai tuoi clienti uno strumento utile anche dopo l’acquisto. CuraCasa può essere personalizzata con il tuo marchio e diventare un servizio da affiancare alla tua offerta.</p><a className="cc-button" href={contact}>Parliamo del tuo progetto <ArrowRight size={17}/></a></div><div className="cc-partner"><span className="cc-partner-logo">Il tuo logo, qui</span><Art name="casa"/><h3>La cura di casa,<br/>firmata da te.</h3><p>Un servizio da offrire ai tuoi clienti.<br/>Un progetto concordato insieme.</p></div></div></section>
+ <section className="cc-pricing cc-wrap" id="prezzi"><p className="cc-kicker">PREZZI E SOLUZIONI</p><h2>Per la tua casa.<br/>O per i tuoi clienti.</h2><div className="cc-price-grid"><article><p className="cc-kicker">PER TE</p><h3>CuraCasa</h3><strong className="cc-price">Per la tua casa</strong><p>Scopri un modo più semplice di organizzare la cura della tua casa.</p><ul>{["Stanze e faccende","Calendario delle attività","Cronometro"].map(t=><li key={t}><Check size={17}/>{t}</li>)}</ul><Start/><button className="cc-text-link" onClick={()=>go("simulazione")}>Guarda l’app in azione <ArrowRight size={15}/></button></article><article><p className="cc-kicker">PER LA TUA AZIENDA</p><h3>Il tuo marchio</h3><strong className="cc-price">Preventivo su progetto</strong><p>Una versione da offrire ai tuoi clienti, con il tuo logo e un perimetro definito insieme.</p><ul>{["Personalizzazione del marchio","Distribuzione concordata insieme","Costi e servizi definiti nella proposta"].map(t=><li key={t}><Check size={17}/>{t}</li>)}</ul><a className="cc-button" href={contact}>Richiedi una proposta <ArrowRight size={17}/></a><small>Prezzo in base alla personalizzazione e alla distribuzione.</small></article></div></section>
+ <section className="cc-about cc-wrap" id="chi-siamo"><img src={`${import.meta.env.BASE_URL}brand/mark.svg`} alt="" width="120" height="120" loading="lazy"/><div><p className="cc-kicker">CHI SIAMO</p><h2>Strumenti semplici.<br/>Esigenze reali.</h2><p>CuraCasa è un progetto digitale di Nexa. Partiamo dai gesti quotidiani per costruire strumenti concreti, accessibili e pensati intorno alle persone che li usano.</p><a className="cc-text-link" href="https://nexasrls.it/chi-siamo/" target="_blank" rel="noreferrer">Conosci Nexa <ArrowRight size={16}/></a></div></section>
+ <section className="cc-closing"><p className="cc-kicker">FAI SPAZIO ALLE COSE CHE AMI</p><h2>La tua casa,<br/>un pensiero in meno.</h2><Start/></section><footer className="cc-footer cc-wrap"><Brand/><p>Un progetto Nexa · Fatto con cura.</p><button className="cc-text-link" onClick={()=>go("inizio")}>Torna su ↑</button></footer></main>;
 }
