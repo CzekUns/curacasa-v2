@@ -1,10 +1,11 @@
-import { Check, Crown, Pencil, Sparkles } from "lucide-react";
+import { Check, Crown, Pencil, Sparkles, Wrench } from "lucide-react";
 import type { ChoreLevel } from "../lib/chore-levels";
 
 const LABELS = {
   base: { text: "BASE", icon: Check },
   pro: { text: "PRO", icon: Sparkles },
   super: { text: "SUPER", icon: Crown },
+  speciale: { text: "SPECIALE", icon: Wrench },
   tua: { text: "TUA", icon: Pencil },
 } as const;
 
