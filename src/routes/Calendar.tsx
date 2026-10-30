@@ -6,7 +6,7 @@ import { eligibleRoomNames, getRoomRule } from "../lib/chore-rooms";
 import { normalizeRoomDetails } from "../lib/rooms";
 import { ChoreIcon } from "../lib/icons";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
-import { addLog, dayKey, hasCompletedOnDay, loadData, monthKey, saveData, type ChoreLog } from "../lib/store";
+import { addLog, dayKey, hasCompletedOnDay, loadData, monthKey, removeLogAndCoins, saveData, updateLogRoomsAndCoins, type ChoreLog } from "../lib/store";
 
 function timerText(seconds: number) {
   const hours = Math.floor(seconds / 3600);
@@ -121,7 +121,7 @@ export function Calendar() {
     }
     saveData(next);
     setAddStatus("");
-    announce("Faccenda registrata nel calendario!");
+    announce(`Faccenda registrata! +${next.logs[0]?.curaCoins ?? 1} CuraCoin`);
     event.currentTarget.reset();
     setAddRooms([]);
     setAddChoreId("");
@@ -131,10 +131,8 @@ export function Calendar() {
   }
 
   function removeLog(logId: string) {
-    const next = {
-      ...data,
-      logs: data.logs.filter((log) => log.id !== logId),
-    };
+    const next = removeLogAndCoins(loadData(), logId);
+    if (next === data) return;
     saveData(next);
     setData(next);
     if (editingLogId === logId) stopEditingLog();
@@ -153,16 +151,16 @@ export function Calendar() {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const durationSeconds = durationSecondsFrom(editManualMinutes, editElapsedSeconds, editTimerStartedAt);
+    const current = updateLogRoomsAndCoins(loadData(), logId, editRooms);
     const next = {
-      ...data,
-      logs: data.logs.map((log) =>
+      ...current,
+      logs: current.logs.map((log) =>
         log.id === logId
           ? {
               ...log,
               durationMinutes: Math.ceil(durationSeconds / 60),
               durationSeconds,
               note: String(form.get("note") || ""),
-              rooms: editRooms,
             }
           : log,
       ),
