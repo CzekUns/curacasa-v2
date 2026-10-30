@@ -12,6 +12,16 @@ export function AppShell() {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [pathname]);
 
+  useEffect(() => {
+    // Restrict mobile pinch/double-tap zoom to the installed app,
+    // leaving the public landing page's accessibility viewport untouched.
+    const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (!viewport) return;
+    const original = viewport.content;
+    viewport.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover";
+    return () => { viewport.content = original; };
+  }, []);
+
   return (
     <div className="app-shell">
       {!isDemoMode && <RemindersBackgroundSync />}
