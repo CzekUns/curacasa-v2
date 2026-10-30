@@ -1,3 +1,5 @@
+import { classifyChoreLevel, type ChoreLevel } from "./chore-levels.ts";
+
 export type ChoreType = "ordinaria" | "straordinaria";
 
 export type Chore = {
@@ -6,6 +8,8 @@ export type Chore = {
   description: string;
   icon: string;
   type: ChoreType;
+  /** Cleaning depth, separate from routine/extraordinary frequency. */
+  level?: ChoreLevel;
   room: string;
   frequency: number;
   estimatedMinutes: number;
@@ -108,7 +112,10 @@ export function loadData(): AppData {
     const parsed = JSON.parse(raw) as AppData;
     const rooms = Array.isArray(parsed.rooms) ? parsed.rooms : DEFAULT_ROOMS;
     const chores = Array.isArray(parsed.chores)
-      ? parsed.chores.map((chore) => ({ ...chore, icon: LEGACY_ICON_MAP[chore.icon] || chore.icon }))
+      ? parsed.chores.map((chore) => {
+          const icon = LEGACY_ICON_MAP[chore.icon] || chore.icon;
+          return { ...chore, icon, level: classifyChoreLevel({ ...chore, icon }) };
+        })
       : [];
     const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
     return {
@@ -210,6 +217,7 @@ export function importPresets(data: AppData, presets: PresetChore[]): { data: Ap
       ...preset,
       id: id("chore"),
       presetKey: key,
+      level: classifyChoreLevel(preset),
       notes: preset.notes || "",
       createdAt: stamp,
       updatedAt: stamp,

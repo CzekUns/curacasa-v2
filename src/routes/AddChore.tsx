@@ -21,6 +21,7 @@ export function AddChore() {
       description: String(form.get("description") || "").trim(),
       icon: selectedIcon,
       type: String(form.get("type") || "ordinaria") as ChoreType,
+      level: "tua",
       room: String(form.get("room") || "").trim(),
       frequency: Number(form.get("frequency") || 0),
       estimatedMinutes: Number(form.get("estimatedMinutes") || 0),

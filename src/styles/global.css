@@ -2203,3 +2203,42 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
 .curacasa-brand__name span:last-child { color: #c9958e; }
 .curacasa-brand__symbol { background: transparent; box-shadow: none; }
 .landing-hero-mark { background: transparent; box-shadow: none; }
+
+/* A subtle cleaning-depth ear, under the edit/complete buttons.
+   Shared colour on all four labels; do not override due-state colours. */
+.task-list {
+  row-gap: 20px;
+}
+.task-edit-group {
+  row-gap: 19px;
+}
+.task-row {
+  position: relative;
+  overflow: visible;
+}
+.task-level-tag {
+  position: absolute;
+  right: 14px;
+  bottom: -12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 21px;
+  padding: 3px 8px;
+  border: 1px solid rgba(184, 135, 141, .43);
+  border-radius: 5px 5px 10px 10px;
+  background: var(--paper);
+  box-shadow: 0 4px 9px rgba(93, 65, 59, .09);
+  color: var(--rose-deep);
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: .58rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.task-level-tag svg {
+  flex: 0 0 auto;
+}

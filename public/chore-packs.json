@@ -5,15 +5,96 @@
       "title": "Casa base",
       "description": "Faccende essenziali per partire con una casa vuota.",
       "chores": [
-        { "title": "Controllo generale casa", "description": "Passaggio rapido negli ambienti principali.", "icon": "casa", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 10 },
-        { "title": "Aspirapolvere", "description": "Passare l'aspirapolvere nelle zone usate di piu.", "icon": "aspirapolvere", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 20 },
-        { "title": "Scopa", "description": "Spazzare pavimenti e angoli visibili.", "icon": "scopa", "type": "ordinaria", "room": "Tutta casa", "frequency": 3, "estimatedMinutes": 12 },
-        { "title": "Lavare pavimento", "description": "Lavare i pavimenti delle stanze principali.", "icon": "pavimento", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 25 },
-        { "title": "Mocio e secchio", "description": "Preparare e usare mocio e secchio per i pavimenti.", "icon": "mocio-secchio", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 20 },
-        { "title": "Paletta e briciole", "description": "Raccogliere briciole e piccoli residui.", "icon": "paletta", "type": "ordinaria", "room": "Tutta casa", "frequency": 2, "estimatedMinutes": 5 },
-        { "title": "Spolverare", "description": "Spolverare ripiani e superfici a vista.", "icon": "spolverino", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 15 },
-        { "title": "Svuotare pattumiera", "description": "Svuotare e sistemare la pattumiera.", "icon": "pattumiera", "type": "ordinaria", "room": "Cucina", "frequency": 2, "estimatedMinutes": 5 },
-        { "title": "Annaffiare piante", "description": "Controllare e annaffiare le piante.", "icon": "piante", "type": "ordinaria", "room": "Balcone", "frequency": 4, "estimatedMinutes": 8 }
+        {
+          "title": "Controllo generale casa",
+          "description": "Passaggio rapido negli ambienti principali.",
+          "icon": "casa",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 10,
+          "level": "base"
+        },
+        {
+          "title": "Aspirapolvere",
+          "description": "Passare l'aspirapolvere nelle zone usate di piu.",
+          "icon": "aspirapolvere",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 20,
+          "level": "base"
+        },
+        {
+          "title": "Scopa",
+          "description": "Spazzare pavimenti e angoli visibili.",
+          "icon": "scopa",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 3,
+          "estimatedMinutes": 12,
+          "level": "base"
+        },
+        {
+          "title": "Lavare pavimento",
+          "description": "Lavare i pavimenti delle stanze principali.",
+          "icon": "pavimento",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 25,
+          "level": "base"
+        },
+        {
+          "title": "Mocio e secchio",
+          "description": "Preparare e usare mocio e secchio per i pavimenti.",
+          "icon": "mocio-secchio",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 20,
+          "level": "base"
+        },
+        {
+          "title": "Paletta e briciole",
+          "description": "Raccogliere briciole e piccoli residui.",
+          "icon": "paletta",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 2,
+          "estimatedMinutes": 5,
+          "level": "base"
+        },
+        {
+          "title": "Spolverare",
+          "description": "Spolverare ripiani e superfici a vista.",
+          "icon": "spolverino",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Svuotare pattumiera",
+          "description": "Svuotare e sistemare la pattumiera.",
+          "icon": "pattumiera",
+          "type": "ordinaria",
+          "room": "Cucina",
+          "frequency": 2,
+          "estimatedMinutes": 5,
+          "level": "base"
+        },
+        {
+          "title": "Annaffiare piante",
+          "description": "Controllare e annaffiare le piante.",
+          "icon": "piante",
+          "type": "ordinaria",
+          "room": "Balcone",
+          "frequency": 4,
+          "estimatedMinutes": 8,
+          "level": "base"
+        }
       ]
     },
     {
@@ -21,18 +102,126 @@
       "title": "Bagno e acqua",
       "description": "Pulizia bagno, sanitari e piccole manutenzioni acqua.",
       "chores": [
-        { "title": "Pulire bagno", "description": "Pulizia completa del bagno.", "icon": "bagno", "type": "ordinaria", "room": "Bagno", "frequency": 7, "estimatedMinutes": 25 },
-        { "title": "Pulire doccia", "description": "Pulire vetri, piatto e rubinetteria della doccia.", "icon": "doccia", "type": "ordinaria", "room": "Bagno", "frequency": 7, "estimatedMinutes": 15 },
-        { "title": "Pulire box doccia", "description": "Pulizia piu accurata del box doccia.", "icon": "box-doccia", "type": "straordinaria", "room": "Bagno", "frequency": 30, "estimatedMinutes": 25 },
-        { "title": "Pulire vasca", "description": "Pulire vasca, bordo e rubinetteria.", "icon": "vasca", "type": "ordinaria", "room": "Bagno", "frequency": 14, "estimatedMinutes": 15 },
-        { "title": "Pulire WC", "description": "Pulizia del WC e delle superfici vicine.", "icon": "wc", "type": "ordinaria", "room": "Bagno", "frequency": 4, "estimatedMinutes": 8 },
-        { "title": "Pulire lavandino", "description": "Pulire lavabo, scarico e rubinetto.", "icon": "lavandino", "type": "ordinaria", "room": "Bagno", "frequency": 4, "estimatedMinutes": 8 },
-        { "title": "Pulire sifone lavandino", "description": "Controllo e pulizia del sifone.", "icon": "sifone-lavandino", "type": "straordinaria", "room": "Bagno", "frequency": 90, "estimatedMinutes": 20 },
-        { "title": "Pulire mattonelle", "description": "Pulire e sgrassare le mattonelle del bagno.", "icon": "mattonelle", "type": "straordinaria", "room": "Bagno", "frequency": 30, "estimatedMinutes": 25 },
-        { "title": "Pulire tubi esterni", "description": "Pulire tubi e raccordi esterni a vista.", "icon": "tubi-esterni", "type": "straordinaria", "room": "Bagno", "frequency": 60, "estimatedMinutes": 15 },
-        { "title": "Cambiare asciugamani", "description": "Sostituire asciugamani e teli.", "icon": "asciugamani", "type": "ordinaria", "room": "Bagno", "frequency": 7, "estimatedMinutes": 5 },
-        { "title": "Manutenzione addolcitore", "description": "Controllare l'addolcitore e l'eventuale manutenzione.", "icon": "addolcitore-manutenzione", "type": "straordinaria", "room": "Tutta casa", "frequency": 30, "estimatedMinutes": 10 },
-        { "title": "Caricare sale addolcitore", "description": "Controllare il livello e caricare il sale dell'addolcitore.", "icon": "addolcitore-sale", "type": "straordinaria", "room": "Tutta casa", "frequency": 30, "estimatedMinutes": 8 }
+        {
+          "title": "Pulire bagno",
+          "description": "Pulizia completa del bagno.",
+          "icon": "bagno",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 7,
+          "estimatedMinutes": 25,
+          "level": "base"
+        },
+        {
+          "title": "Pulire doccia",
+          "description": "Pulire vetri, piatto e rubinetteria della doccia.",
+          "icon": "doccia",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 7,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Pulire box doccia",
+          "description": "Pulizia piu accurata del box doccia.",
+          "icon": "box-doccia",
+          "type": "straordinaria",
+          "room": "Bagno",
+          "frequency": 30,
+          "estimatedMinutes": 25,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire vasca",
+          "description": "Pulire vasca, bordo e rubinetteria.",
+          "icon": "vasca",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 14,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Pulire WC",
+          "description": "Pulizia del WC e delle superfici vicine.",
+          "icon": "wc",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 4,
+          "estimatedMinutes": 8,
+          "level": "base"
+        },
+        {
+          "title": "Pulire lavandino",
+          "description": "Pulire lavabo, scarico e rubinetto.",
+          "icon": "lavandino",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 4,
+          "estimatedMinutes": 8,
+          "level": "base"
+        },
+        {
+          "title": "Pulire sifone lavandino",
+          "description": "Controllo e pulizia del sifone.",
+          "icon": "sifone-lavandino",
+          "type": "straordinaria",
+          "room": "Bagno",
+          "frequency": 90,
+          "estimatedMinutes": 20,
+          "level": "super"
+        },
+        {
+          "title": "Pulire mattonelle",
+          "description": "Pulire e sgrassare le mattonelle del bagno.",
+          "icon": "mattonelle",
+          "type": "straordinaria",
+          "room": "Bagno",
+          "frequency": 30,
+          "estimatedMinutes": 25,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire tubi esterni",
+          "description": "Pulire tubi e raccordi esterni a vista.",
+          "icon": "tubi-esterni",
+          "type": "straordinaria",
+          "room": "Bagno",
+          "frequency": 60,
+          "estimatedMinutes": 15,
+          "level": "super"
+        },
+        {
+          "title": "Cambiare asciugamani",
+          "description": "Sostituire asciugamani e teli.",
+          "icon": "asciugamani",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 7,
+          "estimatedMinutes": 5,
+          "level": "base"
+        },
+        {
+          "title": "Manutenzione addolcitore",
+          "description": "Controllare l'addolcitore e l'eventuale manutenzione.",
+          "icon": "addolcitore-manutenzione",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 30,
+          "estimatedMinutes": 10,
+          "level": "super"
+        },
+        {
+          "title": "Caricare sale addolcitore",
+          "description": "Controllare il livello e caricare il sale dell'addolcitore.",
+          "icon": "addolcitore-sale",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 30,
+          "estimatedMinutes": 8,
+          "level": "super"
+        }
       ]
     },
     {
@@ -40,15 +229,96 @@
       "title": "Cucina ed elettrodomestici",
       "description": "Pulizia e manutenzioni per cucina, filtri e macchine.",
       "chores": [
-        { "title": "Pulire cucina", "description": "Pulire piano, lavello e superfici principali.", "icon": "cucina", "type": "ordinaria", "room": "Cucina", "frequency": 3, "estimatedMinutes": 15 },
-        { "title": "Pulire forno", "description": "Pulire interno, vetro e griglie del forno.", "icon": "forno", "type": "straordinaria", "room": "Cucina", "frequency": 45, "estimatedMinutes": 35 },
-        { "title": "Pulire frigorifero", "description": "Controllare ripiani, cassetti e scadenze.", "icon": "frigorifero", "type": "straordinaria", "room": "Cucina", "frequency": 30, "estimatedMinutes": 25 },
-        { "title": "Pulire cappa", "description": "Pulire la cappa e la zona cottura.", "icon": "cappa", "type": "straordinaria", "room": "Cucina", "frequency": 30, "estimatedMinutes": 20 },
-        { "title": "Cambiare filtro cappa", "description": "Controllare o sostituire il filtro della cappa.", "icon": "filtro-cappa", "type": "straordinaria", "room": "Cucina", "frequency": 90, "estimatedMinutes": 15 },
-        { "title": "Lavastoviglie manutenzione", "description": "Controllare filtro e manutenzione lavastoviglie.", "icon": "lavastoviglie-manutenzione", "type": "straordinaria", "room": "Cucina", "frequency": 30, "estimatedMinutes": 15 },
-        { "title": "Sale lavastoviglie", "description": "Controllare e caricare il sale della lavastoviglie.", "icon": "lavastoviglie-sale", "type": "straordinaria", "room": "Cucina", "frequency": 30, "estimatedMinutes": 5 },
-        { "title": "Macchina caffe", "description": "Pulizia e controllo della macchina caffe.", "icon": "macchina-caffe", "type": "ordinaria", "room": "Cucina", "frequency": 14, "estimatedMinutes": 10 },
-        { "title": "Pulire tavolo", "description": "Pulire tavolo e zona pranzo.", "icon": "tavolo", "type": "ordinaria", "room": "Cucina", "frequency": 2, "estimatedMinutes": 5 }
+        {
+          "title": "Pulire cucina",
+          "description": "Pulire piano, lavello e superfici principali.",
+          "icon": "cucina",
+          "type": "ordinaria",
+          "room": "Cucina",
+          "frequency": 3,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Pulire forno",
+          "description": "Pulire interno, vetro e griglie del forno.",
+          "icon": "forno",
+          "type": "straordinaria",
+          "room": "Cucina",
+          "frequency": 45,
+          "estimatedMinutes": 35,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire frigorifero",
+          "description": "Controllare ripiani, cassetti e scadenze.",
+          "icon": "frigorifero",
+          "type": "straordinaria",
+          "room": "Cucina",
+          "frequency": 30,
+          "estimatedMinutes": 25,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire cappa",
+          "description": "Pulire la cappa e la zona cottura.",
+          "icon": "cappa",
+          "type": "straordinaria",
+          "room": "Cucina",
+          "frequency": 30,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        },
+        {
+          "title": "Cambiare filtro cappa",
+          "description": "Controllare o sostituire il filtro della cappa.",
+          "icon": "filtro-cappa",
+          "type": "straordinaria",
+          "room": "Cucina",
+          "frequency": 90,
+          "estimatedMinutes": 15,
+          "level": "super"
+        },
+        {
+          "title": "Lavastoviglie manutenzione",
+          "description": "Controllare filtro e manutenzione lavastoviglie.",
+          "icon": "lavastoviglie-manutenzione",
+          "type": "straordinaria",
+          "room": "Cucina",
+          "frequency": 30,
+          "estimatedMinutes": 15,
+          "level": "pro"
+        },
+        {
+          "title": "Sale lavastoviglie",
+          "description": "Controllare e caricare il sale della lavastoviglie.",
+          "icon": "lavastoviglie-sale",
+          "type": "straordinaria",
+          "room": "Cucina",
+          "frequency": 30,
+          "estimatedMinutes": 5,
+          "level": "pro"
+        },
+        {
+          "title": "Macchina caffe",
+          "description": "Pulizia e controllo della macchina caffe.",
+          "icon": "macchina-caffe",
+          "type": "ordinaria",
+          "room": "Cucina",
+          "frequency": 14,
+          "estimatedMinutes": 10,
+          "level": "base"
+        },
+        {
+          "title": "Pulire tavolo",
+          "description": "Pulire tavolo e zona pranzo.",
+          "icon": "tavolo",
+          "type": "ordinaria",
+          "room": "Cucina",
+          "frequency": 2,
+          "estimatedMinutes": 5,
+          "level": "base"
+        }
       ]
     },
     {
@@ -56,13 +326,76 @@
       "title": "Camera e tessili",
       "description": "Letto, tessili, armadio e superfici morbide.",
       "chores": [
-        { "title": "Cambio letto", "description": "Cambiare lenzuola e sistemare il letto.", "icon": "letto", "type": "ordinaria", "room": "Camera", "frequency": 7, "estimatedMinutes": 15 },
-        { "title": "Biancheria letto", "description": "Gestire biancheria del letto e ricambi.", "icon": "biancheria-letto", "type": "ordinaria", "room": "Camera", "frequency": 14, "estimatedMinutes": 12 },
-        { "title": "Controllare materasso", "description": "Arieggiare o girare il materasso.", "icon": "materasso", "type": "straordinaria", "room": "Camera", "frequency": 90, "estimatedMinutes": 20 },
-        { "title": "Sistemare cuscini", "description": "Sistemare e arieggiare i cuscini.", "icon": "cuscini", "type": "ordinaria", "room": "Camera", "frequency": 14, "estimatedMinutes": 8 },
-        { "title": "Sistemare armadio", "description": "Riordinare ante, ripiani e vestiti.", "icon": "armadio", "type": "straordinaria", "room": "Camera", "frequency": 30, "estimatedMinutes": 30 },
-        { "title": "Fare lavatrice", "description": "Preparare e avviare la lavatrice.", "icon": "lavatrice", "type": "ordinaria", "room": "Bagno", "frequency": 7, "estimatedMinutes": 10 },
-        { "title": "Pulire tappeto", "description": "Aspirare o scuotere il tappeto.", "icon": "tappeto", "type": "ordinaria", "room": "Soggiorno", "frequency": 14, "estimatedMinutes": 12 }
+        {
+          "title": "Cambio letto",
+          "description": "Cambiare lenzuola e sistemare il letto.",
+          "icon": "letto",
+          "type": "ordinaria",
+          "room": "Camera",
+          "frequency": 7,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Biancheria letto",
+          "description": "Gestire biancheria del letto e ricambi.",
+          "icon": "biancheria-letto",
+          "type": "ordinaria",
+          "room": "Camera",
+          "frequency": 14,
+          "estimatedMinutes": 12,
+          "level": "base"
+        },
+        {
+          "title": "Controllare materasso",
+          "description": "Arieggiare o girare il materasso.",
+          "icon": "materasso",
+          "type": "straordinaria",
+          "room": "Camera",
+          "frequency": 90,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        },
+        {
+          "title": "Sistemare cuscini",
+          "description": "Sistemare e arieggiare i cuscini.",
+          "icon": "cuscini",
+          "type": "ordinaria",
+          "room": "Camera",
+          "frequency": 14,
+          "estimatedMinutes": 8,
+          "level": "base"
+        },
+        {
+          "title": "Sistemare armadio",
+          "description": "Riordinare ante, ripiani e vestiti.",
+          "icon": "armadio",
+          "type": "straordinaria",
+          "room": "Camera",
+          "frequency": 30,
+          "estimatedMinutes": 30,
+          "level": "pro"
+        },
+        {
+          "title": "Fare lavatrice",
+          "description": "Preparare e avviare la lavatrice.",
+          "icon": "lavatrice",
+          "type": "ordinaria",
+          "room": "Bagno",
+          "frequency": 7,
+          "estimatedMinutes": 10,
+          "level": "base"
+        },
+        {
+          "title": "Pulire tappeto",
+          "description": "Aspirare o scuotere il tappeto.",
+          "icon": "tappeto",
+          "type": "ordinaria",
+          "room": "Soggiorno",
+          "frequency": 14,
+          "estimatedMinutes": 12,
+          "level": "base"
+        }
       ]
     },
     {
@@ -70,15 +403,96 @@
       "title": "Soggiorno e dettagli",
       "description": "Ordine visivo, arredi e piccoli dettagli di casa.",
       "chores": [
-        { "title": "Sistemare soggiorno", "description": "Riordinare divano, superfici e oggetti a vista.", "icon": "soggiorno", "type": "ordinaria", "room": "Soggiorno", "frequency": 7, "estimatedMinutes": 15 },
-        { "title": "Sistemare divano", "description": "Sistemare cuscini e sedute del divano.", "icon": "divano", "type": "ordinaria", "room": "Soggiorno", "frequency": 7, "estimatedMinutes": 8 },
-        { "title": "Pulire specchio", "description": "Pulire specchi e aloni.", "icon": "specchio", "type": "ordinaria", "room": "Tutta casa", "frequency": 14, "estimatedMinutes": 10 },
-        { "title": "Pulire mensole", "description": "Spolverare mensole, libri e piccoli oggetti.", "icon": "mensole", "type": "ordinaria", "room": "Soggiorno", "frequency": 14, "estimatedMinutes": 15 },
-        { "title": "Spolverare pareti", "description": "Passare le pareti con panno o scopa morbida.", "icon": "pareti", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 20 },
-        { "title": "Pulire battiscopa", "description": "Pulire battiscopa e angoli bassi delle stanze.", "icon": "battiscopa", "type": "straordinaria", "room": "Tutta casa", "frequency": 30, "estimatedMinutes": 20 },
-        { "title": "Pulire maniglie", "description": "Pulire maniglie e punti di contatto.", "icon": "maniglie", "type": "ordinaria", "room": "Tutta casa", "frequency": 14, "estimatedMinutes": 8 },
-        { "title": "Pulire porta", "description": "Pulire porta e cornice.", "icon": "porta", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 15 },
-        { "title": "Pulire lampadario", "description": "Spolverare o pulire il lampadario.", "icon": "lampadario", "type": "straordinaria", "room": "Soggiorno", "frequency": 90, "estimatedMinutes": 20 }
+        {
+          "title": "Sistemare soggiorno",
+          "description": "Riordinare divano, superfici e oggetti a vista.",
+          "icon": "soggiorno",
+          "type": "ordinaria",
+          "room": "Soggiorno",
+          "frequency": 7,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Sistemare divano",
+          "description": "Sistemare cuscini e sedute del divano.",
+          "icon": "divano",
+          "type": "ordinaria",
+          "room": "Soggiorno",
+          "frequency": 7,
+          "estimatedMinutes": 8,
+          "level": "base"
+        },
+        {
+          "title": "Pulire specchio",
+          "description": "Pulire specchi e aloni.",
+          "icon": "specchio",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 14,
+          "estimatedMinutes": 10,
+          "level": "base"
+        },
+        {
+          "title": "Pulire mensole",
+          "description": "Spolverare mensole, libri e piccoli oggetti.",
+          "icon": "mensole",
+          "type": "ordinaria",
+          "room": "Soggiorno",
+          "frequency": 14,
+          "estimatedMinutes": 15,
+          "level": "base"
+        },
+        {
+          "title": "Spolverare pareti",
+          "description": "Passare le pareti con panno o scopa morbida.",
+          "icon": "pareti",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 20,
+          "level": "super"
+        },
+        {
+          "title": "Pulire battiscopa",
+          "description": "Pulire battiscopa e angoli bassi delle stanze.",
+          "icon": "battiscopa",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 30,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire maniglie",
+          "description": "Pulire maniglie e punti di contatto.",
+          "icon": "maniglie",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 14,
+          "estimatedMinutes": 8,
+          "level": "base"
+        },
+        {
+          "title": "Pulire porta",
+          "description": "Pulire porta e cornice.",
+          "icon": "porta",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 15,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire lampadario",
+          "description": "Spolverare o pulire il lampadario.",
+          "icon": "lampadario",
+          "type": "straordinaria",
+          "room": "Soggiorno",
+          "frequency": 90,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        }
       ]
     },
     {
@@ -86,16 +500,106 @@
       "title": "Vetri, tende e balcone",
       "description": "Tutto cio che riguarda luce, finestre e spazio esterno.",
       "chores": [
-        { "title": "Pulire vetri", "description": "Pulire vetri e aloni.", "icon": "vetri", "type": "straordinaria", "room": "Tutta casa", "frequency": 30, "estimatedMinutes": 30 },
-        { "title": "Pulire finestra", "description": "Pulire finestra, telaio e tende vicine.", "icon": "finestra-tende", "type": "straordinaria", "room": "Tutta casa", "frequency": 30, "estimatedMinutes": 25 },
-        { "title": "Pulire infissi", "description": "Pulire telai, guarnizioni e profili degli infissi.", "icon": "infissi", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 30 },
-        { "title": "Pulire tapparelle", "description": "Pulire tapparelle e guide.", "icon": "tapparelle", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 30 },
-        { "title": "Pulire tapparella grande", "description": "Pulizia accurata di una tapparella grande.", "icon": "tapparella-grande", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 35 },
-        { "title": "Lavare tende", "description": "Lavare o rinfrescare le tende.", "icon": "tende", "type": "straordinaria", "room": "Tutta casa", "frequency": 90, "estimatedMinutes": 30 },
-        { "title": "Pulire tende da esterno", "description": "Pulire tende esterne o da balcone.", "icon": "tende-esterno", "type": "straordinaria", "room": "Balcone", "frequency": 90, "estimatedMinutes": 35 },
-        { "title": "Pulire zanzariera", "description": "Pulire zanzariera e binari.", "icon": "zanzariera", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 20 },
-        { "title": "Sistemare balcone", "description": "Riordinare e pulire il balcone.", "icon": "balcone", "type": "ordinaria", "room": "Balcone", "frequency": 14, "estimatedMinutes": 20 },
-        { "title": "Pulire mobiletti esterni", "description": "Pulire ante, ripiani e superfici dei mobiletti esterni.", "icon": "mobiletti-esterni", "type": "straordinaria", "room": "Balcone", "frequency": 30, "estimatedMinutes": 25 }
+        {
+          "title": "Pulire vetri",
+          "description": "Pulire vetri e aloni.",
+          "icon": "vetri",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 30,
+          "estimatedMinutes": 30,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire finestra",
+          "description": "Pulire finestra, telaio e tende vicine.",
+          "icon": "finestra-tende",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 30,
+          "estimatedMinutes": 25,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire infissi",
+          "description": "Pulire telai, guarnizioni e profili degli infissi.",
+          "icon": "infissi",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 30,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire tapparelle",
+          "description": "Pulire tapparelle e guide.",
+          "icon": "tapparelle",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 30,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire tapparella grande",
+          "description": "Pulizia accurata di una tapparella grande.",
+          "icon": "tapparella-grande",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 35,
+          "level": "super"
+        },
+        {
+          "title": "Lavare tende",
+          "description": "Lavare o rinfrescare le tende.",
+          "icon": "tende",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 90,
+          "estimatedMinutes": 30,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire tende da esterno",
+          "description": "Pulire tende esterne o da balcone.",
+          "icon": "tende-esterno",
+          "type": "straordinaria",
+          "room": "Balcone",
+          "frequency": 90,
+          "estimatedMinutes": 35,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire zanzariera",
+          "description": "Pulire zanzariera e binari.",
+          "icon": "zanzariera",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 20,
+          "level": "super"
+        },
+        {
+          "title": "Sistemare balcone",
+          "description": "Riordinare e pulire il balcone.",
+          "icon": "balcone",
+          "type": "ordinaria",
+          "room": "Balcone",
+          "frequency": 14,
+          "estimatedMinutes": 20,
+          "level": "base"
+        },
+        {
+          "title": "Pulire mobiletti esterni",
+          "description": "Pulire ante, ripiani e superfici dei mobiletti esterni.",
+          "icon": "mobiletti-esterni",
+          "type": "straordinaria",
+          "room": "Balcone",
+          "frequency": 30,
+          "estimatedMinutes": 25,
+          "level": "super"
+        }
       ]
     },
     {
@@ -103,12 +607,66 @@
       "title": "Manutenzioni",
       "description": "Controlli periodici su clima, riscaldamento e aspirazione.",
       "chores": [
-        { "title": "Pulire termosifoni", "description": "Spolverare termosifoni e zona vicina.", "icon": "termosifone", "type": "straordinaria", "room": "Tutta casa", "frequency": 90, "estimatedMinutes": 20 },
-        { "title": "Controllare caldaia", "description": "Controllo visivo della caldaia.", "icon": "caldaia", "type": "straordinaria", "room": "Tutta casa", "frequency": 90, "estimatedMinutes": 10 },
-        { "title": "Pulire condizionatore", "description": "Pulire esterno e griglie del condizionatore.", "icon": "condizionatore", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 20 },
-        { "title": "Pulire filtro condizionatore", "description": "Estrarre e pulire il filtro del condizionatore.", "icon": "filtro-condizionatore", "type": "straordinaria", "room": "Tutta casa", "frequency": 60, "estimatedMinutes": 20 },
-        { "title": "Controllare deumidificatore", "description": "Svuotare e pulire il deumidificatore.", "icon": "deumidificatore", "type": "ordinaria", "room": "Tutta casa", "frequency": 14, "estimatedMinutes": 10 },
-        { "title": "Cambiare batterie telecomando", "description": "Controllare telecomando e batterie.", "icon": "telecomando-batterie", "type": "straordinaria", "room": "Tutta casa", "frequency": 180, "estimatedMinutes": 5 }
+        {
+          "title": "Pulire termosifoni",
+          "description": "Spolverare termosifoni e zona vicina.",
+          "icon": "termosifone",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 90,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        },
+        {
+          "title": "Controllare caldaia",
+          "description": "Controllo visivo della caldaia.",
+          "icon": "caldaia",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 90,
+          "estimatedMinutes": 10,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire condizionatore",
+          "description": "Pulire esterno e griglie del condizionatore.",
+          "icon": "condizionatore",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire filtro condizionatore",
+          "description": "Estrarre e pulire il filtro del condizionatore.",
+          "icon": "filtro-condizionatore",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 60,
+          "estimatedMinutes": 20,
+          "level": "super"
+        },
+        {
+          "title": "Controllare deumidificatore",
+          "description": "Svuotare e pulire il deumidificatore.",
+          "icon": "deumidificatore",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 14,
+          "estimatedMinutes": 10,
+          "level": "pro"
+        },
+        {
+          "title": "Cambiare batterie telecomando",
+          "description": "Controllare telecomando e batterie.",
+          "icon": "telecomando-batterie",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 180,
+          "estimatedMinutes": 5,
+          "level": "pro"
+        }
       ]
     },
     {
@@ -116,11 +674,56 @@
       "title": "Aspirazione",
       "description": "Aspirapolvere, Dyson, Folletto e accessori.",
       "chores": [
-        { "title": "Passare Dyson", "description": "Usare la Dyson nelle stanze principali.", "icon": "dyson", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 20 },
-        { "title": "Pulire accessori Dyson", "description": "Pulire spazzole, filtro e pezzi smontati.", "icon": "dyson-accessori", "type": "straordinaria", "room": "Tutta casa", "frequency": 30, "estimatedMinutes": 20 },
-        { "title": "Passare Folletto", "description": "Usare il Folletto nelle stanze principali.", "icon": "folletto", "type": "ordinaria", "room": "Tutta casa", "frequency": 7, "estimatedMinutes": 20 },
-        { "title": "Passare scopa elettrica", "description": "Pulizia rapida con scopa elettrica.", "icon": "scopa-elettrica", "type": "ordinaria", "room": "Tutta casa", "frequency": 4, "estimatedMinutes": 12 },
-        { "title": "Avviare robot aspirapolvere", "description": "Avviare o programmare il robot aspirapolvere.", "icon": "robot-aspirapolvere", "type": "ordinaria", "room": "Tutta casa", "frequency": 3, "estimatedMinutes": 5 }
+        {
+          "title": "Passare Dyson",
+          "description": "Usare la Dyson nelle stanze principali.",
+          "icon": "dyson",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 20,
+          "level": "pro"
+        },
+        {
+          "title": "Pulire accessori Dyson",
+          "description": "Pulire spazzole, filtro e pezzi smontati.",
+          "icon": "dyson-accessori",
+          "type": "straordinaria",
+          "room": "Tutta casa",
+          "frequency": 30,
+          "estimatedMinutes": 20,
+          "level": "super"
+        },
+        {
+          "title": "Passare Folletto",
+          "description": "Usare il Folletto nelle stanze principali.",
+          "icon": "folletto",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 7,
+          "estimatedMinutes": 20,
+          "level": "base"
+        },
+        {
+          "title": "Passare scopa elettrica",
+          "description": "Pulizia rapida con scopa elettrica.",
+          "icon": "scopa-elettrica",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 4,
+          "estimatedMinutes": 12,
+          "level": "base"
+        },
+        {
+          "title": "Avviare robot aspirapolvere",
+          "description": "Avviare o programmare il robot aspirapolvere.",
+          "icon": "robot-aspirapolvere",
+          "type": "ordinaria",
+          "room": "Tutta casa",
+          "frequency": 3,
+          "estimatedMinutes": 5,
+          "level": "base"
+        }
       ]
     }
   ]

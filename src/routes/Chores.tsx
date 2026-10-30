@@ -2,6 +2,8 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Clock, Pencil, Play, Search, Square, X } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
+import { ChoreLevelTag } from "../components/ChoreLevelTag";
+import { classifyChoreLevel } from "../lib/chore-levels";
 import { ChoreIcon, choreIconOptions, type ChoreIconName } from "../lib/icons";
 import { addLog, daysAgo, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor, type ChoreType } from "../lib/store";
 
@@ -195,6 +197,7 @@ export function Chores() {
                       </button>
                     )}
                   </div>
+                  <ChoreLevelTag level={classifyChoreLevel(chore)} />
                 </article>
                 {editingId === chore.id ? (
                   <form className="task-edit-card" onSubmit={(event) => submitEdit(event, chore.id)}>
