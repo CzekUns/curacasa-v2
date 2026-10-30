@@ -86,7 +86,7 @@ const LABELS = {
 export function ChoreLevelTag({ level }: { level: ChoreLevel }) {
   const { text, icon: Icon } = LABELS[level];
   return (
-    <span className="task-level-tag" aria-label={\`Faccenda \${text.toLowerCase()}\`}>
+    <span className="task-level-tag" aria-label={"Faccenda " + text.toLowerCase()}>
       <Icon aria-hidden="true" size={12} strokeWidth={2.1} />
       {text}
     </span>
