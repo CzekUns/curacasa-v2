@@ -32,7 +32,7 @@ export function normalizeRoomDetails(rooms: string[], saved?: RoomDetails): Room
   const used = new Map<RoomKind, Set<number>>();
   rooms.forEach((name, index) => {
     const previous = saved?.[name];
-    const kind = ROOM_TYPES.some((item) => item.id === previous?.kind) || previous?.kind === "altro"
+    const kind: RoomKind = previous && (ROOM_TYPES.some((item) => item.id === previous.kind) || previous.kind === "altro")
       ? previous.kind : guessRoomKind(name);
     const colors = used.get(kind) ?? new Set<number>();
     const proposed = previous?.color;
