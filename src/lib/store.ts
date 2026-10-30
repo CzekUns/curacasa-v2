@@ -1,4 +1,4 @@
-import { classifyChoreLevel, type ChoreLevel } from "./chore-levels.ts";
+import { classifyChoreLevel, presetIdentity, type ChoreLevel } from "./chore-levels.ts";
 import { normalizeRoomDetails, type RoomDetails } from "./rooms.ts";
 import { getRoomRule, type ChoreRoomRule } from "./chore-rooms.ts";
 
@@ -213,12 +213,12 @@ export type PresetChore = Omit<Chore, "id" | "createdAt" | "updatedAt" | "notes"
  */
 export function importPresets(data: AppData, presets: PresetChore[]): { data: AppData; added: number } {
   const existing = new Set(
-    data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore)].filter((key): key is string => !!key)),
+    data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore), presetIdentity(chore)].filter((key): key is string => !!key)),
   );
   const stamp = now();
   const additions: Chore[] = [];
   for (const preset of presets) {
-    const key = presetSignature(preset);
+    const key = presetIdentity(preset);
     if (existing.has(key)) continue;
     existing.add(key);
     additions.push({
