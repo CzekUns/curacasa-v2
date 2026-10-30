@@ -4,7 +4,7 @@ import { CalendarDays, Check, Clock, Download, ListChecks, Sparkles } from "luci
 import { ChoreIcon } from "../lib/icons";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { canInstallApp, requestAppInstall } from "../lib/pwa";
-import { addLog, daysAgo, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor } from "../lib/store";
+import { addLog, daysAgo, dueFor, hasCompletedToday, lastLog, loadData, relativeDays, saveData, statusFor } from "../lib/store";
 
 export function Home() {
   const [data, setData] = useState(loadData);
@@ -40,6 +40,19 @@ export function Home() {
   }, [recentlyDoneId]);
 
   useEffect(() => {
+    const refresh = () => setData(loadData());
+    const onVisible = () => { if (document.visibilityState === "visible") refresh(); };
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", onVisible);
+    const interval = window.setInterval(refresh, 60_000);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
     function syncInstallState() {
       setShowInstall(canInstallApp());
     }
@@ -58,12 +71,11 @@ export function Home() {
   function dueLabel(choreId: string) {
     const chore = data.chores.find((item) => item.id === choreId);
     if (!chore) return "Da controllare";
-    const status = statusFor(chore, data.logs);
-    const days = daysAgo(lastLog(chore, data.logs)?.completedAt);
-    if (status === "overdue") return "Scaduta";
-    if (status === "warning") return "Scade adesso";
-    if (days !== null && chore.frequency) return `Tra ${Math.max(0, chore.frequency - days)} giorni`;
-    return "In avvicinamento";
+    const due = dueFor(chore, data.logs);
+    if (due.status === "overdue") return `Scaduta da ${-due.daysUntil!} giorn${due.daysUntil === -1 ? "o" : "i"}`;
+    if (due.status === "warning") return "Da fare oggi";
+    if (due.daysUntil !== null) return `Tra ${due.daysUntil} giorn${due.daysUntil === 1 ? "o" : "i"}`;
+    return "Senza scadenza";
   }
 
   return (
