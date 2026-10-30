@@ -48,4 +48,5 @@ test("Older saved presets migrate by room type; unknown room names remain specif
   assert.deepEqual(roomRuleFromLegacy("Soggiorno"), { mode: "type", kind: "salone" });
   assert.deepEqual(roomRuleFromLegacy("Tutta casa"), { mode: "any" });
   assert.deepEqual(roomRuleFromLegacy("Studio privato"), { mode: "specific", names: ["Studio privato"] });
+  assert.deepEqual(roomRuleFromLegacy("Bagno di servizio"), { mode: "specific", names: ["Bagno di servizio"] });
 });
