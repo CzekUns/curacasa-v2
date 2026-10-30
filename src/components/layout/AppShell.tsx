@@ -4,6 +4,7 @@ import { BottomNav } from "./BottomNav";
 import { Header } from "./Header";
 import { isDemoMode } from "../../lib/demo";
 import { RemindersBackgroundSync } from "../RemindersBackgroundSync";
+import { LoginCoinReward } from "../LoginCoinReward";
 
 export function AppShell() {
   const { pathname } = useLocation();
@@ -24,7 +25,7 @@ export function AppShell() {
 
   return (
     <div className="app-shell">
-      {!isDemoMode && <RemindersBackgroundSync />}
+      {!isDemoMode && <><LoginCoinReward /><RemindersBackgroundSync /></>}
       <div className="app-aurora" aria-hidden="true">
         <span />
         <span />
