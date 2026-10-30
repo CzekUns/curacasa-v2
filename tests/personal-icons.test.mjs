@@ -37,7 +37,12 @@ test("SVGs are single-color currentColor drawings with NO baked-in background", 
 
 test("The same white tile footprint as WebP presets, colored per active theme", () => {
   assert.ok(styles.includes(".icon-tile:has(> .chore-icon-personal)"));
-  assert.match(styles, /\.icon-tile:has\(> \.chore-icon-personal\)\s*\{[^}]*background:\s*#fff/);
+  const customStart = styles.indexOf(".icon-tile:has(> .chore-icon-personal) {");
+  const innerStart = styles.indexOf(".chore-icon-personal {");
+  const outer = styles.slice(customStart, styles.indexOf("}", customStart));
+  const inner = styles.slice(innerStart, styles.indexOf("}", innerStart));
+  assert.ok(outer.includes("background: transparent"), "No frame around the personal glyph");
+  assert.ok(inner.includes("background: #fff"), "White belongs to the icon itself");
   for (const theme of ["classico", "cipria", "giada", "ghiaccio", "corallo"]) {
     const block = styles.match(new RegExp(`:root\\[data-theme="${theme}"\\] \\{([^}]*--personal-rose:[^}]*)\\}`));
     assert.ok(block, `Missing dynamic icon colors in ${theme}`);
@@ -93,16 +98,22 @@ test("Only the inconsistent symbols use canonical Lucide geometry", () => {
   assert.ok(license.includes("Cole Bemis"));
 });
 
-test("Custom SVG chores retain the same rose border as preset WebP tiles", () => {
+test("Custom chore icons have a hairline border, never a chunky outer frame", () => {
   const originalIndex = styles.indexOf(".icon-tile {");
   const customIndex = styles.indexOf(".icon-tile:has(> .chore-icon-personal) {");
-  assert.ok(originalIndex >= 0, "Preset tile styling must exist");
-  assert.ok(customIndex >= 0, "Personal tile styling must exist");
-  const presetTile = styles.slice(originalIndex, styles.indexOf("}", originalIndex));
-  const personalTile = styles.slice(customIndex, styles.indexOf("}", customIndex));
-  assert.ok(presetTile.includes("border: 1px solid rgba(184, 135, 141, .7)"),
-    "Preset tiles use the rose border");
-  assert.ok(!personalTile.includes("border-color:") && !personalTile.includes("border:"),
-    "Custom icons must inherit the preset rose border");
-  assert.ok(personalTile.includes("background: #fff"), "Custom icons keep their white tile");
+  const personalIndex = styles.indexOf(".chore-icon-personal {");
+  assert.ok(originalIndex >= 0 && customIndex >= 0 && personalIndex >= 0);
+  const originalTile = styles.slice(originalIndex, styles.indexOf("}", originalIndex));
+  const customTile = styles.slice(customIndex, styles.indexOf("}", customIndex));
+  const actualIcon = styles.slice(personalIndex, styles.indexOf("}", personalIndex));
+  const rose = "1px solid rgba(184, 135, 141, .7)";
+  assert.ok(originalTile.includes(`border: ${rose}`), "Default WebP tiles retain their original rose");
+  assert.ok(actualIcon.includes(`border: ${rose}`), "One-pixel outline is directly on the white SVG");
+  assert.ok(actualIcon.includes("border-radius: 13px"));
+  assert.ok(actualIcon.includes("background: #fff"));
+  assert.ok(customTile.includes("border-color: transparent"), "No second outer border on the 48px frame");
+  assert.ok(customTile.includes("background: transparent"), "No colored 4px rim around the 40px icon");
+  assert.ok(customTile.includes("box-shadow: none"), "No outer frame shadow");
+  assert.ok(styles.includes(".personal-icon-picker__trigger .chore-icon-personal,"),
+    "Do not draw a second border inside the compact emoji picker");
 });
