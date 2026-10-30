@@ -1,0 +1,33 @@
+name: Test CuraCasa reminder scheduler
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'reminders-worker/**'
+      - 'src/lib/reminders.ts'
+      - 'src/lib/store.ts'
+      - 'tests/due-reminders.test.mjs'
+      - 'public/sw.js'
+      - '.github/workflows/check-reminders.yml'
+permissions:
+  contents: read
+jobs:
+  reminder-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test scheduler daylight saving and due counts
+        working-directory: reminders-worker
+        run: node --test tests/*.test.mjs
+      - name: Validate service-worker syntax
+        run: |
+          node --check public/sw.js
+          node --check reminders-worker/src/index.js
+      - name: Bundle Worker without deploying
+        working-directory: reminders-worker
+        run: |
+          npm install --no-package-lock --no-audit --no-fund
+          npx wrangler deploy --dry-run --outdir ./dist
