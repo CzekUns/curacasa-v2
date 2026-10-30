@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Check, Plus, Trash2, X } from "lucide-react";
+import { createPortal } from "react-dom";
 import { RoomBadge, roomIcons } from "./RoomBadge";
 import { availableRoomColors, normalizeRoomDetails, ROOM_TYPES, roomLabel, type RoomKind } from "../lib/rooms";
 import { loadData, type AppData } from "../lib/store";
@@ -10,10 +11,12 @@ export function RoomManager({
   data,
   onChange,
   label = "Aggiungi stanza",
+  startInManager = false,
 }: {
   data: AppData;
   onChange: (value: AppData) => void;
   label?: string;
+  startInManager?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -31,8 +34,13 @@ export function RoomManager({
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onEscape);
-    return () => window.removeEventListener("keydown", onEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onEscape);
+    };
   }, [open]);
 
   function beginAdd() {
@@ -71,6 +79,7 @@ export function RoomManager({
       roomDetails: { ...currentDetails, [name]: { kind: type, note: note.trim(), color } },
     });
     setAdding(false);
+    setOpen(false);
     setDeleting(null);
     setError("");
   }
@@ -90,15 +99,20 @@ export function RoomManager({
   return (
     <>
       <button type="button" className="home-add-room" onClick={() => {
-        setAdding(false);
-        setDeleting(null);
+        if (startInManager) {
+          setAdding(false);
+          setError("");
+          setDeleting(null);
+        } else {
+          beginAdd();
+        }
         setOpen(true);
       }}>
         <Plus size={15} />
         {label}
       </button>
 
-      {open ? (
+      {open ? createPortal(
         <div className="room-manager-backdrop" role="presentation" onMouseDown={(event) => {
           if (event.target === event.currentTarget) setOpen(false);
         }}>
@@ -111,7 +125,8 @@ export function RoomManager({
             </header>
 
             {adding ? (
-              <form onSubmit={addRoom} className="room-manager-form">
+              <>
+              <form id="room-manager-create-form" onSubmit={addRoom} className="room-manager-form">
                 <span className="room-manager-field-title">Scegli il tipo di ambiente</span>
                 <div className="room-manager-type-grid">
                   {ROOM_TYPES.map((roomType) => {
@@ -148,13 +163,17 @@ export function RoomManager({
                   ))}
                 </div>
                 {error ? <p className="room-manager-error" role="alert">{error}</p> : null}
-                <button type="submit" className="primary-action" disabled={color === null}>
+              </form>
+              <footer className="room-manager-footer room-manager-footer--add">
+                <button type="button" className="room-manager-back" onClick={() => setAdding(false)}>
+                  Gestisci stanze
+                </button>
+                <button type="submit" form="room-manager-create-form" className="primary-action" disabled={color === null}>
+                  <Plus size={16} />
                   Aggiungi alla casa
                 </button>
-                <button type="button" className="room-manager-back" onClick={() => setAdding(false)}>
-                  Torna alle stanze
-                </button>
-              </form>
+              </footer>
+              </>
             ) : (
               <>
                 <p className="room-manager-hint">Aggiungi o rimuovi gli ambienti. Le faccende e lo storico non vengono cancellati.</p>
@@ -176,14 +195,17 @@ export function RoomManager({
                   ))}
                   {!data.rooms.length ? <p className="room-manager-hint">Non hai ancora configurato stanze.</p> : null}
                 </div>
-                <button type="button" className="primary-action" onClick={beginAdd}>
-                  <Plus size={17} />
-                  Nuova stanza
-                </button>
+                <footer className="room-manager-footer">
+                  <button type="button" className="primary-action" onClick={beginAdd}>
+                    <Plus size={17} />
+                    Nuova stanza
+                  </button>
+                </footer>
               </>
             )}
           </section>
-        </div>
+        </div>,
+        document.body
       ) : null}
     </>
   );
