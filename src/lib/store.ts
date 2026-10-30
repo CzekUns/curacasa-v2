@@ -1,4 +1,5 @@
 import { classifyChoreLevel, type ChoreLevel } from "./chore-levels.ts";
+import { normalizeRoomDetails, type RoomDetails } from "./rooms.ts";
 
 export type ChoreType = "ordinaria" | "straordinaria";
 
@@ -32,6 +33,8 @@ export type ChoreLog = {
 
 export type AppData = {
   rooms: string[];
+  /** Optional for backwards compatibility with existing saves and backups. */
+  roomDetails?: RoomDetails;
   chores: Chore[];
   logs: ChoreLog[];
 };
@@ -83,7 +86,7 @@ function id(prefix: string) {
   return `${prefix}_${crypto.getRandomValues(new Uint32Array(3)).join("")}`;
 }
 
-export const DEFAULT_ROOMS = ["Bagno", "Cucina", "Camera", "Soggiorno", "Balcone"];
+export const DEFAULT_ROOMS = ["Cucina", "Bagno", "Camera", "Salone", "Balcone"];
 
 const DEFAULT_CHORES: Omit<Chore, "id" | "createdAt" | "updatedAt">[] = [];
 
@@ -91,6 +94,7 @@ export function createDefaultData(): AppData {
   const stamp = now();
   return {
     rooms: DEFAULT_ROOMS,
+    roomDetails: normalizeRoomDetails(DEFAULT_ROOMS),
     chores: DEFAULT_CHORES.map((chore) => ({
       ...chore,
       id: id("chore"),
@@ -120,6 +124,7 @@ export function loadData(): AppData {
     const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
     return {
       rooms,
+      roomDetails: normalizeRoomDetails(rooms, parsed.roomDetails),
       chores,
       logs,
     };
