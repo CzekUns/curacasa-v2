@@ -73,3 +73,22 @@ test("Standalone icon board shows 42 unlabeled SVGs and all five palette preview
     assert.ok(preview.includes(`data-theme="${theme}"`));
   }
 });
+
+
+test("Only the inconsistent symbols use canonical Lucide geometry", () => {
+  const corrected = [...sprite.matchAll(/<!-- Lucide: ([a-z0-9-]+) -->/g)].map((match) => match[1]);
+  assert.equal(corrected.length, 21, "Replace only 21 awkward shapes, not the entire library");
+  assert.equal(new Set(corrected).size, corrected.length);
+  for (const name of ["spray-can", "brush-cleaning", "broom-sparkles", "soap-dispenser-droplet", "recycle", "refresh-cw"]) {
+    assert.ok(corrected.includes(name), `Expected Lucide glyph: ${name}`);
+  }
+  const untouched = ["scintilla", "stella", "cuore", "goccia", "spugna", "panno", "secchiello"];
+  for (const id of untouched) {
+    const match = sprite.match(new RegExp(`<symbol id="personale-${id}"[\\s\\S]*?<\\/symbol>`));
+    assert.ok(match, `Missing original glyph: ${id}`);
+    assert.ok(!match[0].includes("<!-- Lucide:"), `Do not replace the already-good glyph: ${id}`);
+  }
+  const license = readFileSync(new URL("../public/personal-icons/LUCIDE_LICENSE.txt", import.meta.url), "utf8");
+  assert.ok(license.includes("Lucide Icons and Contributors"));
+  assert.ok(license.includes("Cole Bemis"));
+});

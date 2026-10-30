@@ -43,3 +43,13 @@ il cambio colore. I controlli automatici verificano che lo sprite resti
 monocromatico, che non incorpori sfondi, e che il selettore rimanga compatto.
 
 Non sono stati aggiunti servizi, dipendenze o database.
+
+## Rifinitura grafica con Lucide
+
+Per evitare forme imprecise o eccessivamente artificiose, **21 dei 42 pittogrammi** sono stati ridisegnati utilizzando la geometria del set open-source **Lucide**. Le altre **21 icone già riuscite** non sono state modificate.
+
+I disegni Lucide sono incorporati nello stesso sprite SVG statico, quindi **non è stata aggiunta alcuna dipendenza o richiesta di rete**. Sono scalati dentro lo stesso riquadro 96×96 e mantengono `currentColor`: i cinque temi CuraCasa continueranno a colorarli automaticamente.
+
+Gli ID personali salvati, il popup compatto e le immagini WebP dei preset restano invariati. Le licenze ISC/MIT e i crediti sono preservati in `public/personal-icons/LUCIDE_LICENSE.txt`.
+
+Riferimento: https://lucide.dev/ — icone di Lucide Icons and Contributors.

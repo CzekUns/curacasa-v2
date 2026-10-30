@@ -17,8 +17,13 @@
     </g>
   </symbol>
   <symbol id="personale-fiore" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <circle cx="48" cy="28" r="12"/><circle cx="67" cy="42" r="12"/><circle cx="60" cy="65" r="12"/><circle cx="36" cy="65" r="12"/><circle cx="29" cy="42" r="12"/><circle cx="48" cy="48" r="9" fill="none" stroke="currentColor" stroke-width="3"/>
+    <!-- Lucide: flower-2 -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" />
+  <circle cx="12" cy="8" r="2" />
+  <path d="M12 10v12" />
+  <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" />
+  <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" />
     </g>
   </symbol>
   <symbol id="personale-sole" viewBox="0 0 96 96">
@@ -27,8 +32,9 @@
     </g>
   </symbol>
   <symbol id="personale-luna" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M67 18C49 20 36 34 36 50c0 17 13 30 32 30C42 88 20 70 20 48c0-21 20-37 47-30Z"/>
+    <!-- Lucide: moon -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />
     </g>
   </symbol>
   <symbol id="personale-orologio" viewBox="0 0 96 96">
@@ -52,8 +58,13 @@
     </g>
   </symbol>
   <symbol id="personale-nastro" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M48 45C35 19 14 26 20 43c5 13 17 13 28 2Zm0 0c13-26 34-19 28-2-5 13-17 13-28 2ZM43 53 29 80l20-9 19 9-14-27Z"/>
+    <!-- Lucide: ribbon -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22" />
+  <path d="m12 18 2.57-3.5" />
+  <path d="M6.243 9.016a7 7 0 0 1 11.507-.009" />
+  <path d="M9.35 14.53 12 11.22" />
+  <path d="M9.35 14.53C7.728 12.246 6 10.221 6 7a6 5 0 0 1 12 0c-.005 3.22-1.778 5.235-3.43 7.5l3.557 4.527a1 1 0 0 1-.203 1.43l-1.894 1.36a1 1 0 0 1-1.384-.215L12 18l-2.679 3.593a1 1 0 0 1-1.39.213l-1.865-1.353a1 1 0 0 1-.203-1.422z" />
     </g>
   </symbol>
   <symbol id="personale-campanella" viewBox="0 0 96 96">
@@ -62,8 +73,11 @@
     </g>
   </symbol>
   <symbol id="personale-lampadina" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M48 17c-17 0-27 11-27 25 0 12 7 17 14 25h26c7-8 14-13 14-25C75 28 65 17 48 17Zm-10 54h20v6H38Zm5 10h10v5H43Z"/>
+    <!-- Lucide: lightbulb -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+  <path d="M9 18h6" />
+  <path d="M10 22h4" />
     </g>
   </symbol>
   <symbol id="personale-bersaglio" viewBox="0 0 96 96">
@@ -87,8 +101,11 @@
     </g>
   </symbol>
   <symbol id="personale-piuma" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M22 72C17 41 39 17 76 20c2 33-19 55-54 52Z"/><path d="M17 81 70 27" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+    <!-- Lucide: feather -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14.086 18.412A2 2 0 0112.67 19H5v-7.672a2 2 0 01.586-1.414L11.75 3.75a6 6 0 118.49 8.49z" />
+  <path d="M16 8 2 22" />
+  <path d="M17.488 15H9" />
     </g>
   </symbol>
   <symbol id="personale-goccia" viewBox="0 0 96 96">
@@ -97,8 +114,12 @@
     </g>
   </symbol>
   <symbol id="personale-bolle" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <circle cx="41" cy="57" r="21"/><circle cx="67" cy="30" r="12"/><circle cx="25" cy="26" r="8"/>
+    <!-- Lucide: bubbles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M7.001 15.085A1.5 1.5 0 0 1 9 16.5" />
+  <circle cx="18.5" cy="8.5" r="3.5" />
+  <circle cx="7.5" cy="16.5" r="5.5" />
+  <circle cx="7.5" cy="4.5" r="2.5" />
     </g>
   </symbol>
   <symbol id="personale-schiuma" viewBox="0 0 96 96">
@@ -107,8 +128,18 @@
     </g>
   </symbol>
   <symbol id="personale-spruzzo" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M17 65 43 39l17 17-26 26Z"/><path d="m54 26 12-14M64 39l17-5M64 51l14 9" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <!-- Lucide: spray-can -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 3h.01" />
+  <path d="M7 5h.01" />
+  <path d="M11 7h.01" />
+  <path d="M3 7h.01" />
+  <path d="M7 9h.01" />
+  <path d="M3 11h.01" />
+  <rect width="4" height="4" x="15" y="5" />
+  <path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2" />
+  <path d="m13 14 8-2" />
+  <path d="m13 19 8-2" />
     </g>
   </symbol>
   <symbol id="personale-spugna" viewBox="0 0 96 96">
@@ -122,8 +153,12 @@
     </g>
   </symbol>
   <symbol id="personale-guanto" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M33 79 21 54q-4-8 3-11 5-2 10 8l-5-25q-2-9 6-10 6 0 8 9l5 20-2-25q0-9 8-9 7 1 7 9v24l3-20q1-8 8-7 7 1 6 10l-2 30q6-12 13-8 7 5 1 14L71 79Z"/>
+    <!-- Lucide: hand -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+  <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" />
+  <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" />
+  <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
     </g>
   </symbol>
   <symbol id="personale-sapone" viewBox="0 0 96 96">
@@ -132,8 +167,12 @@
     </g>
   </symbol>
   <symbol id="personale-spazzolina" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M21 29h54v23H21Z"/><path d="M26 56v20M36 56v20M46 56v20M56 56v20M66 56v20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    <!-- Lucide: brush-cleaning -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="m16 22-1-4" />
+  <path d="M19 14a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2h-3a1 1 0 0 1-1-1V4a2 2 0 0 0-4 0v5a1 1 0 0 1-1 1H6a2 2 0 0 0-2 2v1a1 1 0 0 0 1 1" />
+  <path d="M19 14H5l-1.973 6.767A1 1 0 0 0 4 22h16a1 1 0 0 0 .973-1.233z" />
+  <path d="m8 22 1-4" />
     </g>
   </symbol>
   <symbol id="personale-secchiello" viewBox="0 0 96 96">
@@ -142,33 +181,69 @@
     </g>
   </symbol>
   <symbol id="personale-piumino" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M25 81 58 35" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><path d="M50 49C25 42 28 20 41 17c9 1 15 7 17 15 4-13 15-17 22-12 0 11-5 19-15 27 15-2 20 5 17 15-13 8-24 3-32-13Z"/>
+    <!-- Lucide: broom-sparkles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M11 2v2" />
+  <path d="M12 3h-2" />
+  <path d="M13.5 10.5 22 2" />
+  <path d="M14.734 13.841a2 2 0 00-.314-2.42L12.58 9.58a2 2 0 00-2.421-.314l-7.657 4.461A1 1 0 002.3 15.3l6.403 6.403a1 1 0 001.571-.204z" />
+  <path d="M20 15v4" />
+  <path d="M22 17h-4" />
+  <path d="M4 4v4" />
+  <path d="m5 18 2-2" />
+  <path d="M6 6H2" />
+  <path d="m7.699 10.7 5.602 5.601" />
     </g>
   </symbol>
   <symbol id="personale-detergente" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M40 19h18v10H40Zm4 10h10v6H44Zm-7 6h24q11 0 11 11v29q0 8-9 8H34q-9 0-9-8V46q0-11 12-11Z"/><path d="M40 54h18" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+    <!-- Lucide: flask-conical -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" />
+  <path d="M6.453 15h11.094" />
+  <path d="M8.5 2h7" />
     </g>
   </symbol>
   <symbol id="personale-vetro" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <rect x="24" y="19" width="48" height="59" rx="5" fill="none" stroke="currentColor" stroke-width="7"/><path d="M48 21v54M25 48h44" fill="none" stroke="currentColor" stroke-width="4"/><path d="m59 27 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/>
+    <!-- Lucide: square-sparkles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M11 15H7" />
+  <path d="M15.41 2.49a.6.6 0 011.18 0l.63 3.334a1.2 1.2 0 00.956.955l3.334.631a.6.6 0 010 1.18l-3.334.63a1.2 1.2 0 00-.955.956l-.631 3.334a.6.6 0 01-1.18 0l-.63-3.334a1.2 1.2 0 00-.956-.955L10.49 8.59a.6.6 0 010-1.18l3.334-.63a1.2 1.2 0 00.955-.956z" />
+  <path d="M21 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6" />
+  <path d="M9 13v4" />
     </g>
   </symbol>
   <symbol id="personale-riciclo" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="m47 16 12 8-9 11v-7C35 28 28 34 24 44l-7-5q7-19 30-21Zm30 24 4 14-13 7 3-8c-1-8-6-14-16-18l5-8q19 7 21 21ZM29 76l-13-8 9-13v9q10 10 27 4l3 10q-22 8-32-2Z"/>
+    <!-- Lucide: recycle -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
+  <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12" />
+  <path d="m14 16-3 3 3 3" />
+  <path d="M8.293 13.596 7.196 9.5 3.1 10.598" />
+  <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843" />
+  <path d="m13.378 9.633 4.096 1.098 1.097-4.096" />
     </g>
   </symbol>
   <symbol id="personale-profumo" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M45 77V46M45 62q-20-7-15-22M45 62q19-7 20-22" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M43 48C23 37 31 18 42 18c7 0 11 4 12 8 11-12 25 2 15 15-6 8-17 10-26 7Z"/>
+    <!-- Lucide: flower -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="3" />
+  <path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" />
+  <path d="M12 7.5V9" />
+  <path d="M7.5 12H9" />
+  <path d="M16.5 12H15" />
+  <path d="M12 16.5V15" />
+  <path d="m8 8 1.88 1.88" />
+  <path d="M14.12 9.88 16 8" />
+  <path d="m8 16 1.88-1.88" />
+  <path d="M14.12 14.12 16 16" />
     </g>
   </symbol>
   <symbol id="personale-aria" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M18 33h44c15 0 17-14 8-17-7-3-12 1-12 6M18 50h58c13 0 14 17 2 20-7 2-13-2-12-8M26 67h23" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <!-- Lucide: wind -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12.8 19.6A2 2 0 1 0 14 16H2" />
+  <path d="M17.5 8a2.5 2.5 0 1 1 2 4H2" />
+  <path d="M9.8 4.4A2 2 0 1 1 11 8H2" />
     </g>
   </symbol>
   <symbol id="personale-granelli" viewBox="0 0 96 96">
@@ -177,28 +252,50 @@
     </g>
   </symbol>
   <symbol id="personale-asciutto" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M47 18c-12 20-22 31-22 41a22 22 0 0 0 44 0c0-10-10-21-22-41Z" fill="none" stroke="currentColor" stroke-width="7"/><path d="M22 77 74 23" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+    <!-- Lucide: droplet-off -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18.715 13.186C18.29 11.858 17.384 10.607 16 9.5c-2-1.6-3.5-4-4-6.5a10.7 10.7 0 0 1-.884 2.586" />
+  <path d="m2 2 20 20" />
+  <path d="M8.795 8.797A11 11 0 0 1 8 9.5C6 11.1 5 13 5 15a7 7 0 0 0 13.222 3.208" />
     </g>
   </symbol>
   <symbol id="personale-lavaggio" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M19 48h58l-7 23q-3 10-15 10H40q-12 0-15-10Z"/><circle cx="30" cy="29" r="9"/><circle cx="52" cy="23" r="6"/><circle cx="68" cy="32" r="4"/>
+    <!-- Lucide: washing-machine -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 6h3" />
+  <path d="M17 6h.01" />
+  <rect width="18" height="20" x="3" y="2" rx="2" />
+  <circle cx="12" cy="13" r="5" />
+  <path d="M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5" />
     </g>
   </symbol>
   <symbol id="personale-microfibra" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="m19 36 43-16 16 19-39 19Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"/><path d="m19 36 1 25 19 17V58l39-19v24L39 78" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round"/>
+    <!-- Lucide: layers-2 -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M13 13.74a2 2 0 0 1-2 0L2.5 8.87a1 1 0 0 1 0-1.74L11 2.26a2 2 0 0 1 2 0l8.5 4.87a1 1 0 0 1 0 1.74z" />
+  <path d="m20 14.285 1.5.845a1 1 0 0 1 0 1.74L13 21.74a2 2 0 0 1-2 0l-8.5-4.87a1 1 0 0 1 0-1.74l1.5-.845" />
     </g>
   </symbol>
   <symbol id="personale-lucido" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M23 65h51v12H23Z"/><path d="m47 15 5 14 13 5-13 5-5 14-5-14-13-5 13-5Z"/>
+    <!-- Lucide: wand-sparkles -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72" />
+  <path d="m14 7 3 3" />
+  <path d="M5 6v4" />
+  <path d="M19 14v4" />
+  <path d="M10 2v2" />
+  <path d="M7 8H3" />
+  <path d="M21 16h-4" />
+  <path d="M11 3H9" />
     </g>
   </symbol>
   <symbol id="personale-flacone" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M41 18h18v11H41Zm-5 11h29q8 0 8 9v37q0 7-8 7H31q-8 0-8-7V43q0-14 13-14Z"/><path d="M41 49h17" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    <!-- Lucide: soap-dispenser-droplet -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M10.5 2v4" />
+  <path d="M14 2H7a2 2 0 0 0-2 2" />
+  <path d="M19.29 14.76A6.67 6.67 0 0 1 17 11a6.6 6.6 0 0 1-2.29 3.76c-1.15.92-1.71 2.04-1.71 3.19 0 2.22 1.8 4.05 4 4.05s4-1.83 4-4.05c0-1.16-.57-2.26-1.71-3.19" />
+  <path d="M9.607 21H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h7V7a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" />
     </g>
   </symbol>
   <symbol id="personale-tergivetro" viewBox="0 0 96 96">
@@ -207,8 +304,12 @@
     </g>
   </symbol>
   <symbol id="personale-movimento" viewBox="0 0 96 96">
-    <g fill="currentColor" stroke-linejoin="round">
-      <path d="M68 28A29 29 0 1 0 75 60" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="m62 17 11 15-18 4Z"/><path d="m35 49 10 10 18-22" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Lucide: refresh-cw -->
+    <g transform="translate(10.8 10.8) scale(3.1)" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+  <path d="M21 3v5h-5" />
+  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+  <path d="M8 16H3v5" />
     </g>
   </symbol>
 </svg>
