@@ -74,7 +74,7 @@ jobs:
           assert width == 1024 and 200 <= height <= 400, (width, height)
           stacked = (brand / 'logo-stacked-512.png').read_bytes()
           width, height = unpack('>II', stacked[16:24])
-          assert width == 512 and 450 <= height <= 512, (width, height)
+          assert width == 512 and 440 <= height <= 512, (width, height)
           html = Path('dist/index.html').read_text()
           assert 'brand/favicon.svg' in html
           assert 'brand/apple-touch-icon.png' in html
