@@ -244,7 +244,7 @@ export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number })
       aria-hidden="true"
       className="chore-icon-img"
       loading="lazy"
-      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${CLEANED_PRESET_ICONS.has(name || "") ? "?edges=clean-1" : ""}`}
+      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-2" : ""}`}
       style={{ height: size, width: size }}
     />
   );
