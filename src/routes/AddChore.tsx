@@ -2,12 +2,15 @@ import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PersonalIconPicker } from "../components/PersonalIconPicker";
 import { defaultPersonalIcon, type PersonalIconName } from "../lib/icons";
+import { ChoreRoomRulePicker } from "../components/ChoreRoomRulePicker";
+import { roomRuleToLegacy, type ChoreRoomRule } from "../lib/chore-rooms";
 import { loadData, saveData, type Chore, type ChoreType } from "../lib/store";
 
 export function AddChore() {
   const navigate = useNavigate();
   const [data] = useState(loadData);
   const [selectedIcon, setSelectedIcon] = useState<PersonalIconName>(defaultPersonalIcon);
+  const [roomRule, setRoomRule] = useState<ChoreRoomRule>({ mode: "any" });
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -20,14 +23,15 @@ export function AddChore() {
       icon: selectedIcon,
       type: String(form.get("type") || "ordinaria") as ChoreType,
       level: "tua",
-      room: String(form.get("room") || "").trim(),
+      room: roomRuleToLegacy(roomRule),
+      roomRule,
       frequency: Number(form.get("frequency") || 0),
       estimatedMinutes: Number(form.get("estimatedMinutes") || 0),
       notes: String(form.get("notes") || "").trim(),
       createdAt: stamp,
       updatedAt: stamp,
     };
-    if (!chore.title) return;
+    if (!chore.title || (roomRule.mode === "specific" && !roomRule.names.length)) return;
     // Use the latest saved list, not the snapshot from when the form opened.
     const latest = loadData();
     saveData({ ...latest, chores: [...latest.chores, chore] });
@@ -60,21 +64,11 @@ export function AddChore() {
           </label>
           <PersonalIconPicker value={selectedIcon} onChange={setSelectedIcon} />
         </div>
-        <div className="form-grid">
-          <label>
-            Stanza o zona
-            <input name="room" list="rooms" placeholder="Bagno, cucina, camera..." />
-            <datalist id="rooms">
-              {data.rooms.map((room) => (
-                <option key={room} value={room} />
-              ))}
-            </datalist>
-          </label>
-          <label>
-            Scadenza opzionale
-            <input name="frequency" type="number" min="0" inputMode="numeric" placeholder="Senza scadenza" />
-          </label>
-        </div>
+        <ChoreRoomRulePicker rooms={data.rooms} roomDetails={data.roomDetails} value={roomRule} onChange={setRoomRule} />
+        <label>
+          Scadenza opzionale
+          <input name="frequency" type="number" min="0" inputMode="numeric" placeholder="Senza scadenza" />
+        </label>
         <label>
           Minuti stimati
           <input name="estimatedMinutes" type="number" min="0" inputMode="numeric" />
@@ -83,7 +77,10 @@ export function AddChore() {
           Note
           <textarea name="notes" rows={3} placeholder="Prodotti, accortezze, dettagli utili..." />
         </label>
-        <button className="primary-action" type="submit">
+        {roomRule.mode === "specific" && !roomRule.names.length ? (
+          <p className="chore-room-no-match">Seleziona almeno una stanza specifica prima di salvare.</p>
+        ) : null}
+        <button className="primary-action" type="submit" disabled={roomRule.mode === "specific" && !roomRule.names.length}>
           Salva faccenda
         </button>
       </form>
