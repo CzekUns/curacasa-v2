@@ -197,3 +197,19 @@ le posizioni e le attuali sfumature del sistema grafico moderno.
 
 La suite `tests/classico-original.test.mjs` impedisce alterazioni
 accidentali della palette autentica.
+
+
+## Icone faccende e livelli
+
+Le 66 immagini raster dello Store sono in `public/chore-icons/*.webp`;
+l'illustrazione SVG del bagno rimane vettoriale. Le immagini del marchio,
+le favicon e le icone PWA non fanno parte di questa conversione.
+
+Il catalogo distingue **BASE** (32), **PRO** (24) e **SUPER** (11), con
+una piccola orecchietta sotto ai comandi di ogni faccenda. Il livello
+**TUA** indica quelle create manualmente. Questa classificazione e'
+separata da `ordinaria/straordinaria` e viene conservata per i preset
+aggiunti dallo Store anche se in seguito si modifica il titolo.
+
+La migrazione originale e' riproducibile con
+`scripts/migrate_chore_images_and_levels.py` partendo dallo storico Git.
