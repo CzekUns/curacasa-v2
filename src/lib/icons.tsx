@@ -70,7 +70,38 @@ export const choreIconImages = {
   "sifone-lavandino": "/chore-icons/sifone-lavandino.webp",
 } as const;
 
-export type ChoreIconName = keyof typeof choreIconImages;
+export type PresetIconName = keyof typeof choreIconImages;
+
+export const personalIconOptions = [
+  { value: "personale-scintilla", label: "Scintilla" },
+  { value: "personale-stella", label: "Stella" },
+  { value: "personale-cuore", label: "Cuore" },
+  { value: "personale-fiore", label: "Fiore" },
+  { value: "personale-sole", label: "Sole" },
+  { value: "personale-luna", label: "Luna" },
+  { value: "personale-orologio", label: "Orologio" },
+  { value: "personale-bandierina", label: "Bandierina" },
+  { value: "personale-segnalibro", label: "Segnalibro" },
+  { value: "personale-etichetta", label: "Etichetta" },
+  { value: "personale-nastro", label: "Nastro" },
+  { value: "personale-campanella", label: "Campanella" },
+  { value: "personale-lampadina", label: "Lampadina" },
+  { value: "personale-bersaglio", label: "Bersaglio" },
+  { value: "personale-onda", label: "Onda" },
+  { value: "personale-check", label: "Spunta" },
+  { value: "personale-cerchio", label: "Cerchio" },
+  { value: "personale-piuma", label: "Piuma" },
+] as const;
+
+export type PersonalIconName = typeof personalIconOptions[number]["value"];
+export type ChoreIconName = PresetIconName | PersonalIconName;
+export const defaultPersonalIcon: PersonalIconName = "personale-scintilla";
+
+const personalIconNames: ReadonlySet<string> = new Set(personalIconOptions.map(({ value }) => value));
+
+export function isPersonalIconName(name: string): name is PersonalIconName {
+  return personalIconNames.has(name);
+}
 
 export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = [
   { value: "casa", label: "Casa" },
@@ -143,20 +174,35 @@ export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = 
 ];
 
 export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number }) {
-  const iconPath = choreIconImages[name as ChoreIconName];
+  if (name && isPersonalIconName(name)) {
+    return (
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        className="chore-icon-img chore-icon-personal"
+        viewBox="0 0 96 96"
+        height={size}
+        width={size}
+        style={{ height: size, width: size }}
+      >
+        <use href={`${import.meta.env.BASE_URL}personal-icons/symbols.svg#${name}`} />
+      </svg>
+    );
+  }
 
+  // Preset illustrations remain reserved for the catalog.
+  // Existing user chores that already reference these images are preserved.
+  const iconPath = choreIconImages[name as PresetIconName];
   if (!iconPath) {
     return <Home aria-hidden="true" size={Math.max(18, Math.round(size * 0.56))} />;
   }
-
-  const src = `${import.meta.env.BASE_URL}${iconPath.slice(1)}`;
 
   return (
     <img
       aria-hidden="true"
       className="chore-icon-img"
       loading="lazy"
-      src={src}
+      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}`}
       style={{ height: size, width: size }}
     />
   );
