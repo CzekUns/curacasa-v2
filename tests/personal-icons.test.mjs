@@ -94,11 +94,15 @@ test("Only the inconsistent symbols use canonical Lucide geometry", () => {
 });
 
 test("Custom SVG chores retain the same rose border as preset WebP tiles", () => {
-  const presetTile = styles.match(/\\.icon-tile\\s*\\{([^}]*)\\}/)?.[1];
-  const personalTile = styles.match(/\\.icon-tile:has\\(> \\.chore-icon-personal\\)\\s*\\{([^}]*)\\}/)?.[1];
-  assert.ok(presetTile, "Preset icon tile styling must exist");
-  assert.match(presetTile, /border:\\s*1px solid rgba\\(184,\\s*135,\\s*141,\\s*\\.7\\)/);
-  assert.ok(personalTile, "Personal icon tile styling must exist");
-  assert.doesNotMatch(personalTile, /border(?:-color)?:/, "Custom icons must inherit the preset rose border");
-  assert.match(personalTile, /background:\\s*#fff/, "Custom icons keep their white tile");
+  const originalIndex = styles.indexOf(".icon-tile {");
+  const customIndex = styles.indexOf(".icon-tile:has(> .chore-icon-personal) {");
+  assert.ok(originalIndex >= 0, "Preset tile styling must exist");
+  assert.ok(customIndex >= 0, "Personal tile styling must exist");
+  const presetTile = styles.slice(originalIndex, styles.indexOf("}", originalIndex));
+  const personalTile = styles.slice(customIndex, styles.indexOf("}", customIndex));
+  assert.ok(presetTile.includes("border: 1px solid rgba(184, 135, 141, .7)"),
+    "Preset tiles use the rose border");
+  assert.ok(!personalTile.includes("border-color:") && !personalTile.includes("border:"),
+    "Custom icons must inherit the preset rose border");
+  assert.ok(personalTile.includes("background: #fff"), "Custom icons keep their white tile");
 });
