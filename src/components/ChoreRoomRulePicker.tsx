@@ -41,7 +41,7 @@ export function ChoreRoomRulePicker({
         </label>
       ) : null}
       {value.mode === "specific" ? (
-        <RoomSelection rooms={rooms} roomDetails={roomDetails} rule={{ mode: "any" }}
+        <RoomSelection rooms={rooms} roomDetails={roomDetails} rule={{ mode: "specific", names: rooms }}
           selected={value.names} onChange={(names) => onChange({ mode: "specific", names })}
           title="Quali stanze precise?" />
       ) : null}
