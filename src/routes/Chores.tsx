@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Check, Clock, Pencil, Play, Search, Square, X } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreLevelTag } from "../components/ChoreLevelTag";
+import { ChoreRoomRulePicker } from "../components/ChoreRoomRulePicker";
+import { CompletionRoomDialog } from "../components/CompletionRoomDialog";
+import { eligibleRoomNames, getRoomRule, locationRuleLabel, roomRuleToLegacy, type ChoreRoomRule } from "../lib/chore-rooms";
 import { classifyChoreLevel } from "../lib/chore-levels";
 import { PersonalIconPicker } from "../components/PersonalIconPicker";
 import { ChoreIcon, choreIconOptions, isPersonalIconName, defaultPersonalIcon, type ChoreIconName } from "../lib/icons";
@@ -15,6 +18,8 @@ export function Chores() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
   const [selectedIcon, setSelectedIcon] = useState<ChoreIconName>(defaultPersonalIcon);
+  const [editingRoomRule, setEditingRoomRule] = useState<ChoreRoomRule>({ mode: "any" });
+  const [pendingCompletion, setPendingCompletion] = useState<{ id: string; durationMinutes: number; note: string } | null>(null);
   const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [manualMinutes, setManualMinutes] = useState("");
@@ -30,37 +35,36 @@ export function Chores() {
 
   const rooms = useMemo(() => ["", ...data.rooms], [data.rooms]);
   const chores = data.chores.filter((chore) => {
-    const roomOk = !room || chore.room === room;
+    const roomOk = !room || eligibleRoomNames(data.rooms, data.roomDetails, getRoomRule(chore)).includes(room);
     const queryOk = !query || chore.title.toLowerCase().includes(query.toLowerCase());
     return roomOk && queryOk;
   });
 
   function markDone(choreId: string) {
-    const current = loadData();
-    const next = addLog(current, choreId);
-    setData(next);
-    if (next === current) return;
-    saveData(next);
-    setRecentlyDoneId(choreId);
-    announce("Faccenda completata!");
+    if (hasCompletedToday(loadData(), choreId)) return;
+    setPendingCompletion({ id: choreId, durationMinutes: 0, note: "" });
   }
 
   function markDoneWithDetails(choreId: string) {
     const timerMinutes = elapsedSeconds ? Math.max(1, Math.round(elapsedSeconds / 60)) : 0;
     const durationMinutes = Number(manualMinutes || timerMinutes || 0);
+    closeDetail();
+    setPendingCompletion({ id: choreId, durationMinutes, note: completionNote.trim() });
+  }
+
+  function confirmCompletion(rooms: string[]) {
+    if (!pendingCompletion) return;
     const current = loadData();
-    const next = addLog(current, choreId, {
-      durationMinutes,
-      note: completionNote.trim(),
+    const next = addLog(current, pendingCompletion.id, {
+      durationMinutes: pendingCompletion.durationMinutes,
+      note: pendingCompletion.note,
+      rooms,
     });
     setData(next);
-    if (next === current) {
-      closeDetail();
-      return;
-    }
+    setPendingCompletion(null);
+    if (next === current) return;
     saveData(next);
-    setRecentlyDoneId(choreId);
-    closeDetail();
+    setRecentlyDoneId(pendingCompletion.id);
     announce("Faccenda completata!");
   }
 
@@ -83,6 +87,8 @@ export function Chores() {
   }
 
   function startEdit(choreId: string, icon: string) {
+    const chore = data.chores.find((item) => item.id === choreId);
+    setEditingRoomRule(chore ? getRoomRule(chore) : { mode: "any" });
     setEditingId(choreId);
     setDetailId(null);
     // Preserve current preset or legacy art until the user chooses a neutral symbol.
@@ -94,7 +100,7 @@ export function Chores() {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const title = String(form.get("title") || "").trim();
-    if (!title) return;
+    if (!title || (editingRoomRule.mode === "specific" && !editingRoomRule.names.length)) return;
 
     const next = {
       ...data,
@@ -106,7 +112,8 @@ export function Chores() {
               description: String(form.get("description") || "").trim(),
               icon: selectedIcon,
               type: String(form.get("type") || "ordinaria") as ChoreType,
-              room: String(form.get("room") || "").trim(),
+              room: roomRuleToLegacy(editingRoomRule),
+              roomRule: editingRoomRule,
               frequency: Number(form.get("frequency") || 0),
               estimatedMinutes: Number(form.get("estimatedMinutes") || 0),
               notes: String(form.get("notes") || "").trim(),
@@ -179,7 +186,7 @@ export function Chores() {
                   <div>
                     <strong>{chore.title}</strong>
                     <span>
-                      {chore.room || "Tutta casa"} - {doneToday ? "svolta oggi" : relativeDays(daysAgo(last?.completedAt))}
+                      {locationRuleLabel(getRoomRule(chore))} - {doneToday ? "svolta oggi" : relativeDays(daysAgo(last?.completedAt))}
                     </span>
                   </div>
                   <div className="task-actions">
@@ -232,21 +239,12 @@ export function Chores() {
                       </label>
                       <PersonalIconPicker key={chore.id} value={selectedIcon} onChange={setSelectedIcon} />
                     </div>
-                    <div className="form-grid">
-                      <label>
-                        Stanza o zona
-                        <input name="room" list="edit-rooms" defaultValue={chore.room} />
-                        <datalist id="edit-rooms">
-                          {data.rooms.map((room) => (
-                            <option key={room} value={room} />
-                          ))}
-                        </datalist>
-                      </label>
-                      <label>
-                        Scadenza opzionale
-                        <input name="frequency" type="number" min="0" inputMode="numeric" defaultValue={chore.frequency || ""} />
-                      </label>
-                    </div>
+                    <ChoreRoomRulePicker rooms={data.rooms} roomDetails={data.roomDetails}
+                      value={editingRoomRule} onChange={setEditingRoomRule} />
+                    <label>
+                      Scadenza opzionale
+                      <input name="frequency" type="number" min="0" inputMode="numeric" defaultValue={chore.frequency || ""} />
+                    </label>
                     <label>
                       Minuti stimati
                       <input
@@ -261,7 +259,8 @@ export function Chores() {
                       Note
                       <textarea name="notes" rows={3} defaultValue={chore.notes} />
                     </label>
-                    <button className="primary-action" type="submit">
+                    <button className="primary-action" type="submit"
+                      disabled={editingRoomRule.mode === "specific" && !editingRoomRule.names.length}>
                       Salva modifiche
                     </button>
                   </form>
@@ -285,6 +284,11 @@ export function Chores() {
           </div>
         </section>
       )}
+      {pendingCompletion && data.chores.some((item) => item.id === pendingCompletion.id) ? (
+        <CompletionRoomDialog key={pendingCompletion.id} data={data}
+          chore={data.chores.find((item) => item.id === pendingCompletion.id)!}
+          onConfirm={confirmCompletion} onClose={() => setPendingCompletion(null)} />
+      ) : null}
       {detailChore && !hasCompletedToday(data, detailChore.id) ? (
         <div className="task-sheet-backdrop" role="dialog" aria-modal="true" aria-labelledby="task-sheet-title">
           <section className="task-sheet">
@@ -293,7 +297,7 @@ export function Chores() {
                 <ChoreIcon name={detailChore.icon} size={40} />
               </span>
               <div>
-                <p className="eyebrow">{detailChore.room || "Tutta casa"}</p>
+                <p className="eyebrow">{locationRuleLabel(getRoomRule(detailChore))}</p>
                 <h2 id="task-sheet-title">{detailChore.title}</h2>
               </div>
               <button className="icon-only-button" type="button" onClick={closeDetail} aria-label="Chiudi scheda">
