@@ -23,6 +23,16 @@ export function Shop() {
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>(getTheme);
   const { feedback, announce } = useActionFeedback();
 
+  useEffect(() => {
+    const syncTheme = () => setSelectedTheme(getTheme());
+    window.addEventListener("storage", syncTheme);
+    window.addEventListener("curacasa-theme-changed", syncTheme);
+    return () => {
+      window.removeEventListener("storage", syncTheme);
+      window.removeEventListener("curacasa-theme-changed", syncTheme);
+    };
+  }, []);
+
   const owned = useMemo(() => new Set(
     data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore)].filter((key): key is string => !!key)),
   ), [data.chores]);
@@ -83,7 +93,8 @@ export function Shop() {
     if (selectedTheme === theme) return;
     setTheme(theme);
     setSelectedTheme(theme);
-    announce(`Tema ${theme === "cipria" ? "Cipria" : "Classico"} applicato!`);
+    const label = THEMES.find((item) => item.id === theme)?.label ?? theme;
+    announce(`Tema ${label} applicato!`);
   }
 
   return (
@@ -92,7 +103,7 @@ export function Shop() {
       <section className="page-heading">
         <p className="eyebrow">Shop CuraCasa</p>
         <div>
-          <h1>Collezioni e attività</h1>
+          <h1>{activeTab === "themes" ? "Temi e colori" : "Collezioni e attività"}</h1>
         </div>
       </section>
 
@@ -165,7 +176,12 @@ export function Shop() {
         <section className="shop-themes" role="tabpanel" aria-label="Temi dell'app">
           <div className="shop-themes__intro">
             <Palette size={20} aria-hidden="true" />
-            <p>Cambia i colori di CuraCasa. Sfumature, disposizione e funzioni rimangono uguali.</p>
+            <div>
+              <p>Cambia i colori di CuraCasa. Sfumature, disposizione e funzioni rimangono uguali.</p>
+              <a href="https://business.pinterest.com/it/pinterest-palette/" target="_blank" rel="noopener noreferrer">
+                I nuovi temi sono ispirati alla Pinterest Palette 2026
+              </a>
+            </div>
           </div>
           <div className="theme-grid">
             {THEMES.map((theme) => (
@@ -179,6 +195,7 @@ export function Shop() {
                     <span style={{ background: theme.colors[1] }} />
                   </span>
                 </div>
+                {theme.inspiration ? <span className="theme-card__source">{theme.inspiration}</span> : null}
                 <h2>{theme.label}</h2>
                 <p>{theme.description}</p>
                 <button type="button" disabled={selectedTheme === theme.id}
