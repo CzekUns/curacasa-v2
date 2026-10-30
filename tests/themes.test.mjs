@@ -81,24 +81,31 @@ for (const [id, expected] of Object.entries({
 }
 
 test("Bottom navigation selected buttons and center add use palette colors", () => {
-  // Both controls must read the selected theme, not the hard-coded Cipria shades.
-  const active = css.match(/\\.bottom-nav-item\\.active:not\\(\\.add\\)\\s*\\{([^}]*)\\}/)?.[1];
-  const addButton = css.match(/\\.bottom-nav-item\\.add\\s*\\{([^}]*)\\}/)?.[1];
-  assert.ok(active && addButton, "Navigation button rules must exist");
-  assert.match(active, /background:\\s*linear-gradient\\(145deg,\\s*var\\(--theme-cta\\),\\s*var\\(--theme-cta-hover\\)\\)/);
-  assert.match(addButton, /color:\\s*var\\(--rose-deep\\)/);
-  assert.match(addButton, /background:\\s*linear-gradient\\(145deg,\\s*var\\(--paper\\),\\s*var\\(--rose-soft\\)\\)/);
-  assert.match(addButton, /border:\\s*3px solid var\\(--nav-surface\\)/);
+  // Check the actual base rules, rather than a theme-specific selector.
+  const activeSelector = ".bottom-nav-item.active:not(.add) {";
+  const addSelector = ".bottom-nav-item.add {";
+  const activeAt = css.indexOf(activeSelector);
+  const addAt = css.indexOf(addSelector);
+  assert.ok(activeAt >= 0 && addAt >= 0, "Navigation buttons must exist");
+  const active = css.slice(activeAt, css.indexOf("}", activeAt));
+  const addButton = css.slice(addAt, css.indexOf("}", addAt));
 
-  // Existing dark dock and light central + are intentional in Classico.
+  assert.ok(active.includes("linear-gradient(145deg, var(--theme-cta), var(--theme-cta-hover))"));
+  assert.ok(addButton.includes("color: var(--rose-deep)"));
+  assert.ok(addButton.includes("linear-gradient(145deg, var(--paper), var(--rose-soft))"));
+  assert.ok(addButton.includes("border: 3px solid var(--nav-surface)"));
+
+  // Classico deliberately retains its original dark bar and ivory central action.
   assert.ok(css.includes(':root[data-theme="classico"] .bottom-nav-item.active:not(.add)'));
   assert.ok(css.includes(':root[data-theme="classico"] .bottom-nav-item.add'));
   assert.ok(css.includes(".bottom-nav { background: var(--nav-surface); }"));
   assert.ok(css.includes(".bottom-nav-item { color: var(--nav-muted); }"));
 
   for (const id of ["classico", "giada", "ghiaccio", "corallo"]) {
-    const themeBlock = css.match(new RegExp(`:root\\\\[data-theme="${id}"\\\\] \\\\{([\\\\s\\\\S]*?)\\\\n\\\\}`))?.[1];
-    assert.ok(themeBlock, `Missing ${id} CSS palette`);
+    const selector = `:root[data-theme="${id}"] {`;
+    const start = css.indexOf(selector);
+    assert.ok(start >= 0, `Missing ${id} CSS palette`);
+    const themeBlock = css.slice(start, css.indexOf("}", start));
     for (const variable of ["rose-deep", "rose-soft", "nav-surface", "theme-cta", "theme-cta-hover"]) {
       assert.ok(themeBlock.includes(`--${variable}:`), `Missing ${variable} for ${id}`);
     }
