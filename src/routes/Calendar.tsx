@@ -241,6 +241,10 @@ export function Calendar() {
           {selectedLogs.length ? (
             selectedLogs.map((log) => {
               const chore = data.chores.find((item) => item.id === log.choreId);
+              const rule = chore ? getRoomRule(chore) : { mode: "any" as const };
+              const allowed = eligibleRoomNames(data.rooms, data.roomDetails, rule);
+              const wholeHouse = rule.mode === "any" && allowed.length > 0 &&
+                allowed.every((name) => log.rooms?.includes(name));
               return (
                 <div className="task-edit-group" key={log.id}>
                   <article className="task-row calendar-log-row">
@@ -254,17 +258,10 @@ export function Calendar() {
                         onClick={() => setExpandedLogId(expandedLogId === log.id ? null : log.id)}>
                         {log.rooms?.length ? (
                           <span className="calendar-log-room-icons">
-                            {(() => {
-                              const rule = chore ? getRoomRule(chore) : { mode: "any" as const };
-                              const allowed = eligibleRoomNames(data.rooms, data.roomDetails, rule);
-                              const allHouse = rule.mode === "any" && allowed.length > 0 &&
-                                allowed.every((name) => log.rooms?.includes(name));
-                              return allHouse ? <House size={15} /> : log.rooms.map((name) => {
-                                const details = normalizeRoomDetails(
-                                  [...new Set([...data.rooms, name])], data.roomDetails);
-                                return <RoomBadge key={name} name={name} detail={details[name]} tiny />;
-                              });
-                            })()}
+                            {wholeHouse ? <House size={15} aria-label="Tutta casa" /> : log.rooms.map((name) => {
+                              const details = normalizeRoomDetails([...new Set([...data.rooms, name])], data.roomDetails);
+                              return <RoomBadge key={name} name={name} detail={details[name]} tiny />;
+                            })}
                           </span>
                         ) : <span>Luoghi non indicati</span>}
                         <span className="calendar-log-room-chevron">{expandedLogId === log.id ? "▴" : "▾"}</span>
@@ -284,7 +281,12 @@ export function Calendar() {
                   {expandedLogId === log.id && editingLogId !== log.id ? (
                     <div className="calendar-log-room-detail">
                       <strong>Luoghi in cui è stata svolta</strong>
-                      {log.rooms?.length ? log.rooms.map((name) => {
+                      {wholeHouse ? (
+                        <div className="calendar-log-room-line">
+                          <span className="chore-room-house"><House size={17} /></span>
+                          <span>Tutta la casa</span>
+                        </div>
+                      ) : log.rooms?.length ? log.rooms.map((name) => {
                         const details = normalizeRoomDetails([...new Set([...data.rooms, name])], data.roomDetails);
                         return <div key={name} className="calendar-log-room-line">
                           <RoomBadge name={name} detail={details[name]} small />
