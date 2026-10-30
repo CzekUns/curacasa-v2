@@ -4,58 +4,72 @@ import { readFileSync } from "node:fs";
 
 const icons = readFileSync(new URL("../src/lib/icons.tsx", import.meta.url), "utf8");
 const sprite = readFileSync(new URL("../public/personal-icons/symbols.svg", import.meta.url), "utf8");
+const picker = readFileSync(new URL("../src/components/PersonalIconPicker.tsx", import.meta.url), "utf8");
+const preview = readFileSync(new URL("../public/personal-icons/preview.html", import.meta.url), "utf8");
+const styles = readFileSync(new URL("../src/styles/global.css", import.meta.url), "utf8");
 const createPage = readFileSync(new URL("../src/routes/AddChore.tsx", import.meta.url), "utf8");
 const editPage = readFileSync(new URL("../src/routes/Chores.tsx", import.meta.url), "utf8");
 
-const section = icons.match(/export const personalIconOptions = \[([\s\S]*?)\] as const;/)?.[1] || "";
-const personal = [...section.matchAll(/value: "(personale-[a-z-]+)"/g)].map((m) => m[1]);
+const options = icons.match(/export const personalIconOptions = \[([\s\S]*?)\] as const;/)?.[1] || "";
+const personal = [...options.matchAll(/value: "(personale-[a-z-]+)"/g)].map((m) => m[1]);
 const presetSection = icons.match(/export const choreIconImages = \{([\s\S]*?)\} as const;/)?.[1] || "";
 
-test("User-created chores have 18 abstract and 24 cleaning-themed original illustrations", () => {
+test("42 personal IDs are stable, distinct from Store WebP artwork", () => {
   assert.equal(personal.length, 42);
-  assert.equal(new Set(personal).size, personal.length);
-  assert.ok(personal.every((name) => name.startsWith("personale-")));
-  assert.ok(personal.every((name) => !presetSection.includes(name)), "Personal keys must not duplicate preset keys");
-  assert.ok(personal.every((name) => sprite.includes(`id="${name}"`)), "Sprite must include every option");
-  assert.equal((sprite.match(/<symbol /g) || []).length, 42);
-  const groups = [...section.matchAll(/group: "(Pulizie|Generiche)"/g)].map((m) => m[1]);
-  assert.equal(groups.filter((group) => group === "Pulizie").length, 24);
-  assert.equal(groups.filter((group) => group === "Generiche").length, 18);
-  assert.equal(groups.length, personal.length);
-  assert.ok(personal.every((name) => sprite.includes(`<symbol id="${name}" viewBox="0 0 96 96">`)));
-  assert.ok(!/<script|foreignObject|onload=/i.test(sprite), "Never embed executable HTML or scripts in icon art");
-
+  assert.equal(new Set(personal).size, 42);
+  assert.ok(personal.every((id) => !presetSection.includes(id)));
+  assert.equal((sprite.match(/<symbol id=/g) || []).length, 42);
+  for (const id of personal) assert.ok(sprite.includes(`<symbol id="${id}" viewBox="0 0 96 96">`), id);
+  assert.equal([...options.matchAll(/group: "Pulizie"/g)].length, 24);
+  assert.equal([...options.matchAll(/group: "Generiche"/g)].length, 18);
 });
 
-test("New chores suggest a neutral title and default to a personal symbol", () => {
+test("SVGs are single-color currentColor drawings with NO baked-in background", () => {
+  assert.ok(sprite.includes('fill="currentColor"'));
+  assert.ok(sprite.includes('stroke="currentColor"'));
+  assert.doesNotMatch(sprite, /#[a-fA-F0-9]{3,8}\b/);
+  assert.doesNotMatch(sprite, /<rect[^>]*width="96"[^>]*height="96"/);
+  assert.doesNotMatch(sprite, /<script|foreignObject|onload=/i);
+  assert.ok(icons.includes("personal-icons/symbols.svg"));
+  assert.ok(icons.includes("data-tone={tone}"));
+  assert.ok(icons.includes("choreIconImages[name as PresetIconName]"));
+});
+
+test("The same white tile footprint as WebP presets, colored per active theme", () => {
+  assert.ok(styles.includes(".icon-tile:has(> .chore-icon-personal)"));
+  assert.match(styles, /\.icon-tile:has\(> \.chore-icon-personal\)\s*\{[^}]*background:\s*#fff/);
+  for (const theme of ["classico", "cipria", "giada", "ghiaccio", "corallo"]) {
+    const block = styles.match(new RegExp(`:root\\[data-theme="${theme}"\\] \\{([^}]*--personal-rose:[^}]*)\\}`));
+    assert.ok(block, `Missing dynamic icon colors in ${theme}`);
+    assert.match(block[1], /--personal-sage:/);
+    assert.match(block[1], /--personal-accent:/);
+  }
+});
+
+test("Aggiungi/Modifica preserve existing data and show compact emoji picker", () => {
   assert.ok(createPage.includes('placeholder="Inserisci un titolo"'));
   assert.ok(createPage.includes("useState<PersonalIconName>(defaultPersonalIcon)"));
   assert.ok(createPage.includes("<PersonalIconPicker"));
-  assert.ok(!createPage.includes("choreIconOptions.map"));
-  assert.ok(!createPage.includes('placeholder="Pulizia filtri condizionatore"'));
-});
-
-test("Editing preserves existing icons and offers neutral alternatives", () => {
   assert.ok(editPage.includes("choreIconOptions.some"));
   assert.ok(editPage.includes("isPersonalIconName(icon)"));
   assert.ok(editPage.includes("<PersonalIconPicker"));
-  assert.ok(!editPage.includes("choreIconOptions.map"));
+  assert.ok(!picker.includes("<span>{icon.label}</span>"));
+  assert.ok(!picker.includes("icon.group === group"));
+  assert.ok(picker.includes("aria-label={icon.label}"));
+  assert.ok(picker.includes('event.key !== "Escape"'));
+  assert.ok(picker.includes("pointerdown"));
+  assert.ok(picker.includes("setOpen(false)"));
+  assert.ok(styles.includes("grid-template-columns: repeat(6, minmax(0, 1fr))"));
+  assert.ok(styles.includes("max-height: 220px"));
+  assert.ok(styles.includes("width: min(264px, calc(100vw - 32px))"));
 });
 
-test("Single SVG sprite powers user icons while Store images remain unchanged", () => {
-  assert.ok(icons.includes("personal-icons/symbols.svg"));
-  assert.ok(icons.includes("choreIconImages[name as PresetIconName]"));
-  assert.ok(sprite.includes('xmlns="http://www.w3.org/2000/svg"'));
-});
-
-test("Visual picker groups cleaning and generic symbols without hiding legacy task icons", () => {
-  const picker = readFileSync(new URL("../src/components/PersonalIconPicker.tsx", import.meta.url), "utf8");
-  const preview = readFileSync(new URL("../public/personal-icons/preview.html", import.meta.url), "utf8");
-  assert.ok(picker.includes('["Pulizie", "Generiche"]'));
-  assert.ok(picker.includes("icon.group === group"));
-  assert.ok(picker.includes("choreIconOptions.find"));
-  assert.equal((preview.match(/<article class="card">/g) || []).length, 42);
-  assert.ok(preview.includes('A tema pulizie'));
-  assert.ok(preview.includes('Simboli generici'));
-  assert.ok(preview.includes("personale-tergivetro"));
+test("Standalone icon board shows 42 unlabeled SVGs and all five palette previews", () => {
+  assert.equal((preview.match(/class="glyph-tile"/g) || []).length, 42);
+  assert.ok(preview.includes('symbols.svg#personale-tergivetro'));
+  assert.ok(!preview.includes("<strong>Scintilla</strong>"));
+  assert.ok(!preview.includes("<small>Personale</small>"));
+  for (const theme of ["classico", "cipria", "giada", "ghiaccio", "corallo"]) {
+    assert.ok(preview.includes(`data-theme="${theme}"`));
+  }
 });
