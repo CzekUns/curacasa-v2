@@ -1,0 +1,37 @@
+name: Enlarge four new CuraCasa chore icons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/zoom_new_chore_icons.py'
+      - '.github/workflows/zoom-new-chore-icons.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  enlarge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Pillow
+        run: python -m pip install pillow
+      - name: Enlarge approved icons without affecting awning
+        run: python scripts/zoom_new_chore_icons.py
+      - name: Commit WebP replacements
+        run: |
+          if ! git diff --quiet -- public/chore-icons; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/chore-icons/mobiletti-esterni.webp public/chore-icons/divano.webp public/chore-icons/tappeto.webp public/chore-icons/materasso.webp
+            git commit -m "Enlarge four chore icons slightly, keep sun awning unchanged"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
