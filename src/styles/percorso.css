@@ -167,7 +167,8 @@
   .pc-context-heading { margin-bottom:9px; }
   .pc-context-heading strong { font-size:.85rem; }
   .pc-explore-tip { display:none; }
-  .pc-camera-controls,.pc-zoom-controls { bottom:12px; }
+  /* Keep camera controls visible even when the contextual bottom sheet is open. */
+  .pc-camera-controls,.pc-zoom-controls { top:10px; bottom:auto; }
   .pc-mode-dock { bottom:0; left:0; transform:none; width:100%; max-width:none; border-radius:17px 17px 0 0;
     padding:6px 8px calc(6px + env(safe-area-inset-bottom)); box-shadow:0 -4px 21px #334e3930; }
   .pc-mode-dock button { min-height:53px; padding:7px 2px; font-size:.68rem; }
