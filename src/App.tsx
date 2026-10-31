@@ -12,6 +12,7 @@ import { Home } from "./routes/Home";
 import { Landing } from "./routes/Landing";
 import { Settings } from "./routes/Settings";
 import { Shop } from "./routes/Shop";
+import { Percorso } from "./routes/Percorso";
 
 function ProtectedRoute() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -21,6 +22,14 @@ function ProtectedRoute() {
   if (!isSignedIn) return <Navigate to="/" replace state={{ from: location.pathname }} />;
 
   return <AppShell />;
+}
+
+function ProtectedPercorso() {
+  const { isLoaded, isSignedIn } = useAuth();
+  const location = useLocation();
+  if (!isLoaded) return <div className="page-loader">Caricamento account...</div>;
+  if (!isSignedIn) return <Navigate to="/" replace state={{ from: location.pathname }} />;
+  return <Percorso />;
 }
 
 export default function App() {
@@ -33,6 +42,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       {isDemoMode && <Route path="/accesso" element={<AccessPreview />} />}
+      <Route path="/percorso" element={isDemoMode ? <Percorso /> : <ProtectedPercorso />} />
       <Route path="/app" element={isDemoMode ? <AppShell /> : <ProtectedRoute />}>
         <Route index element={<Home />} />
         <Route path="faccende" element={<Chores />} />
