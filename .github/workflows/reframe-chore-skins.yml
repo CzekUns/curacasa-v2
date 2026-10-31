@@ -1,0 +1,54 @@
+name: Reframe all 60 CuraCasa skin assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/reframe_chore_skin_subjects.py
+      - .github/workflows/reframe-chore-skins.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  reframe-skins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install image dependencies
+        run: python -m pip install Pillow numpy
+      - name: Reduce subjects and extend card backgrounds
+        run: python scripts/reframe_chore_skin_subjects.py
+      - name: Verify resulting assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          root = Path("public/chore-skins")
+          packs = ("Vintage60", "Vintage80", "Ink30", "ClayToon", "ChibiCasa")
+          for pack in packs:
+              files = list((root / pack).glob("*.webp"))
+              assert len(files) == 12, (pack, len(files))
+              for file in files:
+                  with Image.open(file) as im:
+                      assert im.size == (320, 320), (file, im.size)
+          assert (root / ".subjects-padded-v1.json").exists()
+          print("All 60 skin images verified.")
+          PY
+      - name: Save reworked assets on main
+        run: |
+          if ! git diff --quiet -- public/chore-skins || [ -n "$(git ls-files --others --exclude-standard public/chore-skins)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/chore-skins
+            git commit -m "Reduce subjects and extend backgrounds in 60 approved chore skins"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi

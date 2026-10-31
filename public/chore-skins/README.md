@@ -18,3 +18,12 @@ Selezionabili nello Shop, separati dai temi colore. L'originale resta sempre dis
   arriva quasi a filo del bordo, senza sostituire la cornice rosa.
 - Le immagini classiche e le icone personalizzate mantengono le
   dimensioni e la presentazione precedenti.
+
+## Inquadratura delle skin
+
+Le 60 WebP vengono normalizzate a 320 × 320 px: illustrazione ridotta al
+**87%** della dimensione originale, con sfondo bianco esteso per **Vintage60**
+e sfondo coerente con i colori originali per gli altri set. La cornice rosa
+dell'app rimane un livello CSS in primo piano e non viene inclusa nei WebP.
+La trasformazione è eseguita una sola volta e registrata nel file
+`.subjects-padded-v1.json` per evitare ridimensionamenti ripetuti.
