@@ -2,7 +2,7 @@
 """Enlarge four recently added chore images by 20%, without touching sun awnings.
 
 Always reads approved source from a pinned commit, so a re-run does not
-accumulate zoom or shrink the card. Output stays full-size opaque 512x512 WebP.
+accumulate zoom or shrink the card. Output stays the original square size (192x192) and opaque WebP.
 """
 from io import BytesIO
 from pathlib import Path
@@ -22,7 +22,7 @@ for name in NAMES:
     with Image.open(BytesIO(source)) as img:
         img = img.convert("RGB")
         w, h = img.size
-        if (w, h) != (512, 512):
+        if w != h or w < 128:
             raise ValueError(f"Unexpected dimensions {name}: {w} x {h}")
         crop_size = round(w / ZOOM)
         offset = (w - crop_size) // 2
@@ -31,8 +31,7 @@ for name in NAMES:
         ).resize((w, h), resample=Image.Resampling.LANCZOS)
         zoomed.save(ROOT / path, format="WEBP", quality=96, method=6)
     with Image.open(ROOT / path) as check:
-        assert check.size == (512, 512)
-        assert check.getpixel((0, 0))[:3] == check.getpixel((0, 0))[:3]
-    print(f"Zoomed {name}: x{ZOOM}, 512x512 opaque WebP")
+        assert check.size == (w, h)
+    print(f"Zoomed {name}: x{ZOOM}, {w}x{h} opaque WebP")
 
 print("Done. tende-esterno.webp was intentionally left untouched.")
