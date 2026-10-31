@@ -26,6 +26,8 @@ test("Store: activities are grouped under explicit category headers, without dup
   assert.equal(icons.length,67);
   assert.equal(new Set(icons).size,67);
   assert.equal(groups[0].chores[0].title,"Controllo generale casa");
+  assert.ok(groups[0].chores.some(c => c.title === "Aspirapolvere" && c.icon === "scopa-elettrica"));
+  assert.ok(groups[3].chores.some(c => c.title === "Aspirapolvere vintage" && c.icon === "aspirapolvere"));
 });
 
 test("Store: old cached catalogue without collection category no longer produces blank list", () => {
