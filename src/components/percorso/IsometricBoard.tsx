@@ -7,9 +7,11 @@ type Props = {
   view: Direction;
   showAll: boolean;
   sculpt: boolean;
+  showWalls: boolean;
   selectedObject: string | null;
   onCell: (roomId: string, x: number, y: number) => void;
   onObject: (roomId: string, id: string) => void;
+  onWall: (roomId: string) => void;
 };
 type Vec = { x: number; y: number };
 const cellKey = (x: number, y: number) => `${x},${y}`;
@@ -116,7 +118,7 @@ const wallColor: Record<HouseRoom["wall"], string> = {
   avorio: "#f8ecdc", salvia: "#c9d9c6", cipria: "#ecd2d1",
   righe: "#f3e3d4", carta: "#d9e6dd",
 };
-export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, selectedObject, onCell, onObject }: Props) {
+export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, showWalls, selectedObject, onCell, onObject, onWall }: Props) {
   const visible = showAll ? rooms : rooms.filter((room) => room.id === activeRoomId);
   const vertices = visible.flatMap((room) => [
     P(room.offsetX, room.offsetY, 70, view),
@@ -181,8 +183,9 @@ export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, sel
       const top = polygon(wx, wy, 1, 1, 0, view);
       const bottom = polygon(wx, wy, 1, 1, -7, view);
       const key = `${room.id}/${x}/${y}`;
-      return <g key={key} className={room.id === activeRoomId ? "pc-tile-active" : "pc-tile-passive"}
-        onClick={() => onCell(room.id, x, y)} role="button" tabIndex={room.id === activeRoomId ? 0 : -1}
+      return <g key={key} data-pc-kind="floor" data-pc-room={room.id} data-pc-x={x} data-pc-y={y}
+        className={room.id === activeRoomId ? "pc-tile-active" : "pc-tile-passive"}
+        role="button" tabIndex={room.id === activeRoomId ? 0 : -1}
         aria-label={`${room.name}: casella ${x + 1}, ${y + 1}`}
         onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onCell(room.id, x, y); } }}>
         <polygon points={pts([top[1], top[2], bottom[2], bottom[1]])} fill="#ad9481" />
@@ -197,12 +200,14 @@ export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, sel
         const x = i % room.width, y = Math.floor(i / room.width);
         if (active.has(cellKey(x, y))) return null;
         const footprint = polygon(room.offsetX + x, room.offsetY + y, 0.99, .99, 0, view);
-        return <polygon key={`void-${x}-${y}`} points={pts(footprint)}
+        return <polygon key={`void-${x}-${y}`} data-pc-kind="floor" data-pc-room={room.id}
+          data-pc-x={x} data-pc-y={y} points={pts(footprint)}
           fill="#ecf6eb" opacity=".4" stroke="#538976" strokeDasharray="4 4" strokeWidth="2"
-          onClick={() => onCell(room.id, x, y)} role="button" aria-label={`Aggiungi casella ${x + 1}, ${y + 1}`} />;
+          role="button" tabIndex={0} aria-label={`Aggiungi casella ${x + 1}, ${y + 1}`}
+          onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onCell(room.id, x, y); } }} />;
       });
     })}
-    {tiles.flatMap(({ room, x, y }) => {
+    {showWalls && tiles.flatMap(({ room, x, y }) => {
       const occupied = new Set(room.cells);
       const sides = [
         { dx: 0, dy: -1, normal: { x: 0, y: -1 }, a: [x, y], b: [x + 1, y] },
@@ -216,16 +221,20 @@ export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, sel
         const a = side.a, b = side.b, wx = room.offsetX, wy = room.offsetY;
         const quad = [P(wx + a[0], wy + a[1], 0, view), P(wx + b[0], wy + b[1], 0, view),
           P(wx + b[0], wy + b[1], 64, view), P(wx + a[0], wy + a[1], 64, view)];
-        return [<g key={`wall-${room.id}-${x}-${y}-${i}`} pointerEvents="none">
+        return [<g key={`wall-${room.id}-${x}-${y}-${i}`}
+          data-pc-kind="wall" data-pc-room={room.id} className="pc-wall"
+          role="button" tabIndex={room.id === activeRoomId ? 0 : -1}
+          aria-label={`Scegli pattern pareti di ${room.name}`}
+          onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onWall(room.id); } }}>
           <polygon points={pts(quad)} fill={wallColor[room.wall]} stroke="#8d837c60" strokeWidth="1.2" />
-          <polygon points={pts(quad)} fill={`url(#pc-wall-${room.wall === "righe" || room.wall === "carta" ? room.wall : "basic"})`} opacity=".8" />
-          <path d={`M ${quad[0].x} ${quad[3].y} L ${quad[1].x} ${quad[2].y}`} fill="none" stroke="#fff" strokeWidth="2" opacity=".65" />
+          <polygon points={pts(quad)} fill={`url(#pc-wall-${room.wall === "righe" || room.wall === "carta" ? room.wall : "basic"})`} opacity=".8" pointerEvents="none" />
+          <path d={`M ${quad[3].x} ${quad[3].y} L ${quad[2].x} ${quad[2].y}`} fill="none" stroke="#fff" strokeWidth="2" opacity=".65" pointerEvents="none" />
         </g>];
       });
     })}
-    {furniture.map(({ room, item }) => <g key={item.id} className="pc-furniture" role="button" tabIndex={0}
+    {furniture.map(({ room, item }) => <g key={item.id} data-pc-kind="object" data-pc-room={room.id}
+      data-pc-object={item.id} className="pc-furniture" role="button" tabIndex={0}
       aria-label={`Seleziona ${FURNITURE.find((spec) => spec.id === item.type)?.label} in ${room.name}`}
-      onClick={(event) => { event.stopPropagation(); onObject(room.id, item.id); }}
       onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onObject(room.id, item.id); } }}>
       <Furniture3D item={item} room={room} view={view} selected={selectedObject === item.id} />
     </g>)}
