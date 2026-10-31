@@ -101,6 +101,17 @@ const ZOOMED_PRESET_ICONS: ReadonlySet<string> = new Set([
   "mobiletti-esterni", "divano", "tappeto", "materasso",
 ]);
 
+/** Distinguish salt refills from maintenance with crisp standalone vector badges.
+ * These WebPs have the old baked-in pictograms removed from the blank corner;
+ * the machine and decoration pixels remain unchanged.
+ */
+const EQUIPMENT_OPERATION_BADGES: Readonly<Record<string, "manutenzione" | "sale">> = {
+  "lavastoviglie-manutenzione": "manutenzione",
+  "lavastoviglie-sale": "sale",
+  "addolcitore-manutenzione": "manutenzione",
+  "addolcitore-sale": "sale",
+};
+
 export const personalIconOptions = [
   { value: "personale-scintilla", label: "Scintilla", group: "Generiche" },
   { value: "personale-stella", label: "Stella", group: "Generiche" },
@@ -256,14 +267,30 @@ export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number })
     return <Home aria-hidden="true" size={Math.max(18, Math.round(size * 0.56))} />;
   }
 
-  return (
+  const operationBadge = name ? EQUIPMENT_OPERATION_BADGES[name] : undefined;
+  const src = `${import.meta.env.BASE_URL}${iconPath.slice(1)}${operationBadge ? "?art=equipment-pictograms-removed-v1" : EDGE_REPAIRED_PRESET_ICONS.has(name || "") ? "?art=edge-clean-20261031-v1" : ZOOMED_PRESET_ICONS.has(name || "") ? "?art=zoom-120-v3" : REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`;
+  const image = (
     <img
       aria-hidden="true"
       className="chore-icon-img"
       loading="lazy"
-      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${EDGE_REPAIRED_PRESET_ICONS.has(name || "") ? "?art=edge-clean-20261031-v1" : ZOOMED_PRESET_ICONS.has(name || "") ? "?art=zoom-120-v3" : REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
+      src={src}
       style={{ height: size, width: size }}
     />
+  );
+  if (!operationBadge) return image;
+
+  return (
+    <span className="chore-icon-with-operation" aria-hidden="true"
+      style={{ height: size, width: size }}>
+      {image}
+      <img
+        className="chore-operation-badge"
+        alt=""
+        loading="lazy"
+        src={`${import.meta.env.BASE_URL}chore-icons/badges/${operationBadge}.svg`}
+      />
+    </span>
   );
 }
 
