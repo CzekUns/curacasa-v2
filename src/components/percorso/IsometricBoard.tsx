@@ -36,7 +36,7 @@ function Box3D({ x, y, w, d, bottom = 0, top, base, topColor, view, label }: {
   return <g>
     {normals.map((normal, i) => {
       const facing = transformNormal(normal.x, normal.y, view);
-      if (facing.x < 0 && facing.y < 0) return null;
+      if (facing.x <= 0 && facing.y <= 0) return null;
       const quad = [high[i], high[(i + 1) % 4], low[(i + 1) % 4], low[i]];
       return <polygon key={i} points={pts(quad)} fill={base} stroke="#4b45414d" strokeWidth="1"
         opacity={i === 2 || i === 1 ? 0.89 : 0.72} />;
@@ -212,14 +212,14 @@ export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, sel
       ];
       return sides.flatMap((side, i) => {
         const normal = transformNormal(side.normal.x, side.normal.y, view);
-        if (occupied.has(cellKey(x + side.dx, y + side.dy)) || (normal.x >= 0 || normal.y >= 0)) return [];
+        if (occupied.has(cellKey(x + side.dx, y + side.dy)) || (normal.x > 0 || normal.y > 0)) return [];
         const a = side.a, b = side.b, wx = room.offsetX, wy = room.offsetY;
         const quad = [P(wx + a[0], wy + a[1], 0, view), P(wx + b[0], wy + b[1], 0, view),
           P(wx + b[0], wy + b[1], 64, view), P(wx + a[0], wy + a[1], 64, view)];
         return [<g key={`wall-${room.id}-${x}-${y}-${i}`} pointerEvents="none">
           <polygon points={pts(quad)} fill={wallColor[room.wall]} stroke="#8d837c60" strokeWidth="1.2" />
           <polygon points={pts(quad)} fill={`url(#pc-wall-${room.wall === "righe" || room.wall === "carta" ? room.wall : "basic"})`} opacity=".8" />
-          <path d={`M ${quad[0].x} ${quad[0].y - 60} L ${quad[1].x} ${quad[1].y - 60}`} fill="none" stroke="#fff" strokeWidth="2" opacity=".65" />
+          <path d={`M ${quad[0].x} ${quad[3].y} L ${quad[1].x} ${quad[2].y}`} fill="none" stroke="#fff" strokeWidth="2" opacity=".65" />
         </g>];
       });
     })}
