@@ -2,16 +2,21 @@ import { useEffect, useMemo, useState } from "react";
 import { Check, Palette, PackagePlus, Plus } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreIcon } from "../lib/icons";
-import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity } from "../lib/chore-levels";
+import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity, type ChoreLevel } from "../lib/chore-levels";
 import { importPresets, loadData, presetSignature, saveData, type PresetChore } from "../lib/store";
 import { getTheme, setTheme, THEMES, type ThemeName } from "../lib/theme";
+
+type CollectionCategory = Exclude<ChoreLevel, "tua">;
 
 type ChorePack = {
   id: string;
   title: string;
   description: string;
+  category: CollectionCategory;
   chores: PresetChore[];
 };
+
+const COLLECTION_CATEGORIES: CollectionCategory[] = ["base", "pro", "super", "speciale"];
 
 type PackFile = { packs: ChorePack[] };
 type ShopTab = "collections" | "activities" | "themes";
@@ -118,33 +123,47 @@ export function Shop() {
       </div>
 
       {activeTab === "collections" && packs.length ? (
-        <section className="pack-list" role="tabpanel" aria-label="Collezioni">
-          {packs.map((pack) => {
-            const missing = pack.chores.filter((chore) => !owned.has(presetIdentity(chore)));
-            const allOwned = missing.length === 0;
+        <div className="pack-category-list" role="tabpanel" aria-label="Collezioni">
+          {COLLECTION_CATEGORIES.map((category) => {
+            const matchingPacks = packs.filter((pack) => pack.category === category);
+            if (!matchingPacks.length) return null;
             return (
-              <article className={`pack-card ${allOwned ? "shop-owned" : ""}`} key={pack.id}>
-                <div>
-                  <p className="eyebrow">{pack.chores.length} attività</p>
-                  <h2>{pack.title}</h2>
-                  <span>{pack.description}</span>
+              <section className="pack-category-group" key={category} aria-label={`Collezioni ${CHORE_LEVEL_LABELS[category]}`}>
+                <div className="section-title pack-category-heading">
+                  <h2>{CHORE_LEVEL_LABELS[category]}</h2>
+                  <span>{matchingPacks.length} {matchingPacks.length === 1 ? "collezione" : "collezioni"}</span>
                 </div>
-                <div className="pack-preview" aria-hidden="true">
-                  {pack.chores.slice(0, 4).map((chore) => (
-                    <span className="icon-tile" key={`${pack.id}-${chore.title}`}>
-                      <ChoreIcon name={chore.icon} size={40} />
-                    </span>
-                  ))}
+                <div className="pack-list">
+                  {matchingPacks.map((pack) => {
+                    const missing = pack.chores.filter((chore) => !owned.has(presetIdentity(chore)));
+                    const allOwned = missing.length === 0;
+                    return (
+                      <article className={`pack-card ${allOwned ? "shop-owned" : ""}`} key={pack.id}>
+                        <div>
+                          <p className="eyebrow">{pack.chores.length} attività</p>
+                          <h2>{pack.title}</h2>
+                          <span>{pack.description}</span>
+                        </div>
+                        <div className="pack-preview" aria-hidden="true">
+                          {pack.chores.slice(0, 4).map((chore) => (
+                            <span className="icon-tile" key={`${pack.id}-${chore.title}`}>
+                              <ChoreIcon name={chore.icon} size={40} />
+                            </span>
+                          ))}
+                        </div>
+                        <button type="button" disabled={allOwned} onClick={() => addPresets(pack.chores, pack.title)}>
+                          {allOwned ? <Check size={17} /> : <PackagePlus size={17} />}
+                          {allOwned ? "Collezione già aggiunta" : missing.length === pack.chores.length
+                            ? "Aggiungi collezione" : `Aggiungi ${missing.length} mancanti`}
+                        </button>
+                      </article>
+                    );
+                  })}
                 </div>
-                <button type="button" disabled={allOwned} onClick={() => addPresets(pack.chores, pack.title)}>
-                  {allOwned ? <Check size={17} /> : <PackagePlus size={17} />}
-                  {allOwned ? "Collezione già aggiunta" : missing.length === pack.chores.length
-                    ? "Aggiungi collezione" : `Aggiungi ${missing.length} mancanti`}
-                </button>
-              </article>
+              </section>
             );
           })}
-        </section>
+        </div>
       ) : null}
 
       {activeTab === "activities" && activities.length ? (
