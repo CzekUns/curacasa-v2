@@ -1,4 +1,4 @@
-import { classifyChoreLevel, presetIdentity, type ChoreLevel } from "./chore-levels.ts";
+import { classifyChoreLevel, presetIdentity, updatedVacuumPresetTitle, type ChoreLevel } from "./chore-levels.ts";
 import { normalizeRoomDetails, type RoomDetails } from "./rooms.ts";
 import { getRoomRule, type ChoreRoomRule } from "./chore-rooms.ts";
 
@@ -237,7 +237,8 @@ export function loadData(): AppData {
     const chores = Array.isArray(parsed.chores)
       ? parsed.chores.map((chore) => {
           const icon = LEGACY_ICON_MAP[chore.icon] || chore.icon;
-          return { ...chore, icon, roomRule: getRoomRule(chore), level: classifyChoreLevel({ ...chore, icon }) };
+          const title = updatedVacuumPresetTitle({ ...chore, icon });
+          return { ...chore, title, icon, roomRule: getRoomRule(chore), level: classifyChoreLevel({ ...chore, title, icon }) };
         })
       : [];
     const logs = Array.isArray(parsed.logs) ? parsed.logs : [];
