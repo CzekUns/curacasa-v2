@@ -2866,6 +2866,8 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
 }
 .chore-icon-with-operation > .chore-icon-img {
   display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 .chore-icon-with-operation > .chore-operation-badge {
   display: block;
