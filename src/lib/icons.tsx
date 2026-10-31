@@ -90,6 +90,13 @@ const REPLACED_PRESET_ICONS: ReadonlySet<string> = new Set([
 ]);
 
 /** The four new WebPs are zoomed; the sun awning is left unchanged. */
+/** Cleaned margin artifacts; leave the original artwork and cards at full size. */
+const EDGE_REPAIRED_PRESET_ICONS: ReadonlySet<string> = new Set([
+  "paletta", "pavimento", "termosifone", "letto", "tavolo",
+  "mattonelle", "lavastoviglie-manutenzione", "lavastoviglie-sale",
+  "infissi", "tubi-esterni", "tapparella-grande", "zanzariera",
+]);
+
 const ZOOMED_PRESET_ICONS: ReadonlySet<string> = new Set([
   "mobiletti-esterni", "divano", "tappeto", "materasso",
 ]);
@@ -254,7 +261,7 @@ export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number })
       aria-hidden="true"
       className="chore-icon-img"
       loading="lazy"
-      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${ZOOMED_PRESET_ICONS.has(name || "") ? "?art=zoom-120-v3" : REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
+      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${EDGE_REPAIRED_PRESET_ICONS.has(name || "") ? "?art=edge-clean-20261031-v1" : ZOOMED_PRESET_ICONS.has(name || "") ? "?art=zoom-120-v3" : REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
       style={{ height: size, width: size }}
     />
   );
