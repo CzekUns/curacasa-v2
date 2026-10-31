@@ -132,8 +132,10 @@ Le cinque pill SPECIALE riconosciute dal catalogo attuale sono:
 | Passare Dyson | dyson | PRO |
 | Pulire accessori Dyson | dyson-accessori | SUPER |
 | Passare Folletto | folletto | BASE |
-| Passare scopa elettrica | scopa-elettrica | BASE |
+| Aspirapolvere vintage | aspirapolvere | BASE |
 | Avviare robot aspirapolvere | robot-aspirapolvere | BASE |
+
+**Riassegnazione aspirapolvere (catalogo aggiornato):** la vecchia icona `aspirapolvere.webp` (modello a traino) è ora **Aspirapolvere vintage, SPECIALE**. La precedente icona `scopa-elettrica.webp` (aspirapolvere verticale) è ora la faccenda **Aspirapolvere, BASE**, inclusa nelle dodici essenziali. I nomi dei file e le chiavi `icon` **non cambiano**. Il sistema conserva le firme storiche `aspirapolvere::aspirapolvere` e `passare scopa elettrica::scopa-elettrica` come alias dei due nuovi titoli, evitando doppi import. Sul caricamento di dati legacy, `loadData()` aggiorna esclusivamente nome e categoria dei vecchi preset identificabili: gli ID, i log, le note, le frequenze e le assegnazioni alle stanze restano invariati; le faccende TUA e i titoli già personalizzati non vengono rinominati.
 
 **Riconoscimento origine:** il repository simoneapps non ha level né presetKey. Se **titolo normalizzato + icon** corrisponde *esattamente* a un preset originale, usare la sua categoria nel nuovo catalogo, con SPECIALE per i cinque casi sopra. Altrimenti classificare la faccenda come **tua**. Non basta l'icona da sola: un utente può aver creato manualmente una faccenda con un'icona del catalogo. L'origine legacy non contiene una prova certa di quale pulsante abbia creato il record: in caso di ambiguità, conservare il record e segnalarlo; non inventare la sua provenienza.
 
