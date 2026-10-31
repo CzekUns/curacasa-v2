@@ -1,4 +1,6 @@
+import { useSyncExternalStore } from "react";
 import { CalendarDays, Check, Home, NotebookText, Plus, Settings, Store } from "lucide-react";
+import { DEFAULT_CHORE_SKIN, getChoreSkin, getChoreSkinAsset, subscribeChoreSkin, type ChoreSkinId } from "./chore-skins";
 
 export const choreIconImages = {
   casa: "/chore-icons/casa.webp",
@@ -238,7 +240,17 @@ export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = 
   { value: "sifone-lavandino", label: "Sifone lavandino" },
 ];
 
-export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number }) {
+export function ChoreIcon({ name, size = 38, skin }: { name?: string; size?: number; skin?: ChoreSkinId }) {
+  const activeSkin = useSyncExternalStore(subscribeChoreSkin, getChoreSkin, () => DEFAULT_CHORE_SKIN);
+  // A preview can override the active skin without saving another selection.
+  const skinAsset = getChoreSkinAsset(skin ?? activeSkin, name);
+  if (skinAsset) {
+    return (
+      <img aria-hidden="true" className="chore-icon-img" loading="lazy"
+        src={`${import.meta.env.BASE_URL}${skinAsset}`}
+        style={{ height: size, width: size }} />
+    );
+  }
   if (name && isPersonalIconName(name)) {
     // The glyph is one color; its tone comes from the active app palette.
     // Stable grouping across themes without storing any new user data.

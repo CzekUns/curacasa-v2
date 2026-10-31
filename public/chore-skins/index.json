@@ -1,7 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "basePackId": "base-essenziali",
-  "note": "Archivio grafico separato dal catalogo e dai temi. L'app non seleziona ancora queste skin.",
+  "note": "Skin per le 12 faccende BASE; non modificano attività o palette.",
   "sets": [
     {
       "id": "vintage60",
@@ -19,6 +19,18 @@
       "id": "ink30",
       "name": "Ink30",
       "path": "Ink30/manifest.json",
+      "iconCount": 12
+    },
+    {
+      "id": "claytoon",
+      "name": "ClayToon",
+      "path": "ClayToon/manifest.json",
+      "iconCount": 12
+    },
+    {
+      "id": "chibicasa",
+      "name": "ChibiCasa",
+      "path": "ChibiCasa/manifest.json",
       "iconCount": 12
     }
   ]
