@@ -246,8 +246,10 @@ export function ChoreIcon({ name, size = 38, skin }: { name?: string; size?: num
   const skinAsset = getChoreSkinAsset(skin ?? activeSkin, name);
   if (skinAsset) {
     return (
-      <img aria-hidden="true" className="chore-icon-img" loading="lazy"
-        src={`${import.meta.env.BASE_URL}${skinAsset}`}
+      <img aria-hidden="true"
+        className={`chore-icon-img chore-icon-img--skin chore-icon-img--${skin ?? activeSkin}`}
+        loading="lazy"
+        src={`${import.meta.env.BASE_URL}${skinAsset}?full-frame=v2`}
         style={{ height: size, width: size }} />
     );
   }
