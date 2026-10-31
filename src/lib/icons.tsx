@@ -249,7 +249,7 @@ export function ChoreIcon({ name, size = 38, skin }: { name?: string; size?: num
       <img aria-hidden="true"
         className={`chore-icon-img chore-icon-img--skin chore-icon-img--${skin ?? activeSkin}`}
         loading="lazy"
-        src={`${import.meta.env.BASE_URL}${skinAsset}?full-frame=v2`}
+        src={`${import.meta.env.BASE_URL}${skinAsset}?full-frame=v3-subject87`}
         style={{ height: size, width: size }} />
     );
   }
