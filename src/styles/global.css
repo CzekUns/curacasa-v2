@@ -2861,8 +2861,7 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
   flex: 0 0 auto;
   vertical-align: middle;
   line-height: 0;
-  overflow: hidden;
-  border-radius: 13px;
+  overflow: visible;
 }
 .chore-icon-with-operation > .chore-icon-img {
   display: block;
@@ -2872,10 +2871,10 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
 .chore-icon-with-operation > .chore-operation-badge {
   display: block;
   position: absolute;
-  top: 3%;
-  right: 3%;
-  width: 32%;
-  height: 32%;
+  top: 7%;
+  right: 7%;
+  width: 31%;
+  height: 31%;
   z-index: 1;
   object-fit: contain;
   pointer-events: none;
