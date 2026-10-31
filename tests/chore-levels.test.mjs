@@ -30,6 +30,31 @@ test("Store offers exactly 67 separately selectable pills in BASE PRO SUPER SPEC
   assert.deepEqual(Object.keys(CHORE_LEVEL_LABELS), ["base", "pro", "super", "speciale", "tua"]);
 });
 
+test("Store collections are grouped by category with the agreed 12 BASE essentials first", () => {
+  const packs = catalog.packs;
+  const essentialIcons = [
+    "casa", "aspirapolvere", "scopa", "pavimento", "spolverino", "pattumiera",
+    "piante", "bagno", "cucina", "letto", "soggiorno", "balcone",
+  ];
+  assert.equal(packs[0].id, "base-essenziali");
+  assert.equal(packs[0].title, "Le 12 essenziali");
+  assert.equal(packs[0].category, "base");
+  assert.deepEqual(packs[0].chores.map((chore) => chore.icon), essentialIcons);
+  assert.equal(packs[0].chores.length, 12);
+  assert.deepEqual([...new Set(packs.map((pack) => pack.category))], ["base", "pro", "super", "speciale"]);
+  assert.deepEqual(packs.map((pack) => pack.chores.length), [12, 7, 10, 7, 5, 6, 5, 6, 4, 5]);
+  const unique = new Set();
+  for (const pack of packs) {
+    assert.ok(pack.chores.length > 0, pack.id);
+    for (const chore of pack.chores) {
+      assert.equal(chore.level, pack.category, chore.title);
+      assert.ok(!unique.has(chore.icon), chore.title);
+      unique.add(chore.icon);
+    }
+  }
+  assert.equal(unique.size, 67);
+});
+
 test("Legacy names keep their Store identity after renamed icon variants", () => {
   for (const [icon, oldTitle, newTitle] of pairs) {
     const preset = get(icon);
