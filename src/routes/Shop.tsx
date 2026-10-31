@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Check, Palette, PackagePlus, Plus } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreIcon } from "../lib/icons";
@@ -7,8 +7,10 @@ import { ChoreLevelTag } from "../components/ChoreLevelTag";
 import { normalizeStorePacks, groupStoreActivities, STORE_CATEGORY_ORDER, type StorePack } from "../lib/shop-catalog";
 import { importPresets, loadData, presetSignature, saveData, type PresetChore } from "../lib/store";
 import { getTheme, setTheme, THEMES, type ThemeName } from "../lib/theme";
+import { CHORE_SKINS, DEFAULT_CHORE_SKIN, getChoreSkin, setChoreSkin, subscribeChoreSkin, type ChoreSkinId } from "../lib/chore-skins";
 
-type ShopTab = "collections" | "activities" | "themes";
+type ShopTab = "collections" | "activities" | "themes" | "skins";
+const SKIN_PREVIEW_KEYS = ["casa", "scopa-elettrica", "bagno", "letto"] as const;
 
 export function Shop() {
   const [packs, setPacks] = useState<StorePack[]>([]);
@@ -16,6 +18,7 @@ export function Shop() {
   const [activeTab, setActiveTab] = useState<ShopTab>("activities");
   const [data, setData] = useState(loadData);
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>(getTheme);
+  const selectedSkin = useSyncExternalStore(subscribeChoreSkin, getChoreSkin, () => DEFAULT_CHORE_SKIN);
   const { feedback, announce } = useActionFeedback();
 
   useEffect(() => {
@@ -91,23 +94,31 @@ export function Shop() {
     announce(`Tema ${label} applicato!`);
   }
 
+  function selectSkin(id: ChoreSkinId) {
+    if (selectedSkin === id) return;
+    setChoreSkin(id);
+    announce(`Skin ${CHORE_SKINS.find((item) => item.id === id)?.label ?? id} applicata!`);
+  }
+
   return (
     <div className="page-stack">
       <ActionFeedback feedback={feedback} />
       <section className="page-heading">
         <p className="eyebrow">Shop CuraCasa</p>
         <div>
-          <h1>{activeTab === "themes" ? "Temi e colori" : "Collezioni e attività"}</h1>
+          <h1>{activeTab === "themes" ? "Temi e colori" : activeTab === "skins" ? "Skin delle faccende" : "Collezioni e attività"}</h1>
         </div>
       </section>
 
-      <div className="shop-tabs shop-tabs--three" role="tablist" aria-label="Shop CuraCasa">
+      <div className="shop-tabs shop-tabs--four" role="tablist" aria-label="Shop CuraCasa">
         <button aria-selected={activeTab === "activities"} className={activeTab === "activities" ? "active" : ""}
           onClick={() => setActiveTab("activities")} role="tab" type="button">Faccende</button>
         <button aria-selected={activeTab === "collections"} className={activeTab === "collections" ? "active" : ""}
           onClick={() => setActiveTab("collections")} role="tab" type="button">Collezioni</button>
         <button aria-selected={activeTab === "themes"} className={activeTab === "themes" ? "active" : ""}
           onClick={() => setActiveTab("themes")} role="tab" type="button">Temi</button>
+        <button aria-selected={activeTab === "skins"} className={activeTab === "skins" ? "active" : ""}
+          onClick={() => setActiveTab("skins")} role="tab" type="button">Skin</button>
       </div>
 
       {activeTab === "collections" && packs.length ? (
@@ -189,6 +200,34 @@ export function Shop() {
             </section>
           ))}
         </div>
+      ) : null}
+
+      {activeTab === "skins" ? (
+        <section className="shop-skins" role="tabpanel" aria-label="Set grafici delle faccende">
+          <div className="shop-themes__intro">
+            <Palette size={20} aria-hidden="true" />
+            <p>Cambia l'aspetto delle 12 faccende BASE. Le tue attività, le scadenze e i colori dell'app non cambiano.</p>
+          </div>
+          <div className="skin-grid">
+            {CHORE_SKINS.map((skin) => (
+              <article className={`skin-card ${selectedSkin === skin.id ? "skin-card--selected" : ""}`} key={skin.id}>
+                <div className="skin-card__preview" aria-hidden="true">
+                  {SKIN_PREVIEW_KEYS.map((key) => (
+                    <span className="skin-card__icon" key={key}>
+                      <ChoreIcon name={key} skin={skin.id} size={56} />
+                    </span>
+                  ))}
+                </div>
+                <h2>{skin.label}</h2>
+                <p>{skin.description}</p>
+                <button type="button" disabled={selectedSkin === skin.id} onClick={() => selectSkin(skin.id)}>
+                  {selectedSkin === skin.id ? <Check size={17} /> : <Palette size={17} />}
+                  {selectedSkin === skin.id ? "Skin attiva" : "Applica skin"}
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
       ) : null}
 
       {activeTab === "themes" ? (

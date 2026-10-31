@@ -2879,3 +2879,32 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
   object-fit: contain;
   pointer-events: none;
 }
+
+/* Shop: icon skins, independent of theme palettes and the chore catalog. */
+.shop-tabs--four { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; padding: 5px; }
+.shop-tabs--four button { min-width: 0; padding: 0 2px; font-size: clamp(.59rem, 2.1vw, .76rem); }
+.shop-skins { display: grid; gap: 16px; }
+.skin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+.skin-card {
+  display: grid; align-content: start; gap: 11px;
+  padding: 16px; border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, .84);
+  background: var(--app-surface); box-shadow: var(--shadow);
+}
+.skin-card--selected { outline: 2px solid var(--theme-cta, var(--rose-deep)); outline-offset: -2px; }
+.skin-card__preview { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.skin-card__icon {
+  display: grid; place-items: center; min-width: 0;
+  aspect-ratio: 1; border-radius: 15px; overflow: hidden;
+  background: rgba(255, 253, 249, .8);
+}
+.skin-card__icon .chore-icon-img { display: block; object-fit: contain; max-width: 100%; }
+.skin-card h2 { font-family: Montserrat, Arial, sans-serif; font-weight: 900; font-size: .98rem; }
+.skin-card p { color: var(--muted); font-size: .8rem; font-weight: 650; line-height: 1.45; min-height: 2.8em; }
+.skin-card button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; width: 100%; padding: 0 12px; margin-top: auto;
+  border: 0; border-radius: 999px; font-weight: 850; font-size: .75rem;
+  color: #fff; background: var(--theme-cta, var(--rose-deep)); cursor: pointer;
+}
+.skin-card button:disabled { opacity: .65; cursor: default; }
