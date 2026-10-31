@@ -28,7 +28,7 @@ ICONS = (
 # The old badges were all in the otherwise blank upper-right corner.
 # Protect the illustrated appliance at <= 68.0% of the canvas width, and
 # the separate plant/salt at >= 39% of the height.
-UPPER_RIGHT = (0.685, 0.025, 1.0, 0.352)
+UPPER_RIGHT = (0.685, 0.0, 1.0, 0.36)
 
 rows = []
 for name in ICONS:
@@ -52,11 +52,27 @@ for name in ICONS:
     mask = Image.new("L", (w, h), 0)
     ImageDraw.Draw(mask).rectangle(area, fill=255)
     mask_array = np.asarray(mask, dtype=np.uint8).copy()
-    bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
-    cleaned = cv2.cvtColor(
-        cv2.inpaint(bgr, mask_array, inpaintRadius=6, flags=cv2.INPAINT_TELEA),
-        cv2.COLOR_BGR2RGB
-    )
+    # A broad Telea inpaint at the image edge caused a dark triangular
+    # interpolation artifact next to the dishwasher. Reconstruct the corner
+    # instead from its original, unobstructed ivory sky on the LEFT of the
+    # image (the leftmost 8-16% is empty at these heights).
+    # Interpolate its very low-frequency color variation by row, then feather
+    # the boundary of the repaired rectangle to avoid a visible hard patch.
+    sample = rgb[:, round(w * 0.085):round(w * 0.15), :]
+    row_colors = np.median(sample, axis=1).astype(np.float32)
+    row_colors = cv2.GaussianBlur(row_colors[:, None, :], (1, 0), 24)[:, 0, :]
+    smooth_background = np.broadcast_to(row_colors[:, None, :], rgb.shape)
+    xcoords = np.arange(w)[None, :]
+    ycoords = np.arange(h)[:, None]
+    left = area[0]
+    lower = area[3]
+    horizontal = np.clip((xcoords - left) / max(1, round(w * 0.027)), 0, 1)
+    vertical = np.clip((lower - ycoords) / max(1, round(h * 0.06)), 0, 1)
+    alpha = np.where(mask_array > 0, horizontal * vertical, 0).astype(np.float32)
+    cleaned = np.clip(
+        rgb.astype(np.float32) * (1 - alpha[..., None]) +
+        smooth_background * alpha[..., None], 0, 255
+    ).astype(np.uint8)
 
     assert cleaned.shape == rgb.shape
     assert np.array_equal(rgb[mask_array == 0], cleaned[mask_array == 0])
@@ -69,7 +85,7 @@ for name in ICONS:
         assert check.size == (w, h)
         assert check.mode == "RGB"
     rows.append((name, Image.fromarray(rgb), Image.fromarray(cleaned)))
-    print(f"Removed old upper-right badge: {name} ({w}x{h}); main art preserved")
+    print(f"Removed old upper-right badge: {name} ({w}x{h}); main art preserved; size={path.stat().st_size} bytes")
 
 # Store a small side-by-side preview for visual review. This review is not
 # rendered by CuraCasa itself.
