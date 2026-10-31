@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Caricamento sale">
+  <circle cx="24" cy="24" r="22.1" fill="#fff8f1" stroke="#b99e8c" stroke-width="1.5"/>
+  <path d="M16 18h16l2 16a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4Z"
+    fill="#ead9c6" stroke="#81766a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M17 18l3-6h8l3 6M18 18c4 2 8 2 12 0" fill="#f7ece0" stroke="#81766a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M24 22v10m-4-5h8" stroke="#71856e" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M17 8l1.5-2L20 8l-1.5 2Zm13-1 1-1.4L32 7l-1 1.4Z" fill="#ba9e7b"/>
+</svg>
