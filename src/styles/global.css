@@ -2880,13 +2880,27 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
   pointer-events: none;
 }
 
-/* Fill the whole existing 48px rose frame for alternate icon packs only.
-   Classic and personal icons preserve their original 40px artwork. */
+/* Alternate skin artwork fills the card behind its original pink rim.
+   Keep the classic/personal icon styling untouched, and paint a 3px inner
+   border in front of the 46px image (plus the existing 1px outer border).
+   This restores the visual 4px frame without shrinking the artwork asset. */
+.icon-tile:has(> .chore-icon-img--skin) {
+  position: relative;
+}
 .icon-tile > .chore-icon-img--skin {
   width: 46px !important;
   height: 46px !important;
   border-radius: 15px;
   object-fit: cover;
+}
+.icon-tile:has(> .chore-icon-img--skin)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 3px solid var(--rose);
+  border-radius: 15px;
+  pointer-events: none;
 }
 .chore-icon-img--vintage60 {
   background: #fff;
