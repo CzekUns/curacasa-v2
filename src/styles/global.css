@@ -2834,3 +2834,19 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
   padding: 10px;
   text-decoration: none;
 }
+
+
+/* Store activity badges are the same tabs used below cards in My Chores.
+   Override generic .activity-card span styles without touching other cards. */
+.shop-activity-list { row-gap: 21px; }
+.shop-activity-list .activity-card {
+  position: relative;
+  overflow: visible;
+}
+.shop-activity-list .task-level-tag {
+  color: var(--rose-deep);
+  font-size: .58rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  line-height: 1;
+}
