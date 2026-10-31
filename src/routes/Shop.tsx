@@ -2,28 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import { Check, Palette, PackagePlus, Plus } from "lucide-react";
 import { ActionFeedback, useActionFeedback } from "../components/ActionFeedback";
 import { ChoreIcon } from "../lib/icons";
-import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity, type ChoreLevel } from "../lib/chore-levels";
+import { CHORE_LEVEL_LABELS, presetIdentity } from "../lib/chore-levels";
+import { ChoreLevelTag } from "../components/ChoreLevelTag";
+import { normalizeStorePacks, groupStoreActivities, STORE_CATEGORY_ORDER, type StorePack } from "../lib/shop-catalog";
 import { importPresets, loadData, presetSignature, saveData, type PresetChore } from "../lib/store";
 import { getTheme, setTheme, THEMES, type ThemeName } from "../lib/theme";
 
-type CollectionCategory = Exclude<ChoreLevel, "tua">;
-
-type ChorePack = {
-  id: string;
-  title: string;
-  description: string;
-  category: CollectionCategory;
-  chores: PresetChore[];
-};
-
-const COLLECTION_CATEGORIES: CollectionCategory[] = ["base", "pro", "super", "speciale"];
-
-type PackFile = { packs: ChorePack[] };
 type ShopTab = "collections" | "activities" | "themes";
 
 export function Shop() {
-  const [packs, setPacks] = useState<ChorePack[]>([]);
-  const [status, setStatus] = useState("Caricamento collezioni...");
+  const [packs, setPacks] = useState<StorePack[]>([]);
+  const [status, setStatus] = useState("Caricamento catalogo...");
   const [activeTab, setActiveTab] = useState<ShopTab>("activities");
   const [data, setData] = useState(loadData);
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>(getTheme);
@@ -43,31 +32,30 @@ export function Shop() {
     data.chores.flatMap((chore) => [chore.presetKey, presetSignature(chore), presetIdentity(chore)].filter((key): key is string => !!key)),
   ), [data.chores]);
 
-  const activities = useMemo(() => {
-    const seen = new Set<string>();
-    return packs.flatMap((pack) =>
-      pack.chores
-        .filter((chore) => {
-          const key = presetSignature(chore);
-          if (seen.has(key)) return false;
-          seen.add(key);
-          return true;
-        })
-        .map((chore) => ({ ...chore, packTitle: pack.title })),
-    );
-  }, [packs]);
+  const activityGroups = useMemo(() => groupStoreActivities(packs), [packs]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}chore-packs.json`)
+    const controller = new AbortController();
+    // Prevent an older PWA catalog without category fields from hiding the
+    // new collections. Recover legacy mixed packs if one still slips through.
+    fetch(`${import.meta.env.BASE_URL}chore-packs.json?catalog=grouped-v2`, {
+      cache: "no-store", signal: controller.signal,
+    })
       .then((response) => {
-        if (!response.ok) throw new Error("packs");
-        return response.json() as Promise<PackFile>;
+        if (!response.ok) throw new Error("catalog");
+        return response.json() as Promise<unknown>;
       })
       .then((file) => {
-        setPacks(Array.isArray(file.packs) ? file.packs : []);
-        setStatus("");
+        const normalized = normalizeStorePacks(file);
+        setPacks(normalized);
+        setStatus(normalized.length ? "" : "Catalogo vuoto o non valido. Riprova ad aggiornare l'app.");
       })
-      .catch(() => setStatus("Collezioni non disponibili."));
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        setStatus("Impossibile caricare il catalogo. Riprova con una connessione attiva.");
+        console.warn("CuraCasa Store catalog unavailable:", error);
+      });
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
@@ -124,7 +112,7 @@ export function Shop() {
 
       {activeTab === "collections" && packs.length ? (
         <div className="pack-category-list" role="tabpanel" aria-label="Collezioni">
-          {COLLECTION_CATEGORIES.map((category) => {
+          {STORE_CATEGORY_ORDER.map((category) => {
             const matchingPacks = packs.filter((pack) => pack.category === category);
             if (!matchingPacks.length) return null;
             return (
@@ -166,30 +154,41 @@ export function Shop() {
         </div>
       ) : null}
 
-      {activeTab === "activities" && activities.length ? (
-        <section className="pack-list" role="tabpanel" aria-label="Faccende disponibili">
-          {activities.map((chore) => {
-            const isOwned = owned.has(presetSignature(chore));
-            return (
-              <article className={`activity-card ${isOwned ? "shop-owned" : ""}`}
-                key={presetSignature(chore)}>
-                <span className="icon-tile" aria-hidden="true">
-                  <ChoreIcon name={chore.icon} size={40} />
-                </span>
-                <div>
-                  <p className="eyebrow">{CHORE_LEVEL_LABELS[classifyChoreLevel(chore)]} · {chore.packTitle}</p>
-                  <h2>{chore.title}</h2>
-                  <span>{chore.description}</span>
-                </div>
-                <button aria-label={isOwned ? `${chore.title} già aggiunta` : `Aggiungi ${chore.title}`}
-                  title={isOwned ? "Già nelle tue faccende" : "Aggiungi alle mie faccende"}
-                  type="button" disabled={isOwned} onClick={() => addPresets([chore], chore.title)}>
-                  {isOwned ? <Check size={18} /> : <Plus size={18} />}
-                </button>
-              </article>
-            );
-          })}
-        </section>
+      {activeTab === "activities" && activityGroups.length ? (
+        <div className="pack-category-list" role="tabpanel" aria-label="Faccende disponibili">
+          {activityGroups.map(({ category, chores }) => (
+            <section className="pack-category-group" key={category}
+              aria-label={`Faccende ${CHORE_LEVEL_LABELS[category]}`}>
+              <div className="section-title pack-category-heading">
+                <h2>{CHORE_LEVEL_LABELS[category]}</h2>
+                <span>{chores.length} {chores.length === 1 ? "faccenda" : "faccende"}</span>
+              </div>
+              <div className="pack-list shop-activity-list">
+                {chores.map((chore) => {
+                  const isOwned = owned.has(presetIdentity(chore));
+                  return (
+                    <article className={`activity-card ${isOwned ? "shop-owned" : ""}`}
+                      key={presetSignature(chore)}>
+                      <span className="icon-tile" aria-hidden="true">
+                        <ChoreIcon name={chore.icon} size={40} />
+                      </span>
+                      <div>
+                        <h2>{chore.title}</h2>
+                        <span>{chore.description}</span>
+                      </div>
+                      <button aria-label={isOwned ? `${chore.title} già aggiunta` : `Aggiungi ${chore.title}`}
+                        title={isOwned ? "Già nelle tue faccende" : "Aggiungi alle mie faccende"}
+                        type="button" disabled={isOwned} onClick={() => addPresets([chore], chore.title)}>
+                        {isOwned ? <Check size={18} /> : <Plus size={18} />}
+                      </button>
+                      <ChoreLevelTag level={category} />
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
+        </div>
       ) : null}
 
       {activeTab === "themes" ? (
