@@ -1,0 +1,307 @@
+{
+  "version": 1,
+  "scale": 0.87,
+  "background": "white for Vintage60, gradient-extended for other packs",
+  "assets": [
+    {
+      "set": "Vintage60",
+      "file": "casa.webp",
+      "sha256": "8a75149783bb9011ae3aebe503bbd612ff9f42970a1d56f1da2071dc423c3b48"
+    },
+    {
+      "set": "Vintage60",
+      "file": "scopa-elettrica.webp",
+      "sha256": "2dd8d8d063b116c4888b9b270edb65c53ddceb72fef2f7c1a729b36e8bf6c646"
+    },
+    {
+      "set": "Vintage60",
+      "file": "scopa.webp",
+      "sha256": "0ff86528b7f92aa883b4429480d8532c13f43a63bb422d6feaa31aefa8efb55f"
+    },
+    {
+      "set": "Vintage60",
+      "file": "pavimento.webp",
+      "sha256": "a0dafffd56c3e7d9426c4400424e7f013ffc06735b713fb447f8240ddd0c6bb3"
+    },
+    {
+      "set": "Vintage60",
+      "file": "spolverino.webp",
+      "sha256": "56d0f1444a171b5d0cb8e819a7bacd35c81a0cb7c234e1d1f2509764ff0f37a4"
+    },
+    {
+      "set": "Vintage60",
+      "file": "pattumiera.webp",
+      "sha256": "2bddb5e46b074f694f05af8afa9188d2be9f1ff8c5097cf3235bacfbab924b0a"
+    },
+    {
+      "set": "Vintage60",
+      "file": "piante.webp",
+      "sha256": "c87e59809a6ebf0c1c21d37384e1eb12f5f183a9c48e15cc7b85561f4b99141e"
+    },
+    {
+      "set": "Vintage60",
+      "file": "bagno.webp",
+      "sha256": "7574c6a157db804f5b3874ba0f064f0a64c125c97f3fdc174ebfcad1f7e315fd"
+    },
+    {
+      "set": "Vintage60",
+      "file": "cucina.webp",
+      "sha256": "b7401c1239af810f953ac8deaa233f3fce30d6ad38576cf22e3fd8e156de0c4e"
+    },
+    {
+      "set": "Vintage60",
+      "file": "letto.webp",
+      "sha256": "ec3150573567081b969023a8ce84a78750d8a8cabfbc185f444026c59b70e81c"
+    },
+    {
+      "set": "Vintage60",
+      "file": "soggiorno.webp",
+      "sha256": "cdce419df5732c816fb0abdb06ce53994ac900a493acf8085f1d4590cf2ac321"
+    },
+    {
+      "set": "Vintage60",
+      "file": "balcone.webp",
+      "sha256": "412ad1da1b556d99530275a52c79dd924f7bf345c0c754c17a120a4848576d0d"
+    },
+    {
+      "set": "Vintage80",
+      "file": "casa.webp",
+      "sha256": "6065b3e9c5168e79593dd2a9b045ec0157c18c8b48caaca7ee5c842af7f0a209"
+    },
+    {
+      "set": "Vintage80",
+      "file": "scopa-elettrica.webp",
+      "sha256": "7237c252af63738ccb2081bb14c104b336f2d52355fc7efcada684c4a7b44e77"
+    },
+    {
+      "set": "Vintage80",
+      "file": "scopa.webp",
+      "sha256": "2085afd12a4f0563ad4d55f8189ebf8e7a5e8e2cb40505d03edd299e18b66468"
+    },
+    {
+      "set": "Vintage80",
+      "file": "pavimento.webp",
+      "sha256": "88f7962baa1e3a3b615415d8357d6f856843cc1978807d0d6a84755f74878c95"
+    },
+    {
+      "set": "Vintage80",
+      "file": "spolverino.webp",
+      "sha256": "b862032fe3f00b8360af6c71156c72eff9587152b5fbc4488bad99a0c5065078"
+    },
+    {
+      "set": "Vintage80",
+      "file": "pattumiera.webp",
+      "sha256": "4d4ef19df9f9959f1d1d17005afc4378f4f43a90bbbd29a285ad46a5285301c9"
+    },
+    {
+      "set": "Vintage80",
+      "file": "piante.webp",
+      "sha256": "858c95651007e59b1f3a03e67d40e735b4185c5273226012f5c2167b8a37c657"
+    },
+    {
+      "set": "Vintage80",
+      "file": "bagno.webp",
+      "sha256": "b5d5cd2bdebb80a51712152a63e0d74ca215359fb6a45fa02415a910bbb1f018"
+    },
+    {
+      "set": "Vintage80",
+      "file": "cucina.webp",
+      "sha256": "14e8eb793e7ca55f56d61c8cb50a30112c92cbb5ff5c1354591554dd67db0986"
+    },
+    {
+      "set": "Vintage80",
+      "file": "letto.webp",
+      "sha256": "5ce514bda914ef4cbef66c1108fc1f434eb9bf451b83a135fe0094e73caa62f3"
+    },
+    {
+      "set": "Vintage80",
+      "file": "soggiorno.webp",
+      "sha256": "7df3ff592ef3cb45491056490368341cb40ddd8c86027b9498b799a6617f2854"
+    },
+    {
+      "set": "Vintage80",
+      "file": "balcone.webp",
+      "sha256": "57872031dc24dd4440c8c4bdc3a85b7b87e28fb62ecc5c82f5a40a014d84a296"
+    },
+    {
+      "set": "Ink30",
+      "file": "casa.webp",
+      "sha256": "53c4ed01cfc590d25c5ea9f964ea03a93cd2d8fd63c582ef9bf00d0f77dc2e6c"
+    },
+    {
+      "set": "Ink30",
+      "file": "scopa-elettrica.webp",
+      "sha256": "fb76e641aea5d9df147f0cb9571b2ccffa24cc11243b4034df40dc6727887b35"
+    },
+    {
+      "set": "Ink30",
+      "file": "scopa.webp",
+      "sha256": "6a8d4882aba28e72a1ab98e5de8bf5f955ad2a40ed1b638085c3c002cfa4747f"
+    },
+    {
+      "set": "Ink30",
+      "file": "pavimento.webp",
+      "sha256": "0be3af75664f92d36574e1d019c72b8711d330f554b65bc63714445b42efdb01"
+    },
+    {
+      "set": "Ink30",
+      "file": "spolverino.webp",
+      "sha256": "e650daf779f90035758e669e97e5d3eb2345d1ab633e1120c26c432a5296eb3d"
+    },
+    {
+      "set": "Ink30",
+      "file": "pattumiera.webp",
+      "sha256": "3cb0fead1172c111464341b0789e515d087d65eb380e144a62e0bad23cd0fdd8"
+    },
+    {
+      "set": "Ink30",
+      "file": "piante.webp",
+      "sha256": "5104884fc28e5588930da694c47d0f75d1032807e480fee1dbb3f622fce6bb5d"
+    },
+    {
+      "set": "Ink30",
+      "file": "bagno.webp",
+      "sha256": "8b4d9abd6286155d10828709f1de7e7f01f0ffd92415376adea8cb7636b37ea5"
+    },
+    {
+      "set": "Ink30",
+      "file": "cucina.webp",
+      "sha256": "116d39e6e630c7636695eb7b9d3ded04ff0330307537af57a768efe48c3b2903"
+    },
+    {
+      "set": "Ink30",
+      "file": "letto.webp",
+      "sha256": "443212ef6e5df861d9461674a28c3400bd774774126d38d3d7d7fe57000d8784"
+    },
+    {
+      "set": "Ink30",
+      "file": "soggiorno.webp",
+      "sha256": "f66262a92a5a4dc969f3b8f72537da67a83b512be7be13750e415ea80db5d945"
+    },
+    {
+      "set": "Ink30",
+      "file": "balcone.webp",
+      "sha256": "0b9eb08e9881ed698e3a9fc061e1a2e91f6fec94198f47c66f0261cb74b56418"
+    },
+    {
+      "set": "ClayToon",
+      "file": "casa.webp",
+      "sha256": "b867ca704a64529a0aae53a854b477395d7b174db6425e90b91cc5fb1a5e8db0"
+    },
+    {
+      "set": "ClayToon",
+      "file": "scopa-elettrica.webp",
+      "sha256": "087d52122a56da823cc4dcca709b6b6a6f0104c19b1203bd2fe5eeb6bcfd1ef7"
+    },
+    {
+      "set": "ClayToon",
+      "file": "scopa.webp",
+      "sha256": "58fd3c7a4373ffdcbaf85e7ffe42e0dc7f27c93c3ca96a613d01dc6ed44dce31"
+    },
+    {
+      "set": "ClayToon",
+      "file": "pavimento.webp",
+      "sha256": "82d48b89ef085b3f661507f6ed19b348ad0d557069d297d61850684bf165d2de"
+    },
+    {
+      "set": "ClayToon",
+      "file": "spolverino.webp",
+      "sha256": "a46ba9d3dfc1afdc4c3fff0a42f440384dcae99bb5e6d446020bc04b8804d8a2"
+    },
+    {
+      "set": "ClayToon",
+      "file": "pattumiera.webp",
+      "sha256": "3c2d52dfd62a659ab0a8dfebf051bc344c9e2d26afde7e2f6d145d4af434a989"
+    },
+    {
+      "set": "ClayToon",
+      "file": "piante.webp",
+      "sha256": "6e0526d3aa33eb8ab0378f8b8d81dd3c39b303c97182434fa2bc0993e70f13f6"
+    },
+    {
+      "set": "ClayToon",
+      "file": "bagno.webp",
+      "sha256": "e8fb27763ca4403d9a13e8b8f9619188e4e5ed06279d9082824041760db58b64"
+    },
+    {
+      "set": "ClayToon",
+      "file": "cucina.webp",
+      "sha256": "20d88c3116117f060f2c52b76eadfec10a367bae457df1fc37b70e9646c19a87"
+    },
+    {
+      "set": "ClayToon",
+      "file": "letto.webp",
+      "sha256": "3994763feda26dbf22b30e0bd58ff2791d50b9eaecf406f6a38319cef105c815"
+    },
+    {
+      "set": "ClayToon",
+      "file": "soggiorno.webp",
+      "sha256": "760f5c27a508f1186e2a0921d8d435ac4575aa5ca17d59f97a8bf83b33320020"
+    },
+    {
+      "set": "ClayToon",
+      "file": "balcone.webp",
+      "sha256": "37cb889b846f65e50f0d2d9483d7ebe33351e04415806a97a00f3620dff14fd8"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "casa.webp",
+      "sha256": "7f38212422516ae7093fef57af99ca41b91b610428962a3b4548592887926f9a"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "scopa-elettrica.webp",
+      "sha256": "4995d0a8da8a383efed12160d9ca08fd1f04e2644c188016f8e2e45d801ab4ff"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "scopa.webp",
+      "sha256": "00e778be29d328cb8e512b25ec54163f695af1914994855575686a9ad16ec080"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "pavimento.webp",
+      "sha256": "ab61a88b23ea72733f8412c45fe877dbec127f5d24830b7eea191635fc441e71"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "spolverino.webp",
+      "sha256": "039220b17bc0cb21591dc3ef9c78a469741c62b4dc171a2510a5b0532bdd4720"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "pattumiera.webp",
+      "sha256": "18a61e7376f161fa12b5f74fcd8c2874a538759d5cda0a46dd83c5fd5251e2e1"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "piante.webp",
+      "sha256": "2cb10d0097721443491fab38acd1f47baeab23fe99e49d2e9f410cfdc9a64e61"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "bagno.webp",
+      "sha256": "548c504864db90731bfb643bd57f59df72b540478dc999a6191463b58d900918"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "cucina.webp",
+      "sha256": "cf6c69a32ef5b7bfbac34b76d8d626ed5415380ebdd903d7bdc88d6f1de33c85"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "letto.webp",
+      "sha256": "24702f5afb32c6278dbed903aa219642c9a9f68a6c5e8d82d0796b9bb1d62eb4"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "soggiorno.webp",
+      "sha256": "2a701c2d8ff85ada4dea834522bf33bcb571617f93d847149c8f439e795ae1c4"
+    },
+    {
+      "set": "ChibiCasa",
+      "file": "balcone.webp",
+      "sha256": "9321a41238dedc8f5da5d79bc4fb29d17cda041ef0ca04b897fbb6b882992809"
+    }
+  ]
+}
