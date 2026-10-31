@@ -1,0 +1,37 @@
+name: Restore four equipment drawings without old action symbols
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/replace_equipment_action_symbols.py
+      - .github/workflows/replace-equipment-action-symbols.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install pillow numpy opencv-python-headless
+      - name: Remove old equipment operation symbols from original artwork
+        run: python scripts/replace_equipment_action_symbols.py
+      - name: Commit the four cleaned WebPs and review image
+        run: |
+          if ! git diff --quiet -- public/chore-icons || [ -n "$(git ls-files --others --exclude-standard docs/asset-review/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/chore-icons/{lavastoviglie-manutenzione,lavastoviglie-sale,addolcitore-manutenzione,addolcitore-sale}.webp docs/asset-review/equipment-original-symbol-removal.webp
+            git commit -m "Remove damaged pictograms in four equipment icon margins"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
