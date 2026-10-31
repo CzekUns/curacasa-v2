@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "basePackId": "base-essenziali",
+  "note": "Archivio grafico separato dal catalogo e dai temi. L'app non seleziona ancora queste skin.",
+  "sets": [
+    {
+      "id": "vintage60",
+      "name": "Vintage60",
+      "path": "Vintage60/manifest.json",
+      "iconCount": 12
+    },
+    {
+      "id": "vintage80",
+      "name": "Vintage80",
+      "path": "Vintage80/manifest.json",
+      "iconCount": 12
+    },
+    {
+      "id": "ink30",
+      "name": "Ink30",
+      "path": "Ink30/manifest.json",
+      "iconCount": 12
+    }
+  ]
+}

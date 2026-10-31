@@ -1,0 +1,77 @@
+{
+  "id": "vintage80",
+  "name": "Vintage80",
+  "kind": "chore-icon-skin",
+  "status": "assets-uploaded",
+  "basePackId": "base-essenziali",
+  "description": "Grafica ispirata agli anni Ottanta: Memphis e pop art, colori vivaci, forme geometriche. Versione senza scritte approvata.",
+  "design": {
+    "era": "anni '80",
+    "style": "Memphis pop art",
+    "labels": false
+  },
+  "format": "webp",
+  "dimensions": "320x320",
+  "icons": [
+    {
+      "chore": "Controllo generale casa",
+      "iconKey": "casa",
+      "asset": "/chore-skins/Vintage80/casa.webp"
+    },
+    {
+      "chore": "Aspirapolvere",
+      "iconKey": "scopa-elettrica",
+      "asset": "/chore-skins/Vintage80/scopa-elettrica.webp"
+    },
+    {
+      "chore": "Scopa",
+      "iconKey": "scopa",
+      "asset": "/chore-skins/Vintage80/scopa.webp"
+    },
+    {
+      "chore": "Lavare pavimento",
+      "iconKey": "pavimento",
+      "asset": "/chore-skins/Vintage80/pavimento.webp"
+    },
+    {
+      "chore": "Spolverare",
+      "iconKey": "spolverino",
+      "asset": "/chore-skins/Vintage80/spolverino.webp"
+    },
+    {
+      "chore": "Svuotare pattumiera",
+      "iconKey": "pattumiera",
+      "asset": "/chore-skins/Vintage80/pattumiera.webp"
+    },
+    {
+      "chore": "Annaffiare piante",
+      "iconKey": "piante",
+      "asset": "/chore-skins/Vintage80/piante.webp"
+    },
+    {
+      "chore": "Pulire bagno",
+      "iconKey": "bagno",
+      "asset": "/chore-skins/Vintage80/bagno.webp"
+    },
+    {
+      "chore": "Pulire cucina",
+      "iconKey": "cucina",
+      "asset": "/chore-skins/Vintage80/cucina.webp"
+    },
+    {
+      "chore": "Cambio letto",
+      "iconKey": "letto",
+      "asset": "/chore-skins/Vintage80/letto.webp"
+    },
+    {
+      "chore": "Sistemare soggiorno",
+      "iconKey": "soggiorno",
+      "asset": "/chore-skins/Vintage80/soggiorno.webp"
+    },
+    {
+      "chore": "Sistemare balcone",
+      "iconKey": "balcone",
+      "asset": "/chore-skins/Vintage80/balcone.webp"
+    }
+  ]
+}

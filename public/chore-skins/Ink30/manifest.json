@@ -1,0 +1,77 @@
+{
+  "id": "ink30",
+  "name": "Ink30",
+  "kind": "chore-icon-skin",
+  "status": "assets-uploaded",
+  "basePackId": "base-essenziali",
+  "description": "Cartoon monocromatico ispirato agli anni Trenta, oggetti domestici antropomorfi, guanti bianchi e finitura da pellicola. Personaggi originali, nessuna scritta.",
+  "design": {
+    "era": "anni '30",
+    "style": "rubber-hose cartoons",
+    "labels": false
+  },
+  "format": "webp",
+  "dimensions": "320x320",
+  "icons": [
+    {
+      "chore": "Controllo generale casa",
+      "iconKey": "casa",
+      "asset": "/chore-skins/Ink30/casa.webp"
+    },
+    {
+      "chore": "Aspirapolvere",
+      "iconKey": "scopa-elettrica",
+      "asset": "/chore-skins/Ink30/scopa-elettrica.webp"
+    },
+    {
+      "chore": "Scopa",
+      "iconKey": "scopa",
+      "asset": "/chore-skins/Ink30/scopa.webp"
+    },
+    {
+      "chore": "Lavare pavimento",
+      "iconKey": "pavimento",
+      "asset": "/chore-skins/Ink30/pavimento.webp"
+    },
+    {
+      "chore": "Spolverare",
+      "iconKey": "spolverino",
+      "asset": "/chore-skins/Ink30/spolverino.webp"
+    },
+    {
+      "chore": "Svuotare pattumiera",
+      "iconKey": "pattumiera",
+      "asset": "/chore-skins/Ink30/pattumiera.webp"
+    },
+    {
+      "chore": "Annaffiare piante",
+      "iconKey": "piante",
+      "asset": "/chore-skins/Ink30/piante.webp"
+    },
+    {
+      "chore": "Pulire bagno",
+      "iconKey": "bagno",
+      "asset": "/chore-skins/Ink30/bagno.webp"
+    },
+    {
+      "chore": "Pulire cucina",
+      "iconKey": "cucina",
+      "asset": "/chore-skins/Ink30/cucina.webp"
+    },
+    {
+      "chore": "Cambio letto",
+      "iconKey": "letto",
+      "asset": "/chore-skins/Ink30/letto.webp"
+    },
+    {
+      "chore": "Sistemare soggiorno",
+      "iconKey": "soggiorno",
+      "asset": "/chore-skins/Ink30/soggiorno.webp"
+    },
+    {
+      "chore": "Sistemare balcone",
+      "iconKey": "balcone",
+      "asset": "/chore-skins/Ink30/balcone.webp"
+    }
+  ]
+}
