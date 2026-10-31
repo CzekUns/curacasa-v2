@@ -2,7 +2,7 @@
   "id": "vintage60",
   "name": "Vintage60",
   "kind": "chore-icon-skin",
-  "status": "assets-prepared-pending-upload",
+  "status": "assets-uploaded",
   "basePackId": "base-essenziali",
   "description": "Skin alternativa per le 12 faccende essenziali, ispirata alle illustrazioni domestiche degli anni '60.",
   "design": {
@@ -19,67 +19,67 @@
     "outputFormat": "webp",
     "recommendedDimensions": "160x160"
   },
-  "note": "Solo registro del set. I 12 asset WebP sono preparati in un archivio esterno e non sono ancora pubblicati nel repository. Non cambia le icone classiche e non crea altre faccende.",
+  "note": "Le 12 icone alternative WebP sono archiviate in questa cartella. Non modifica le icone originali né attiva automaticamente la skin.",
   "icons": [
     {
       "chore": "Controllo generale casa",
       "iconKey": "casa",
-      "plannedAsset": "/chore-skins/Vintage60/casa.webp"
+      "asset": "/chore-skins/Vintage60/casa.webp"
     },
     {
       "chore": "Aspirapolvere",
       "iconKey": "scopa-elettrica",
-      "plannedAsset": "/chore-skins/Vintage60/scopa-elettrica.webp"
+      "asset": "/chore-skins/Vintage60/scopa-elettrica.webp"
     },
     {
       "chore": "Scopa",
       "iconKey": "scopa",
-      "plannedAsset": "/chore-skins/Vintage60/scopa.webp"
+      "asset": "/chore-skins/Vintage60/scopa.webp"
     },
     {
       "chore": "Lavare pavimento",
       "iconKey": "pavimento",
-      "plannedAsset": "/chore-skins/Vintage60/pavimento.webp"
+      "asset": "/chore-skins/Vintage60/pavimento.webp"
     },
     {
       "chore": "Spolverare",
       "iconKey": "spolverino",
-      "plannedAsset": "/chore-skins/Vintage60/spolverino.webp"
+      "asset": "/chore-skins/Vintage60/spolverino.webp"
     },
     {
       "chore": "Svuotare pattumiera",
       "iconKey": "pattumiera",
-      "plannedAsset": "/chore-skins/Vintage60/pattumiera.webp"
+      "asset": "/chore-skins/Vintage60/pattumiera.webp"
     },
     {
       "chore": "Annaffiare piante",
       "iconKey": "piante",
-      "plannedAsset": "/chore-skins/Vintage60/piante.webp"
+      "asset": "/chore-skins/Vintage60/piante.webp"
     },
     {
       "chore": "Pulire bagno",
       "iconKey": "bagno",
-      "plannedAsset": "/chore-skins/Vintage60/bagno.webp"
+      "asset": "/chore-skins/Vintage60/bagno.webp"
     },
     {
       "chore": "Pulire cucina",
       "iconKey": "cucina",
-      "plannedAsset": "/chore-skins/Vintage60/cucina.webp"
+      "asset": "/chore-skins/Vintage60/cucina.webp"
     },
     {
       "chore": "Cambio letto",
       "iconKey": "letto",
-      "plannedAsset": "/chore-skins/Vintage60/letto.webp"
+      "asset": "/chore-skins/Vintage60/letto.webp"
     },
     {
       "chore": "Sistemare soggiorno",
       "iconKey": "soggiorno",
-      "plannedAsset": "/chore-skins/Vintage60/soggiorno.webp"
+      "asset": "/chore-skins/Vintage60/soggiorno.webp"
     },
     {
       "chore": "Sistemare balcone",
       "iconKey": "balcone",
-      "plannedAsset": "/chore-skins/Vintage60/balcone.webp"
+      "asset": "/chore-skins/Vintage60/balcone.webp"
     }
   ]
 }
