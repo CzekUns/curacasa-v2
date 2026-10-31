@@ -89,6 +89,11 @@ const REPLACED_PRESET_ICONS: ReadonlySet<string> = new Set([
   "mobiletti-esterni", "tende-esterno", "divano", "tappeto", "materasso",
 ]);
 
+/** The four new WebPs are zoomed; the sun awning is left unchanged. */
+const ZOOMED_PRESET_ICONS: ReadonlySet<string> = new Set([
+  "mobiletti-esterni", "divano", "tappeto", "materasso",
+]);
+
 export const personalIconOptions = [
   { value: "personale-scintilla", label: "Scintilla", group: "Generiche" },
   { value: "personale-stella", label: "Stella", group: "Generiche" },
@@ -168,7 +173,7 @@ export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = 
   { value: "specchio", label: "Specchio" },
   { value: "finestra-tende", label: "Finestra" },
   { value: "scopa", label: "Scopa" },
-  { value: "aspirapolvere", label: "Aspirapolvere" },
+  { value: "aspirapolvere", label: "Aspirapolvere vintage" },
   { value: "asciugamani", label: "Asciugamani" },
   { value: "mocio-secchio", label: "Mocio e secchio" },
   { value: "termosifone", label: "Termosifone" },
@@ -184,7 +189,7 @@ export const choreIconOptions: Array<{ value: ChoreIconName; label: string }> = 
   { value: "cuscini", label: "Cuscini" },
   { value: "materasso", label: "Materasso" },
   { value: "folletto", label: "Folletto" },
-  { value: "scopa-elettrica", label: "Scopa elettrica" },
+  { value: "scopa-elettrica", label: "Aspirapolvere" },
   { value: "robot-aspirapolvere", label: "Robot aspirapolvere" },
   { value: "deumidificatore", label: "Deumidificatore" },
   { value: "filtro-condizionatore", label: "Filtro condizionatore" },
@@ -249,7 +254,7 @@ export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number })
       aria-hidden="true"
       className="chore-icon-img"
       loading="lazy"
-      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
+      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${ZOOMED_PRESET_ICONS.has(name || "") ? "?art=zoom-120-v2" : REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
       style={{ height: size, width: size }}
     />
   );
