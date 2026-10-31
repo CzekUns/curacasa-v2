@@ -78,7 +78,9 @@ preview_rows = []
 for name in REGIONS:
     rgb = read_before(name)
     h, w = rgb.shape[:2]
-    if h != w or not 128 <= w <= 1024:
+    # Legacy JPG conversions are often 1205x1280, while new icons are square.
+    # Preserve each individual original canvas and aspect ratio exactly.
+    if not (128 <= w <= 2000 and 128 <= h <= 2000):
         raise ValueError(f"Unexpected dimensions: {name}: {w}x{h}")
 
     mask = mask_for(name, w, h)
