@@ -1,4 +1,4 @@
-import { guessRoomKind, type RoomKind } from "./rooms";
+import { guessRoomKind, type RoomKind } from "./rooms.ts";
 
 export type Tile = { x: number; y: number };
 export type Direction = 0 | 1 | 2 | 3;
@@ -108,6 +108,7 @@ export function resizeRoom(room: HouseRoom, width: number, height: number): Hous
     return x >= room.width || y >= room.height || previous.has(key);
   });
   const next = { ...room, width: nextWidth, height: nextHeight, cells };
+  if (!validConnected(cells)) return room;
   return { ...next, furniture: room.furniture.filter((item) => validPlacement(next, item, item.id)) };
 }
 export function roomsOverlap(a: HouseRoom, b: HouseRoom): boolean {
