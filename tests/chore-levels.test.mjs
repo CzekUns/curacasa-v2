@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity } from "../src/lib/chore-levels.ts";
+import { CHORE_LEVEL_LABELS, classifyChoreLevel, presetIdentity, updatedVacuumPresetTitle } from "../src/lib/chore-levels.ts";
 import { createDefaultData, importPresets, loadData, saveData } from "../src/lib/store.ts";
 
 const catalog = JSON.parse(readFileSync(new URL("../public/chore-packs.json", import.meta.url), "utf8"));
@@ -33,7 +33,7 @@ test("Store offers exactly 67 separately selectable pills in BASE PRO SUPER SPEC
 test("Store collections are grouped by category with the agreed 12 BASE essentials first", () => {
   const packs = catalog.packs;
   const essentialIcons = [
-    "casa", "aspirapolvere", "scopa", "pavimento", "spolverino", "pattumiera",
+    "casa", "scopa-elettrica", "scopa", "pavimento", "spolverino", "pattumiera",
     "piante", "bagno", "cucina", "letto", "soggiorno", "balcone",
   ];
   assert.equal(packs[0].id, "base-essenziali");
@@ -72,7 +72,7 @@ test("Legacy names keep their Store identity after renamed icon variants", () =>
 });
 
 test("Existing Store-specials convert from their older levels without touching TUA chores", () => {
-  const specialIcons = ["dyson", "dyson-accessori", "folletto", "scopa-elettrica", "robot-aspirapolvere"];
+  const specialIcons = ["dyson", "dyson-accessori", "folletto", "aspirapolvere", "robot-aspirapolvere"];
   for (const icon of specialIcons) {
     const preset = get(icon);
     assert.equal(preset.level, "speciale");
@@ -121,5 +121,59 @@ test("An old simoneapps backup is normalized without deleting logs or renaming t
     assert.equal(loadData().logs.length, 2);
   } finally {
     globalThis.localStorage = old;
+  }
+});
+
+test("Aspirapolvere vintage and modern use different icons and retain their legacy Store identities", () => {
+  const vintage = get("aspirapolvere");
+  const current = get("scopa-elettrica");
+  assert.equal(vintage.title, "Aspirapolvere vintage");
+  assert.equal(vintage.level, "speciale");
+  assert.equal(current.title, "Aspirapolvere");
+  assert.equal(current.level, "base");
+  assert.equal(presetIdentity(vintage), "aspirapolvere::aspirapolvere");
+  assert.equal(presetIdentity(current), "passare scopa elettrica::scopa-elettrica");
+  assert.equal(classifyChoreLevel({ title:"Aspirapolvere",icon:"aspirapolvere",level:"base" }), "speciale");
+  assert.equal(classifyChoreLevel({ title:"Passare scopa elettrica",icon:"scopa-elettrica",level:"speciale" }), "base");
+  assert.equal(classifyChoreLevel({ ...current, level:"speciale" }), "base");
+  assert.equal(classifyChoreLevel({ title:"La mia macchina",icon:"aspirapolvere",level:"tua" }), "tua");
+  assert.equal(updatedVacuumPresetTitle({ title:"Aspirapolvere",icon:"aspirapolvere",level:"base" }), "Aspirapolvere vintage");
+  assert.equal(updatedVacuumPresetTitle({ title:"Passare scopa elettrica",icon:"scopa-elettrica",level:"speciale" }), "Aspirapolvere");
+  assert.equal(updatedVacuumPresetTitle({ title:"Modello mio",icon:"aspirapolvere",level:"base" }), "Modello mio");
+  const existing = { ...createDefaultData(), chores: [
+    { ...vintage, title:"Aspirapolvere", id:"old-vintage" },
+    { ...current, title:"Passare scopa elettrica", id:"old-modern" },
+  ] };
+  assert.equal(importPresets(existing, [vintage,current]).added, 0);
+});
+
+test("Legacy vacuum chores migrate in local storage without losing IDs, room rules or logs", () => {
+  const oldStorage = globalThis.localStorage;
+  const raw = createDefaultData();
+  raw.chores = [
+    { ...get("aspirapolvere"), id:"old-vintage",title:"Aspirapolvere",level:"base",
+      notes:"Non cambiare",createdAt:"2026-01-01T12:00:00.000Z",updatedAt:"2026-01-01T12:00:00.000Z" },
+    { ...get("scopa-elettrica"), id:"old-modern",title:"Passare scopa elettrica",level:"speciale",
+      notes:"Due stanze",createdAt:"2026-01-01T12:00:00.000Z",updatedAt:"2026-01-01T12:00:00.000Z" },
+    { ...get("aspirapolvere"), id:"personal",title:"Il mio aspirapolvere",level:"tua",
+      notes:"Personalizzato",createdAt:"2026-01-01T12:00:00.000Z",updatedAt:"2026-01-01T12:00:00.000Z" },
+  ];
+  raw.logs = [{ id:"test-log",choreId:"old-modern",completedAt:"2026-10-20T12:00:00.000Z",
+    durationMinutes:14,note:"Conservare",rooms:["Cucina","Bagno"] }];
+  const memory = new Map([["curacasa_v2_data",JSON.stringify(raw)]]);
+  globalThis.localStorage = {
+    getItem: key => memory.get(key) ?? null,
+    setItem: (key,value) => memory.set(key,String(value)),
+  };
+  try {
+    const loaded = loadData();
+    assert.deepEqual(loaded.chores.map(x=>x.id),["old-vintage","old-modern","personal"]);
+    assert.deepEqual(loaded.chores.map(x=>x.title),["Aspirapolvere vintage","Aspirapolvere","Il mio aspirapolvere"]);
+    assert.deepEqual(loaded.chores.map(x=>x.level),["speciale","base","tua"]);
+    assert.equal(loaded.chores[0].notes,"Non cambiare");
+    assert.equal(loaded.chores[1].frequency,raw.chores[1].frequency);
+    assert.deepEqual(loaded.logs,raw.logs);
+  } finally {
+    globalThis.localStorage=oldStorage;
   }
 });
