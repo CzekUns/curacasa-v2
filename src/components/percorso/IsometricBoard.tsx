@@ -126,10 +126,10 @@ export function IsometricBoard({ rooms, activeRoomId, view, showAll, sculpt, sel
     P(room.offsetX, room.offsetY, 0, view),
     P(room.offsetX + room.width, room.offsetY + room.height, 0, view),
   ]);
-  const xMin = Math.min(0, ...vertices.map((p) => p.x)) - (visible.length ? 65 : 140);
-  const xMax = Math.max(0, ...vertices.map((p) => p.x)) + (visible.length ? 65 : 140);
-  const yMin = Math.min(0, ...vertices.map((p) => p.y)) - 45;
-  const yMax = Math.max(0, ...vertices.map((p) => p.y)) + 90;
+  const xMin = Math.min(...(vertices.length ? vertices.map((p) => p.x) : [0])) - (visible.length ? 65 : 140);
+  const xMax = Math.max(...(vertices.length ? vertices.map((p) => p.x) : [0])) + (visible.length ? 65 : 140);
+  const yMin = Math.min(...(vertices.length ? vertices.map((p) => p.y) : [0])) - 45;
+  const yMax = Math.max(...(vertices.length ? vertices.map((p) => p.y) : [0])) + 90;
   const width = Math.max(260, xMax - xMin), height = Math.max(240, yMax - yMin);
   const tiles = visible.flatMap((room) => room.cells.map((key) => {
     const [x, y] = key.split(",").map(Number);
