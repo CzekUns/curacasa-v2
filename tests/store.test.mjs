@@ -53,7 +53,9 @@ test("Store: data is never silently deleted when preset title equals a legacy de
   saveData(single.data);
   const stored = loadData();
   assert.equal(stored.chores.length, 1);
-  assert.equal(stored.chores[0].title, "Aspirapolvere");
+  // The original generic vacuum becomes the vintage preset; the saved record survives.
+  assert.equal(stored.chores[0].title, "Aspirapolvere vintage");
+  assert.equal(stored.chores[0].level, "speciale");
 });
 
 test("Logs: same chore one completion per calendar day across quick clicks and Calendar", () => {
