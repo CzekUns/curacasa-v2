@@ -2850,3 +2850,31 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
   letter-spacing: .06em;
   line-height: 1;
 }
+
+
+/* The four equipment chores share the same untouched raster artwork layout.
+   Their distinctive operation glyph is a separate, scalable SVG in the
+   upper-right blank corner; do not let parent card text/span styles shift it. */
+.chore-icon-with-operation {
+  display: inline-block;
+  position: relative;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 13px;
+}
+.chore-icon-with-operation > .chore-icon-img {
+  display: block;
+}
+.chore-icon-with-operation > .chore-operation-badge {
+  display: block;
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 32%;
+  height: 32%;
+  z-index: 1;
+  object-fit: contain;
+  pointer-events: none;
+}
