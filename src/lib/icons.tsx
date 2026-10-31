@@ -84,6 +84,11 @@ const CLEANED_PRESET_ICONS: ReadonlySet<string> = new Set([
   "tende", "zanzariera",
 ]);
 
+/** Updated illustrations from the approved original icon sheet and new sun awning. */
+const REPLACED_PRESET_ICONS: ReadonlySet<string> = new Set([
+  "mobiletti-esterni", "tende-esterno", "divano", "tappeto", "materasso",
+]);
+
 export const personalIconOptions = [
   { value: "personale-scintilla", label: "Scintilla", group: "Generiche" },
   { value: "personale-stella", label: "Stella", group: "Generiche" },
@@ -244,7 +249,7 @@ export function ChoreIcon({ name, size = 38 }: { name?: string; size?: number })
       aria-hidden="true"
       className="chore-icon-img"
       loading="lazy"
-      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
+      src={`${import.meta.env.BASE_URL}${iconPath.slice(1)}${REPLACED_PRESET_ICONS.has(name || "") ? "?art=household-icons-20261031-v1" : CLEANED_PRESET_ICONS.has(name || "") ? "?edges=ivory-full-3" : ""}`}
       style={{ height: size, width: size }}
     />
   );
