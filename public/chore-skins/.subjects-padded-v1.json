@@ -184,66 +184,6 @@
       "sha256": "0b9eb08e9881ed698e3a9fc061e1a2e91f6fec94198f47c66f0261cb74b56418"
     },
     {
-      "set": "ClayToon",
-      "file": "casa.webp",
-      "sha256": "b867ca704a64529a0aae53a854b477395d7b174db6425e90b91cc5fb1a5e8db0"
-    },
-    {
-      "set": "ClayToon",
-      "file": "scopa-elettrica.webp",
-      "sha256": "087d52122a56da823cc4dcca709b6b6a6f0104c19b1203bd2fe5eeb6bcfd1ef7"
-    },
-    {
-      "set": "ClayToon",
-      "file": "scopa.webp",
-      "sha256": "58fd3c7a4373ffdcbaf85e7ffe42e0dc7f27c93c3ca96a613d01dc6ed44dce31"
-    },
-    {
-      "set": "ClayToon",
-      "file": "pavimento.webp",
-      "sha256": "82d48b89ef085b3f661507f6ed19b348ad0d557069d297d61850684bf165d2de"
-    },
-    {
-      "set": "ClayToon",
-      "file": "spolverino.webp",
-      "sha256": "a46ba9d3dfc1afdc4c3fff0a42f440384dcae99bb5e6d446020bc04b8804d8a2"
-    },
-    {
-      "set": "ClayToon",
-      "file": "pattumiera.webp",
-      "sha256": "3c2d52dfd62a659ab0a8dfebf051bc344c9e2d26afde7e2f6d145d4af434a989"
-    },
-    {
-      "set": "ClayToon",
-      "file": "piante.webp",
-      "sha256": "6e0526d3aa33eb8ab0378f8b8d81dd3c39b303c97182434fa2bc0993e70f13f6"
-    },
-    {
-      "set": "ClayToon",
-      "file": "bagno.webp",
-      "sha256": "e8fb27763ca4403d9a13e8b8f9619188e4e5ed06279d9082824041760db58b64"
-    },
-    {
-      "set": "ClayToon",
-      "file": "cucina.webp",
-      "sha256": "20d88c3116117f060f2c52b76eadfec10a367bae457df1fc37b70e9646c19a87"
-    },
-    {
-      "set": "ClayToon",
-      "file": "letto.webp",
-      "sha256": "3994763feda26dbf22b30e0bd58ff2791d50b9eaecf406f6a38319cef105c815"
-    },
-    {
-      "set": "ClayToon",
-      "file": "soggiorno.webp",
-      "sha256": "760f5c27a508f1186e2a0921d8d435ac4575aa5ca17d59f97a8bf83b33320020"
-    },
-    {
-      "set": "ClayToon",
-      "file": "balcone.webp",
-      "sha256": "37cb889b846f65e50f0d2d9483d7ebe33351e04415806a97a00f3620dff14fd8"
-    },
-    {
       "set": "ChibiCasa",
       "file": "casa.webp",
       "sha256": "7f38212422516ae7093fef57af99ca41b91b610428962a3b4548592887926f9a"
@@ -303,5 +243,9 @@
       "file": "balcone.webp",
       "sha256": "9321a41238dedc8f5da5d79bc4fb29d17cda041ef0ca04b897fbb6b882992809"
     }
-  ]
+  ],
+  "restoredSets": [
+    "ClayToon"
+  ],
+  "note": "The 12 approved ClayToon images were restored from the original pre-resize version because shrinking entire rounded clay tiles created visible ghosted inner corners. Other 48 image transformations remain in place."
 }
