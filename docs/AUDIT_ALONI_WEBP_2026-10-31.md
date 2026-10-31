@@ -1,5 +1,22 @@
 # CuraCasa — verifica artefatti WebP (31 ottobre 2026)
 
+## Intervento eseguito — pulizia conservativa
+
+Sono stati rielaborati **12 file**, eliminando esclusivamente macchie isolate presso i margini:
+`paletta`, `pavimento`, `termosifone`, `letto`, `tavolo`, `mattonelle`,
+`lavastoviglie-manutenzione`, `lavastoviglie-sale`, `infissi`,
+`tubi-esterni`, `tapparella-grande`, `zanzariera`.
+
+- Script ripetibile: [`scripts/repair_isolated_chore_webp_stains.py`](../scripts/repair_isolated_chore_webp_stains.py)
+- Confronto prima/dopo: [`docs/asset-review/chore-edge-cleanup-before-after.webp`](asset-review/chore-edge-cleanup-before-after.webp)
+- Tutte le operazioni sono partite da un commit sorgente congelato, non da icone già corrette.
+- **Nessun ritaglio o resize**: dimensioni e disegni conservati; solo porzioni di sfondo isolate sono state ricostruite.
+- `src/lib/icons.tsx` incrementa la versione della cache per queste 12 icone.
+
+**Limite prudenziale:** `infissi` e `tubi-esterni` conservano alcuni aloni addossati al soggetto (finestra/pianta, tubo/panno). Anche gli altri 10 difetti complessi rimangono nell'immagine originale, per non asportare disegni: `battiscopa`, `biancheria-letto`, `cuscini`, `dyson`, `filtro-condizionatore`, `folletto`, `mocio-secchio`, `pareti`, `robot-aspirapolvere`, `scopa-elettrica`.
+
+Le 5 sfumature più lievi `addolcitore-manutenzione`, `addolcitore-sale`, `armadio`, `asciugamani`, `macchina-caffe` sono state lasciate intenzionalmente: non è possibile distinguere con certezza i raggi grafici dello sfondo da artefatti indesiderati senza alterare lo stile. I numeri dell'audit seguente sono riferiti alle **immagini iniziali**, non alla situazione dopo la pulizia.
+
 **Repository:** `CzekUns/curacasa-v2`  
 **Ambito:** tutte le **66** immagini `public/chore-icons/*.webp` sul ramo `main`.  
 **Metodo:** controllo visivo dell'immagine integrale, inclusi bordi e angoli, non solo dei primi/ultimi file caricati. Per alcune immagini con difetti è stato controllato anche il JPG precedente alla conversione (commit antecedente a `f7b560c8230a`).
