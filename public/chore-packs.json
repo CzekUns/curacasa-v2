@@ -21,8 +21,8 @@
         },
         {
           "title": "Aspirapolvere",
-          "description": "Passare l'aspirapolvere nelle zone usate di piu.",
-          "icon": "aspirapolvere",
+          "description": "Passare l'aspirapolvere nelle stanze selezionate.",
+          "icon": "scopa-elettrica",
           "type": "ordinaria",
           "room": "Tutta casa",
           "frequency": 7,
@@ -951,13 +951,13 @@
           }
         },
         {
-          "title": "Passare scopa elettrica",
-          "description": "Pulizia rapida con scopa elettrica.",
-          "icon": "scopa-elettrica",
+          "title": "Aspirapolvere vintage",
+          "description": "Pulire con l'aspirapolvere tradizionale a traino.",
+          "icon": "aspirapolvere",
           "type": "ordinaria",
           "room": "Tutta casa",
-          "frequency": 4,
-          "estimatedMinutes": 12,
+          "frequency": 7,
+          "estimatedMinutes": 20,
           "level": "speciale",
           "roomRule": {
             "mode": "any"
