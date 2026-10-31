@@ -2788,3 +2788,49 @@ h1, h2, h3, h4, h5, h6, .curacasa-brand__name, .landing-copy h1, .hero-card h1, 
 }
 .curacoin-card p strong { color: var(--ink); }
 .curacoin-card .curacoin-card__bonus { margin-top: 7px; font-size: .7rem; }
+
+
+/* Chore filters: categories stay separate from room selection. */
+.chore-filter-label {
+  color: var(--muted);
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: .67rem;
+  font-weight: 850;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-bottom: -5px;
+}
+.chore-category-filters { padding-bottom: 6px; }
+
+/* Store collection taxonomy: the 12 agreed essentials lead the BASE group. */
+.pack-category-list { display: grid; gap: 26px; }
+.pack-category-group { display: grid; gap: 12px; min-width: 0; }
+.pack-category-heading { align-items: baseline; }
+.pack-category-heading h2 { font-size: clamp(1.2rem, 5vw, 1.55rem); }
+.pack-category-heading > span { color: var(--muted); font-size: .72rem; font-weight: 700; }
+
+/* At-home follow-up lists use existing due-card styling without action buttons.
+   Navigating into Faccende retains room selection before any completion. */
+.home-due-section, .home-pending-section { display: grid; gap: 12px; }
+.home-due-link {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  text-decoration: none;
+  color: var(--ink);
+}
+.home-due-link > svg:last-child { color: var(--muted); }
+.home-due-link span:not(.icon-tile) { color: var(--muted); font-size: .73rem; }
+.home-due-link:focus-visible, .home-pending-more:focus-visible {
+  outline: 3px solid var(--rose-deep);
+  outline-offset: 3px;
+}
+.home-pending-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: .76rem;
+  color: var(--rose-deep);
+  font-weight: 850;
+  padding: 10px;
+  text-decoration: none;
+}
