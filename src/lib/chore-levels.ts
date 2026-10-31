@@ -10,7 +10,9 @@ export const CHORE_LEVEL_LABELS: Record<ChoreLevel, string> = {
 };
 const PRESET_LEVELS: Record<string, Exclude<ChoreLevel, "tua">> = {
   "controllo generale casa::casa": "base",
-  "aspirapolvere::aspirapolvere": "base",
+  "aspirapolvere::aspirapolvere": "speciale",
+  "aspirapolvere vintage::aspirapolvere": "speciale",
+  "aspirapolvere::scopa-elettrica": "base",
   "scopa::scopa": "base",
   "lavare pavimento::pavimento": "base",
   "mocio e secchio::mocio-secchio": "base",
@@ -79,11 +81,11 @@ const PRESET_LEVELS: Record<string, Exclude<ChoreLevel, "tua">> = {
   "passare dyson::dyson": "speciale",
   "pulire accessori dyson::dyson-accessori": "speciale",
   "passare folletto::folletto": "speciale",
-  "passare scopa elettrica::scopa-elettrica": "speciale",
+  "passare scopa elettrica::scopa-elettrica": "base",
   "avviare robot aspirapolvere::robot-aspirapolvere": "speciale",
 };
 const normalize = (value: string) =>
-  value.normalize("NFKC").trim().replace(/\\s+/g, " ").toLocaleLowerCase("it-IT");
+  value.normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("it-IT");
 
 const signature = (chore: { title: string; icon: string }) =>
   normalize(chore.title) + "::" + normalize(chore.icon);
@@ -95,6 +97,8 @@ const signature = (chore: { title: string; icon: string }) =>
  * DIFFERENT icons (e.g. pavimento vs mocio-secchio) remain distinct pills.
  */
 const RENAMED_PRESETS: Record<string, string> = {
+  "aspirapolvere vintage::aspirapolvere": "aspirapolvere::aspirapolvere",
+  "aspirapolvere::scopa-elettrica": "passare scopa elettrica::scopa-elettrica",
   "pulire soffione doccia::doccia": "pulire doccia::doccia",
   "lavare biancheria da letto::biancheria-letto": "biancheria letto::biancheria-letto",
   "lavare pavimento 2::mocio-secchio": "mocio e secchio::mocio-secchio",
@@ -116,9 +120,27 @@ const SPECIAL_SIGNATURES = new Set<string>([
   "passare dyson::dyson",
   "pulire accessori dyson::dyson-accessori",
   "passare folletto::folletto",
-  "passare scopa elettrica::scopa-elettrica",
+  "aspirapolvere::aspirapolvere",
+  "aspirapolvere vintage::aspirapolvere",
   "avviare robot aspirapolvere::robot-aspirapolvere",
 ]);
+
+/** Only rename an exact legacy Store title, preserving personalized titles. */
+export function updatedVacuumPresetTitle(chore: { title: string; icon: string; level?: string }): string {
+  if (chore.level === "tua") return chore.title;
+  const key = signature(chore);
+  if (key === "aspirapolvere::aspirapolvere") return "Aspirapolvere vintage";
+  if (key === "passare scopa elettrica::scopa-elettrica") return "Aspirapolvere";
+  return chore.title;
+}
+
+/** Upgrade old category values while preserving Chore ids, logs and settings. */
+const VACUUM_LEVELS: Record<string, "base" | "speciale"> = {
+  "aspirapolvere::aspirapolvere": "speciale",
+  "aspirapolvere vintage::aspirapolvere": "speciale",
+  "passare scopa elettrica::scopa-elettrica": "base",
+  "aspirapolvere::scopa-elettrica": "base",
+};
 
 export function classifyChoreLevel(chore: {
   title: string;
@@ -129,6 +151,7 @@ export function classifyChoreLevel(chore: {
   if (chore.level === "tua") return "tua";
   const current = signature(chore);
   const original = chore.presetKey || presetIdentity(chore);
+  if (VACUUM_LEVELS[original] || VACUUM_LEVELS[current]) return VACUUM_LEVELS[original] ?? VACUUM_LEVELS[current];
   if (SPECIAL_SIGNATURES.has(original) || SPECIAL_SIGNATURES.has(current)) return "speciale";
   if (chore.level === "base" || chore.level === "pro" ||
       chore.level === "super" || chore.level === "speciale") {
