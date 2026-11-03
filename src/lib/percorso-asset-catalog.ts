@@ -70,6 +70,14 @@ const EXTRA_ASSET_ROWS = [
     "🍳"
   ],
   [
+    "soggiorno",
+    "Mobile soggiorno",
+    "Salone",
+    2,
+    1,
+    "📺"
+  ],
+  [
     "balcone",
     "Set balcone",
     "Balcone",
@@ -478,7 +486,6 @@ export const ADDITIONAL_ASSETS = EXTRA_ASSET_ROWS.map(([id,label,category,width,
 const EXISTING_PRESET_ASSETS = {
   "piante": "pianta",
   "letto": "letto",
-  "soggiorno": "divano",
   "vasca": "vasca",
   "lavatrice": "lavatrice",
   "tavolo": "tavolo",
