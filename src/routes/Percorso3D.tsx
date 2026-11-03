@@ -272,8 +272,8 @@ export function Percorso3D() {
 
   return <main ref={pageRef} className="game3d-page">
     <header className="game3d-header">
-      <Link to="/percorso" aria-label="Torna al Percorso classico" className="game3d-back"><ArrowLeft size={20}/></Link>
-      <div className="game3d-brand"><span className="game3d-overline">CURACASA · NUOVO LAB</span><strong>La tua casa 3D</strong></div>
+      <Link to="/app" aria-label="Torna alla Home dell’app" className="game3d-back"><ArrowLeft size={20}/></Link>
+      <div className="game3d-brand"><span className="game3d-overline">CURACASA</span><strong>La mia Casa</strong></div>
       <span className="game3d-coins"><Coins size={17}/>{wallet.balance}</span>
       <button className="game3d-head-icon" type="button" onClick={undo} disabled={!canUndo} aria-label="Annulla ultima modifica"><Undo2 size={19}/></button>
       <button className="game3d-head-icon" type="button" onClick={fullscreen} aria-label={immersive?"Esci dallo schermo intero":"Schermo intero"}><Maximize size={19}/></button>

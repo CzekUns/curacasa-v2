@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarDays, Check, Clock, ChevronRight } from "lucide-react";
+import { CalendarDays, Check, Clock, ChevronRight, House } from "lucide-react";
 import { RoomBadge } from "../components/RoomBadge";
 import { RoomManager } from "../components/RoomManager";
 import { ChoreIcon } from "../lib/icons";
@@ -75,7 +75,11 @@ export function Home() {
           ) : null}
         </div>
         <div className="home-room-actions">
-          <RoomManager data={data} onChange={saveRooms} />
+          <Link to="/la-mia-casa" className="home-my-house">
+            <House size={17} aria-hidden="true" />
+            La mia Casa
+          </Link>
+          <RoomManager data={data} onChange={saveRooms} label="Gestisci" startInManager />
         </div>
       </section>
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Check, Plus, Trash2, X } from "lucide-react";
+import { Check, Plus, Settings2, Trash2, X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { RoomBadge, roomIcons } from "./RoomBadge";
 import { availableRoomColors, normalizeRoomDetails, ROOM_TYPES, roomLabel, type RoomKind } from "../lib/rooms";
@@ -108,7 +108,7 @@ export function RoomManager({
         }
         setOpen(true);
       }}>
-        <Plus size={15} />
+        {startInManager ? <Settings2 size={16} aria-hidden="true" /> : <Plus size={15} aria-hidden="true" />}
         {label}
       </button>
 
@@ -194,13 +194,11 @@ export function RoomManager({
                     </div>
                   ))}
                   {!data.rooms.length ? <p className="room-manager-hint">Non hai ancora configurato stanze.</p> : null}
-                </div>
-                <footer className="room-manager-footer">
-                  <button type="button" className="primary-action" onClick={beginAdd}>
-                    <Plus size={17} />
-                    Nuova stanza
+                  <button type="button" className="room-manager-add-last" onClick={beginAdd}>
+                    <Plus size={18} aria-hidden="true" />
+                    Aggiungi stanza
                   </button>
-                </footer>
+                </div>
               </>
             )}
           </section>
