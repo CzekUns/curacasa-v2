@@ -50,9 +50,7 @@ const defaultCamera: Camera = { zoom: 1, pan: { x: 0, y: 0 } };
 const modes = [
   { id: "gioca", label: "Missioni", Icon: Trophy },
   { id: "esplora", label: "Decora", Icon: Paintbrush },
-  { id: "forma", label: "Forma", Icon: Eraser },
-  { id: "arredi", label: "Arreda", Icon: Box },
-  { id: "sposta", label: "Sposta", Icon: Grid2X2 },
+  { id: "forma", label: "Costruisci", Icon: Layers3 },
 ] as const;
 
 export function Percorso() {
@@ -188,7 +186,7 @@ export function Percorso() {
     setSelectedId(null);
     setToolsOpen(true);
     if (next === "sposta") setShowAll(true);
-    if (next === "gioca") setShowAll(false);
+    if (next === "gioca" || next === "forma" || next === "arredi") setShowAll(false);
     setMessage({
       gioca: "Le missioni sono collegate alle tue faccende reali. Scegli una stanza.",
       esplora: "Tocca una parete o il pavimento per scegliere un pattern.",
@@ -505,7 +503,7 @@ export function Percorso() {
         <button type="button" className="pc-sheet-toggle" aria-expanded={toolsOpen}
           onClick={() => { setToolsOpen((open) => !open); if (toolsOpen) setPalette(null); }}>
           <span className="pc-sheet-handle" />
-          <strong>{palette ? "Finiture" : { gioca: "Le tue missioni", esplora: "Personalizza", forma: "Modifica forma", arredi: "Arredamento", sposta: "Sposta stanze" }[mode]}</strong>
+          <strong>{palette ? "Finiture" : mode === "gioca" ? "Le tue missioni" : mode === "esplora" ? "Personalizza" : "Costruisci la tua casa"}</strong>
           {toolsOpen ? <ChevronDown size={17} /> : <ChevronUp size={17} />}
         </button>
         {toolsOpen && (
@@ -528,6 +526,11 @@ export function Percorso() {
             onClick={removeSelectedTile}><Eraser size={17} /> Rimuovi solo il tile {palette.tile.x + 1}, {palette.tile.y + 1}</button>}
           <p className="pc-tip">Le finiture vengono applicate all'intera superficie di questa stanza.</p>
         </div> : <>
+          {(mode === "forma" || mode === "arredi" || mode === "sposta") && <div className="pc-builder-tabs" role="group" aria-label="Strumenti di costruzione">
+            <button type="button" className={mode === "forma" ? "active" : ""} aria-pressed={mode === "forma"} onClick={() => chooseMode("forma")}><Eraser size={17} /> Forma</button>
+            <button type="button" className={mode === "arredi" ? "active" : ""} aria-pressed={mode === "arredi"} onClick={() => chooseMode("arredi")}><Box size={17} /> Arredi</button>
+            <button type="button" className={mode === "sposta" ? "active" : ""} aria-pressed={mode === "sposta"} onClick={() => chooseMode("sposta")}><Grid2X2 size={17} /> Stanze</button>
+          </div>}
           {mode === "gioca" && <div className="pc-context-content pc-missions">
             <div className="pc-context-heading">
               <div><small>MISSIONI DI OGGI</small><strong>{room?.name ?? "La tua casa"}</strong></div>
@@ -611,12 +614,13 @@ export function Percorso() {
     </main>
 
     <nav className="pc-mode-dock" aria-label="Fasi di modifica">
-      {modes.map(({ id, label, Icon }) =>
-        <button type="button" key={id} className={mode === id ? "active" : ""}
-          aria-pressed={mode === id} onClick={() => chooseMode(id)}>
-          <Icon size={23} strokeWidth={mode === id ? 2.4 : 1.9} />
+      {modes.map(({ id, label, Icon }) => {
+        const active = id === "forma" ? mode === "forma" || mode === "arredi" || mode === "sposta" : mode === id;
+        return <button type="button" key={id} className={active ? "active" : ""}
+          aria-pressed={active} onClick={() => chooseMode(id)}>
+          <Icon size={23} strokeWidth={active ? 2.4 : 1.9} />
           <span>{label}</span>
-        </button>)}
+        </button>; })}
     </nav>
   </div>;
 }
