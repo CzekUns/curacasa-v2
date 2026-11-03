@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft, Armchair, Brush, Check, ChevronDown, ChevronUp, Coins,
@@ -55,7 +55,7 @@ export function Percorso3D() {
   const room=house.rooms.find(r=>r.id===roomId) ?? house.rooms[0];
   const roomName=room?.name ?? "La tua casa";
   const preview = Boolean(room && showcase && room.furniture.length===0);
-  const demoItems=room?sampleFurniture(room.kind,room):[];
+  const demoItems=useMemo(()=>room?sampleFurniture(room.kind,room):[],[room]);
   const items=room?(preview?demoItems:room.furniture):[];
   const selected=items.find(item=>item.id===selectedId);
   const selectedSpec=FURNITURE.find(x=>x.id===selected?.type);
