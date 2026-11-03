@@ -12,12 +12,11 @@ import { Home } from "./routes/Home";
 import { Landing } from "./routes/Landing";
 import { Settings } from "./routes/Settings";
 import { Shop } from "./routes/Shop";
-import { Percorso } from "./routes/Percorso";
 // Keep the Three.js renderer out of the normal CuraCasa bundle.
-const Percorso3D = lazy(() => import("./routes/Percorso3D").then((module) => ({ default: module.Percorso3D })));
-function Percorso3DEntry() {
-  return <Suspense fallback={<div className="page-loader">Caricamento ambiente 3D...</div>}>
-    <Percorso3D />
+const LaMiaCasa = lazy(() => import("./routes/Percorso3D").then((module) => ({ default: module.Percorso3D })));
+function LaMiaCasaEntry() {
+  return <Suspense fallback={<div className="page-loader">Caricamento della tua casa...</div>}>
+    <LaMiaCasa />
   </Suspense>;
 }
 
@@ -31,20 +30,12 @@ function ProtectedRoute() {
   return <AppShell />;
 }
 
-function ProtectedPercorso3D() {
+function ProtectedLaMiaCasa() {
   const { isLoaded, isSignedIn } = useAuth();
   const location = useLocation();
   if (!isLoaded) return <div className="page-loader">Caricamento account...</div>;
   if (!isSignedIn) return <Navigate to="/" replace state={{ from: location.pathname }} />;
-  return <Percorso3DEntry />;
-}
-
-function ProtectedPercorso() {
-  const { isLoaded, isSignedIn } = useAuth();
-  const location = useLocation();
-  if (!isLoaded) return <div className="page-loader">Caricamento account...</div>;
-  if (!isSignedIn) return <Navigate to="/" replace state={{ from: location.pathname }} />;
-  return <Percorso />;
+  return <LaMiaCasaEntry />;
 }
 
 export default function App() {
@@ -57,8 +48,10 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       {isDemoMode && <Route path="/accesso" element={<AccessPreview />} />}
-      <Route path="/percorso" element={isDemoMode ? <Percorso /> : <ProtectedPercorso />} />
-      <Route path="/percorso3d" element={isDemoMode ? <Percorso3DEntry /> : <ProtectedPercorso3D />} />
+      <Route path="/la-mia-casa" element={isDemoMode ? <LaMiaCasaEntry /> : <ProtectedLaMiaCasa />} />
+      {/* Preserve old links without exposing the former prototype paths. */}
+      <Route path="/percorso" element={<Navigate to="/la-mia-casa" replace />} />
+      <Route path="/percorso3d" element={<Navigate to="/la-mia-casa" replace />} />
       <Route path="/app" element={isDemoMode ? <AppShell /> : <ProtectedRoute />}>
         <Route index element={<Home />} />
         <Route path="faccende" element={<Chores />} />
