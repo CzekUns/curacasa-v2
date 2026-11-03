@@ -62,7 +62,7 @@ export function Percorso() {
   const [roomId, setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [view, setView] = useState<Direction>(0);
   const [mode, setMode] = useState<Mode>("gioca");
-  const [toolsOpen, setToolsOpen] = useState(true);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const undoStack = useRef<HouseLayout[]>([]);
   const [undoAvailable, setUndoAvailable] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -220,6 +220,7 @@ export function Percorso() {
       return;
     }
     if (mode === "arredi") {
+      if (selectedId) { setMessage("Deseleziona il mobile prima di aggiungerne un altro."); return; }
       const item: Furniture = { id: `arredo_${crypto.randomUUID()}`, type: furnitureType, x, y, rotation: placementRotation };
       if (!validPlacement(current, item)) {
         setMessage("Il mobile non entra nei tile liberi: scegli una zona più ampia.");
