@@ -641,3 +641,50 @@
   outline:2px solid var(--theme-focus);
   outline-offset:2px;
 }
+
+
+/* Searchable preset-complete 3D asset library; compact, touch-friendly and theme-aware. */
+.game3d-page .game3d-sheet--catalog {
+  max-height:min(70dvh,580px);
+}
+.game3d-asset-tools {
+  display:flex;align-items:center;gap:9px;
+}
+.game3d-asset-tools input {
+  min-width:0;flex:1;height:39px;padding:0 12px;
+  border:1px solid var(--g-outline);border-radius:12px;
+  outline-offset:2px;background:var(--paper);color:var(--g-ink);
+  font-size:.74rem;font-weight:650;
+}
+.game3d-asset-tools input::placeholder {color:var(--g-muted);}
+.game3d-asset-tools > span {
+  flex:0 0 auto;font-size:.60rem;font-weight:800;color:var(--g-accent-text);
+}
+.game3d-asset-categories {
+  display:flex;gap:6px;overflow-x:auto;padding:1px 1px 7px;scrollbar-width:thin;
+  overscroll-behavior-x:contain;touch-action:pan-x;
+}
+.game3d-page .game3d-asset-categories button {
+  white-space:nowrap;flex:0 0 auto;padding:8px 11px;border-radius:999px;
+  background:var(--paper);border:1px solid var(--g-outline);color:var(--g-accent-text);
+  font-size:.64rem;font-weight:820;
+}
+.game3d-page .game3d-asset-categories button.active {
+  background:var(--g-accent);color:var(--paper);border-color:var(--g-accent);
+}
+.game3d-page .game3d-catalog {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+  overflow:visible;padding:2px 1px 10px;touch-action:pan-y;
+}
+.game3d-page .game3d-catalog button {
+  flex:initial;min-width:0;min-height:94px;padding:9px 4px;gap:5px;
+}
+.game3d-page .game3d-catalog button strong {
+  font-size:.64rem;white-space:normal;overflow-wrap:anywhere;line-height:1.2;
+}
+.game3d-page .game3d-catalog button small {
+  margin-top:auto;
+}
+@media(min-width:520px) {
+  .game3d-page .game3d-catalog {grid-template-columns:repeat(4,minmax(0,1fr))}
+}
