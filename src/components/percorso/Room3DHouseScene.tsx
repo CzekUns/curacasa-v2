@@ -99,9 +99,9 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
     scene.add(new THREE.AmbientLight(0xffffff,2));
     const sun=new THREE.DirectionalLight(0xffffff,2);
     sun.position.set(-3,9,8);scene.add(sun);
-    const fill=new THREE.DirectionalLight(0xfce6d8,.65);
-    fill.position.set(8,5,-3);scene.add(fill);
     let activeColors=readSceneTheme();
+    const fill=new THREE.DirectionalLight(activeColors.soft,.65);
+    fill.position.set(8,5,-3);scene.add(fill);
     const groundGeo=new THREE.CircleGeometry(32,64);
     const groundMat=new THREE.MeshBasicMaterial({
       color:activeColors.soft,transparent:true,opacity:.13,depthWrite:false,
@@ -518,6 +518,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
     function refreshSceneTheme(){
       activeColors=readSceneTheme();
       groundMat.color.set(activeColors.soft);
+      fill.color.set(activeColors.soft);
       rebuild();
     }
     const observer=new ResizeObserver(resize);
