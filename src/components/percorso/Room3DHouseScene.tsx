@@ -178,17 +178,13 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
             if(node instanceof THREE.Mesh){
               const mats=Array.isArray(node.material)?node.material:[node.material];
               for(const mat of mats) {
-                mat.transparent=true;mat.opacity=faded?.12:1;mat.depthWrite=!faded;
+                mat.transparent=true;mat.opacity=faded ? .12 : 1;mat.depthWrite=!faded;
               }
             }
           });
         });
-        for(const part of model.floor) {
-          const mats=Array.isArray(part.material)?part.material:[part.material];
-          // Tile editing always highlights the active room without changing textures.
-          part.scale.y = p.showAll && id!==p.room.id ? 1 : 1;
-          void mats;
-        }
+        // Each model preserves its room-specific floor materials and position.
+        void id;
       });
       renderer.render(scene,camera);
     }
@@ -280,8 +276,10 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
         if(node.userData.roomLabel) return {kind:"label",roomId};
         // The old floor mesh is behind the furniture; in tile mode the renderer
         // hides furniture and walls so a tap always selects the floor itself.
-        if(typeof node.userData.furnitureId==="string")
+        if(typeof node.userData.furnitureId==="string") {
+          if(current.current.mode==="tiles")continue;
           return {kind:"furniture",roomId,itemId:node.userData.furnitureId};
+        }
         if(node.userData.wall || node.parent?.userData.wall){
           if(current.current.mode==="tiles")continue;
           const wall=node.userData.wall?node:node.parent;
