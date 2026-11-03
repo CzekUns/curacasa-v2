@@ -328,3 +328,11 @@
 @media(min-width:860px){
   .game3d-organize-entry{top:142px;right:24px}
 }
+
+.game3d-organize-entry--play {top:198px;}
+@media(max-width:380px) {
+  .game3d-organize-entry--play {top:187px;}
+}
+@media(min-width:860px) {
+  .game3d-organize-entry--play {top:213px;}
+}
