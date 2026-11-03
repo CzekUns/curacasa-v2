@@ -267,7 +267,13 @@ export function Percorso3D() {
             <Link to="/app/faccende" className="game3d-main-cta">Apri le faccende</Link>
           </>}
           {mode==="furniture" && <>
-            {preview && <p className="game3d-empty">Prima conferma la stanza d'esempio o scegli «Parti da zero».</p>}
+            {preview && <div className="game3d-demo-choice">
+              <p className="game3d-empty">Stai guardando un esempio non salvato. Scegli come iniziare:</p>
+              <div>
+                <button type="button" onClick={()=>{setShowcase(false);setToast("Stanza vuota: scegli un arredo.");}}>Parti da zero</button>
+                <button type="button" onClick={()=>{applyShowcase();setPanelOpen(false);}}>Usa questa stanza</button>
+              </div>
+            </div>}
             <div className="game3d-catalog">
               {FURNITURE.map(entry=><button type="button" key={entry.id} disabled={preview}
                 className={adding===entry.id?"active":""}
