@@ -372,8 +372,8 @@ export const Room3DScene = forwardRef<Room3DHandle, Props>(function Room3DScene(
       setUnavailable("Il dispositivo ha interrotto la grafica 3D. Torna al Percorso classico.");
     }
     function resize() {
-      const rect=host.getBoundingClientRect();
-      if(rect.width<1||rect.height<1)return;
+      const rect=host?.getBoundingClientRect();
+      if(!rect||rect.width<1||rect.height<1)return;
       size={width:rect.width,height:rect.height};
       renderer.setSize(Math.floor(rect.width),Math.floor(rect.height),false);
       requestDraw();
