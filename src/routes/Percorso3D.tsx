@@ -331,7 +331,7 @@ export function Percorso3D() {
           {walls?<Eye size={18}/>:<EyeOff size={18}/>}
         </button>
       </div>
-      {!showAll && (mode==="tiles"||mode==="finishes") && <div className="game3d-quicktools"
+      {!showAll && !selected && (mode==="tiles"||mode==="finishes") && <div className="game3d-quicktools"
         role="group" aria-label="Strumenti per modificare la stanza">
         <button type="button" className={mode==="tiles"?"active":""}
           aria-pressed={mode==="tiles"} onClick={()=>{setMode("tiles");setPanelOpen(false);}}>
