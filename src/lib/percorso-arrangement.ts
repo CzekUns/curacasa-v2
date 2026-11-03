@@ -1,4 +1,4 @@
-import { canMoveRoom, type HouseRoom } from "./percorso.ts";
+import { canMoveRoom, roomsOverlap, type HouseRoom } from "./percorso.ts";
 
 /**
  * House layout is a presentation layer. Room geometry and furniture do not
@@ -64,11 +64,26 @@ export function reconcileRoomArrangement(rooms: HouseRoom[], saved: unknown): Ro
   };
 }
 
+/** Keep an existing house composition when it was saved by the former editor. */
+export function migrateLegacyArrangement(rooms: HouseRoom[]): RoomArrangement {
+  const base=autoArrangeRooms(rooms);
+  const legacy:RoomArrangement={
+    ...base,
+    positions:Object.fromEntries(rooms.map(r=>[r.id,{x:r.offsetX,y:r.offsetY}])),
+  };
+  if(rooms.every(r=>validPosition(legacy.positions[r.id])) &&
+    rooms.every((a,i)=>rooms.slice(i+1).every(b=>!roomsOverlap(a,b))))
+    return legacy;
+  return base;
+}
+
 export function loadRoomArrangement(rooms: HouseRoom[]): RoomArrangement {
   try {
-    return reconcileRoomArrangement(rooms, JSON.parse(localStorage.getItem(KEY) ?? "null"));
+    const data=localStorage.getItem(KEY);
+    return data===null ? migrateLegacyArrangement(rooms) :
+      reconcileRoomArrangement(rooms, JSON.parse(data));
   } catch {
-    return autoArrangeRooms(rooms);
+    return migrateLegacyArrangement(rooms);
   }
 }
 
