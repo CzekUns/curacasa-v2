@@ -14,7 +14,7 @@ import {
   saveRoomArrangement, type RoomArrangement,
 } from "../lib/percorso-arrangement";
 import { sampleFurniture } from "../components/percorso/three-room-model";
-import { ASSET_CATEGORIES, PRESET_ASSET_IDS, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
+import { ASSET_CATEGORIES, ASSET_CHORE_TITLES, PRESET_ASSET_IDS, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
 import {
   FLOOR_STYLES, WALL_STYLES, FURNITURE, loadHouse, saveHouse,
   validPlacement, type Direction, type Furniture, type FurnitureType,
@@ -87,7 +87,8 @@ export function Percorso3D() {
     const matchesCategory=assetCategory==="Tutti" || categoryForFurniture(entry.id)===assetCategory;
     const q=assetSearch.trim().toLocaleLowerCase("it");
     return matchesCategory && (!q || entry.label.toLocaleLowerCase("it").includes(q) ||
-      entry.id.toLocaleLowerCase("it").includes(q));
+      entry.id.toLocaleLowerCase("it").includes(q) ||
+      ASSET_CHORE_TITLES[entry.id]?.some(title=>title.toLocaleLowerCase("it").includes(q)));
   }),[assetSearch,assetCategory]);
   const relevantChores=room?data.chores.filter(chore =>
     eligibleRoomNames(data.rooms,data.roomDetails,getRoomRule(chore)).includes(room.name)):[];
