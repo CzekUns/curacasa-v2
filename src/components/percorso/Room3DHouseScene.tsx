@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import * as THREE from "three";
-import { buildRoom, createFurniture, type RoomVisual } from "./three-room-model";
+import { buildRoom, createFurniture, readSceneTheme, type RoomVisual } from "./three-room-model";
 import {
   furnitureSize, validPlacement, type Direction, type Furniture,
   type FurnitureType, type HouseRoom,
@@ -82,7 +82,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
     try {
       renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"low-power"});
     } catch {
-      setError("Grafica 3D non disponibile in questo browser. Usa il Percorso classico.");
+      setError("Grafica 3D non disponibile in questo browser. Torna alla Home di CuraCasa.");
       return;
     }
     renderer.setPixelRatio(Math.min(1.5,window.devicePixelRatio||1));
@@ -99,10 +99,13 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
     scene.add(new THREE.AmbientLight(0xffffff,2));
     const sun=new THREE.DirectionalLight(0xffffff,2);
     sun.position.set(-3,9,8);scene.add(sun);
-    const fill=new THREE.DirectionalLight(0xfce6d8,.65);
+    let activeColors=readSceneTheme();
+    const fill=new THREE.DirectionalLight(activeColors.soft,.65);
     fill.position.set(8,5,-3);scene.add(fill);
     const groundGeo=new THREE.CircleGeometry(32,64);
-    const groundMat=new THREE.MeshBasicMaterial({color:0xcedfd0,transparent:true,opacity:.12,depthWrite:false});
+    const groundMat=new THREE.MeshBasicMaterial({
+      color:activeColors.soft,transparent:true,opacity:.13,depthWrite:false,
+    });
     const ground=new THREE.Mesh(groundGeo,groundMat);
     ground.rotation.x=-Math.PI/2;ground.position.y=-.22;scene.add(ground);
 
@@ -228,7 +231,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       const sz=furnitureSize(obj);
       selection=new THREE.Mesh(
         new THREE.BoxGeometry(sz.width+.08,.02,sz.height+.08),
-        new THREE.MeshBasicMaterial({color:"#7abf9a",transparent:true,opacity:.35,depthWrite:false}),
+        new THREE.MeshBasicMaterial({color:activeColors.accent,transparent:true,opacity:.30,depthWrite:false}),
       );
       selection.position.set(p.room.offsetX+obj.x+sz.width/2,.03,
         p.room.offsetY+obj.y+sz.height/2);
@@ -242,7 +245,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
         const items=room.id===p.room.id?p.items:room.furniture;
         const model=buildRoom(room,items,
           p.mode==="tiles"&&!p.movingRooms&&room.id===p.room.id,
-          p.showAll && room.id!==p.room.id);
+          p.showAll && room.id!==p.room.id,activeColors);
         models.set(room.id,model);
         scene.add(model.root);
       }
@@ -318,7 +321,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       ghost.traverse(node=>{
         if(node instanceof THREE.Mesh){
           const mat=node.material as THREE.MeshStandardMaterial;
-          mat.color.set(valid?"#a1d2ad":"#ef9a9b");mat.opacity=.53;
+          mat.color.set(valid?activeColors.finish:"#ef9a9b");mat.opacity=.53;
         }
       });
       requestDraw();
@@ -338,7 +341,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
         obj.traverse(node=>{
           if(node instanceof THREE.Mesh){
             const mat=node.material as THREE.MeshStandardMaterial;
-            mat.emissive.set(valid?"#144b28":"#6b111d");
+            mat.emissive.set(valid?activeColors.finish:"#6b111d");
             mat.emissiveIntensity=.2;
           }
         });
@@ -508,10 +511,20 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
     }
     function onLost(e:Event) {
       e.preventDefault();
-      setError("La grafica 3D si è interrotta. Puoi tornare al Percorso classico.");
+      setError("La grafica 3D si è interrotta. Puoi tornare alla Home di CuraCasa.");
+    }
+    // The five themes are shared with Home and Shop. Rebuild only on a theme
+    // change: scene objects keep their own paints and furniture textures.
+    function refreshSceneTheme(){
+      activeColors=readSceneTheme();
+      groundMat.color.set(activeColors.soft);
+      fill.color.set(activeColors.soft);
+      rebuild();
     }
     const observer=new ResizeObserver(resize);
     observer.observe(host);
+    window.addEventListener("curacasa-theme-changed",refreshSceneTheme);
+    window.addEventListener("storage",refreshSceneTheme);
     canvas.addEventListener("pointerdown",onDown);
     canvas.addEventListener("pointermove",onMove);
     canvas.addEventListener("pointerup",onUp);
@@ -529,6 +542,8 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       dispose(){
         disposed=true;
         observer.disconnect();
+        window.removeEventListener("curacasa-theme-changed",refreshSceneTheme);
+        window.removeEventListener("storage",refreshSceneTheme);
         if(frame)cancelAnimationFrame(frame);
         canvas.removeEventListener("pointerdown",onDown);
         canvas.removeEventListener("pointermove",onMove);

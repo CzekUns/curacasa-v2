@@ -1,51 +1,62 @@
 /* CuraCasa GameLab 3D — phone first, full available viewport, no scrolling shell. */
 .game3d-page {
-  --g-ink:#35594c;--g-muted:#819589;--g-accent:#598e75;
-  --g-pane:#fffdf9f0;--g-stroke:#e5ece2;
+  /* The same live palette variables used by CuraCasa's Home, Shop and nav. */
+  --g-ink:var(--ink);
+  --g-muted:var(--muted);
+  --g-accent:var(--theme-cta);
+  --g-accent-text:var(--rose-deep);
+  --g-pale:var(--theme-finish-light);
+  --g-soft:color-mix(in srgb, var(--rose-soft) 60%, var(--paper));
+  --g-tint:var(--rose-soft);
+  --g-outline:color-mix(in srgb, var(--rose-deep) 18%, var(--paper));
+  --g-outline-active:var(--theme-cta);
+  --g-pane:color-mix(in srgb, var(--paper) 94%, transparent);
+  --g-stroke:var(--g-outline);
+  --g-shadow:color-mix(in srgb, var(--ink) 16%, transparent);
   position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
   width:100vw;height:100dvh;min-width:0;min-height:0;overflow:hidden;
-  overscroll-behavior:none;background:#eef3ec;color:var(--g-ink);
+  overscroll-behavior:none;background:var(--app-backdrop);color:var(--g-ink);
   font-family:Montserrat,"Segoe UI",Arial,sans-serif;
 }
 .game3d-page *{box-sizing:border-box}
 .game3d-page button,.game3d-page select{font:inherit}
 .game3d-page button{border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .game3d-page button:focus-visible,.game3d-page a:focus-visible,.game3d-page select:focus-visible{
-  outline:3px solid #6db68d;outline-offset:2px;
+  outline:3px solid var(--theme-focus);outline-offset:2px;
 }
 .game3d-header{
   position:relative;z-index:12;flex:0 0 calc(64px + env(safe-area-inset-top));
   min-width:0;display:flex;align-items:center;gap:9px;
   padding:env(safe-area-inset-top) 12px 0;
-  background:linear-gradient(100deg,#fcfaf7,#f2f4eb 74%,#f7e9e7);
-  border-bottom:1px solid #e3e8df;
+  background:var(--app-surface);
+  border-bottom:1px solid var(--g-outline);
 }
 .game3d-back,.game3d-head-icon{
   flex:0 0 41px;display:grid;place-items:center;width:41px;height:41px;
-  color:var(--g-ink);border-radius:13px;background:#e8f0e7;
+  color:var(--g-ink);border-radius:13px;background:var(--g-pale);
 }
 .game3d-head-icon:disabled{opacity:.35;cursor:not-allowed}
 .game3d-brand{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
-.game3d-overline{letter-spacing:.115em;font-size:.54rem;font-weight:900;color:#b3888e}
+.game3d-overline{letter-spacing:.115em;font-size:.54rem;font-weight:900;color:var(--g-accent-text)}
 .game3d-brand strong{font-size:clamp(.89rem,3.4vw,1.13rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .game3d-coins{
   display:flex;align-items:center;gap:4px;white-space:nowrap;max-width:76px;
-  font-size:.75rem;font-weight:900;color:#54876a;background:#fffdf8;
-  border:1px solid #e3e8dd;border-radius:50px;padding:10px 10px;
+  font-size:.75rem;font-weight:900;color:var(--g-accent-text);background:var(--paper);
+  border:1px solid var(--g-outline);border-radius:50px;padding:10px 10px;
 }
 .game3d-stage{
   position:relative;isolation:isolate;flex:1 1 0;min-height:0;min-width:0;
-  overflow:hidden;background:radial-gradient(ellipse at 50% 39%,#fdf9f0,#ecf3e8 68%,#e1ece3);
+  overflow:hidden;background:radial-gradient(ellipse at 50% 39%,color-mix(in srgb,var(--paper) 58%,transparent),transparent 78%),var(--app-backdrop);
 }
 .game3d-scene,.game3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .game3d-scene{touch-action:none;user-select:none;overscroll-behavior:contain}
 .game3d-canvas{touch-action:none;user-select:none;outline:none}
 .game3d-no-room,.game3d-error{
   position:absolute;z-index:6;top:42%;left:8%;right:8%;padding:22px;
-  border-radius:18px;background:#fffdf8;text-align:center;font-size:.82rem;
-  box-shadow:0 12px 40px #3b514b22;
+  border-radius:18px;background:var(--paper);text-align:center;font-size:.82rem;
+  box-shadow:0 12px 40px color-mix(in srgb, var(--ink) 13%, transparent);
 }
-.game3d-no-room a{color:#568c6f;text-decoration:underline}
+.game3d-no-room a{color:var(--g-accent-text);text-decoration:underline}
 .game3d-stage-top{
   position:absolute;top:12px;left:12px;right:12px;z-index:5;
   display:flex;justify-content:space-between;align-items:start;gap:9px;pointer-events:none;
@@ -54,9 +65,9 @@
 .game3d-room-picker{
   display:flex;flex-direction:column;gap:3px;min-width:130px;max-width:min(54vw,260px);
   padding:9px 12px;background:var(--g-pane);border:1px solid var(--g-stroke);
-  border-radius:16px;box-shadow:0 7px 28px #43645319;
+  border-radius:16px;box-shadow:0 7px 28px color-mix(in srgb, var(--ink) 10%, transparent);
 }
-.game3d-room-picker span{font-size:.53rem;font-weight:900;letter-spacing:.14em;color:#a8858d}
+.game3d-room-picker span{font-size:.53rem;font-weight:900;letter-spacing:.14em;color:var(--g-accent-text)}
 .game3d-room-picker select{
   min-width:0;border:0;outline:none;color:var(--g-ink);background:transparent;
   font-weight:900;font-size:.91rem;max-width:100%;
@@ -64,126 +75,126 @@
 .game3d-top-actions{display:flex;gap:7px}
 .game3d-top-actions button{
   width:43px;height:43px;display:grid;place-items:center;
-  border-radius:14px;background:var(--g-pane);color:#557a66;
-  border:1px solid var(--g-stroke);box-shadow:0 7px 28px #43645319;
+  border-radius:14px;background:var(--g-pane);color:var(--g-accent-text);
+  border:1px solid var(--g-stroke);box-shadow:0 7px 28px color-mix(in srgb, var(--ink) 10%, transparent);
 }
 .game3d-progress{
   position:absolute;top:80px;left:12px;z-index:4;
   width:min(266px,calc(100% - 24px));padding:11px 13px;
-  border:1px solid #e6ece1;border-radius:15px;background:#fffdf8e8;
-  box-shadow:0 5px 21px #4e746313;backdrop-filter:blur(6px);
+  border:1px solid var(--g-outline);border-radius:15px;background:color-mix(in srgb, var(--paper) 91%, transparent);
+  box-shadow:0 5px 21px color-mix(in srgb, var(--ink) 7%, transparent);backdrop-filter:blur(6px);
 }
 .game3d-progress-copy{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:.65rem}
-.game3d-progress-copy span{font-size:.56rem;color:#aa8a8d;font-weight:860;letter-spacing:.06em}
-.game3d-progress-copy strong{color:#41795e;white-space:nowrap}
-.game3d-progress-track{height:6px;background:#e6eae0;border-radius:100px;margin-top:7px;overflow:hidden}
-.game3d-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#b9d7aa,#63a581);border-radius:inherit;transition:width .3s ease}
+.game3d-progress-copy span{font-size:.56rem;color:var(--g-accent-text);font-weight:860;letter-spacing:.06em}
+.game3d-progress-copy strong{color:var(--g-accent-text);white-space:nowrap}
+.game3d-progress-track{height:6px;background:var(--g-pale);border-radius:100px;margin-top:7px;overflow:hidden}
+.game3d-progress-track span{display:block;height:100%;background:linear-gradient(90deg,var(--theme-finish-light),var(--theme-finish));border-radius:inherit;transition:width .3s ease}
 .game3d-camera-dock{
   position:absolute;z-index:5;right:10px;top:48%;transform:translateY(-50%);
   display:flex;flex-direction:column;gap:6px;
-  padding:6px;border-radius:19px;border:1px solid #e5e9df;
-  background:#fffdf9df;box-shadow:0 7px 28px #4364531c;backdrop-filter:blur(8px);
+  padding:6px;border-radius:19px;border:1px solid var(--g-outline);
+  background:color-mix(in srgb, var(--paper) 87%, transparent);box-shadow:0 7px 28px color-mix(in srgb, var(--ink) 11%, transparent);backdrop-filter:blur(8px);
 }
 .game3d-camera-dock button{
   width:39px;height:39px;display:grid;place-items:center;
-  border-radius:12px;background:#eff4ed;color:#5e866f;
+  border-radius:12px;background:var(--paper);color:var(--g-accent-text);
 }
-.game3d-camera-dock button:active{background:#d6e8d7}
+.game3d-camera-dock button:active{background:var(--g-pale)}
 .game3d-showcase{
   position:absolute;z-index:6;left:12px;right:70px;bottom:122px;
   max-width:400px;display:flex;flex-direction:column;gap:8px;
-  padding:12px 13px;background:#fffefaed;border:1px solid #e6ecdf;
-  box-shadow:0 10px 30px #4b5a481c;border-radius:17px;
+  padding:12px 13px;background:color-mix(in srgb, var(--paper) 93%, transparent);border:1px solid var(--g-outline);
+  box-shadow:0 10px 30px color-mix(in srgb, var(--ink) 11%, transparent);border-radius:17px;
 }
 .game3d-showcase > div:first-child{display:flex;flex-direction:column;gap:3px}
-.game3d-showcase strong{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#46775e}
-.game3d-showcase small{font-size:.61rem;color:#849289;line-height:1.4}
+.game3d-showcase strong{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--g-accent-text)}
+.game3d-showcase small{font-size:.61rem;color:var(--g-accent-text);line-height:1.4}
 .game3d-showcase-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .game3d-showcase-actions button{
-  padding:10px 6px;border-radius:11px;background:#e8eee6;color:#5a7b68;
+  padding:10px 6px;border-radius:11px;background:var(--g-pale);color:var(--g-accent-text);
   font-weight:840;font-size:.67rem;
 }
-.game3d-showcase-actions button:last-child{background:#5b9073;color:white}
+.game3d-showcase-actions button:last-child{background:var(--g-accent);color:var(--paper)}
 .game3d-showcase-actions button:disabled{opacity:.35}
 .game3d-placement-hint,.game3d-selected{
   position:absolute;z-index:7;left:10px;right:10px;bottom:110px;
   max-width:450px;margin:auto;min-height:54px;display:flex;align-items:center;gap:8px;
-  border:1px solid #dfeadd;border-radius:16px;
-  padding:7px 9px;background:#fffefaef;box-shadow:0 7px 28px #36564125;
+  border:1px solid var(--g-outline);border-radius:16px;
+  padding:7px 9px;background:color-mix(in srgb, var(--paper) 94%, transparent);box-shadow:0 7px 28px color-mix(in srgb, var(--ink) 15%, transparent);
 }
 .game3d-placement-hint span{flex:1;font-size:.71rem;line-height:1.35}
 .game3d-placement-hint button,.game3d-selected button{
   flex:0 0 39px;height:39px;display:grid;place-items:center;border-radius:11px;
-  background:#e8f1e6;color:#4a8065;font-size:.72rem;font-weight:800;
+  background:var(--g-pale);color:var(--g-accent-text);font-size:.72rem;font-weight:800;
 }
 .game3d-selected > div{min-width:0;display:flex;flex:1;flex-direction:column;gap:3px}
 .game3d-selected strong{font-size:.77rem}
-.game3d-selected span{font-size:.62rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#8b9d8c}
+.game3d-selected span{font-size:.62rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--g-accent-text)}
 .game3d-toast{
   position:absolute;left:50%;bottom:63px;z-index:4;transform:translateX(-50%);
   max-width:calc(100% - 30px);margin:0;padding:7px 12px;
-  border-radius:30px;border:1px solid #e5eae1;background:#fffefaad;
-  color:#708878;font-size:.60rem;font-weight:750;line-height:1.35;
-  text-align:center;pointer-events:none;white-space:normal;box-shadow:0 4px 14px #35533d11;
+  border-radius:30px;border:1px solid var(--g-outline);background:color-mix(in srgb, var(--paper) 68%, transparent);
+  color:var(--g-accent-text);font-size:.60rem;font-weight:750;line-height:1.35;
+  text-align:center;pointer-events:none;white-space:normal;box-shadow:0 4px 14px color-mix(in srgb, var(--ink) 7%, transparent);
 }
 .game3d-sheet{
   position:absolute;z-index:9;bottom:0;left:8px;right:8px;
-  background:#fffefaed;border:1px solid #e5e9df;
-  border-radius:17px 17px 0 0;box-shadow:0 -8px 35px #37584321;
+  background:color-mix(in srgb, var(--paper) 93%, transparent);border:1px solid var(--g-outline);
+  border-radius:17px 17px 0 0;box-shadow:0 -8px 35px color-mix(in srgb, var(--ink) 13%, transparent);
   max-height:min(40dvh,340px);overflow:hidden;backdrop-filter:blur(12px);
 }
 .game3d-sheet.open{overflow-y:auto;overscroll-behavior:contain}
 .game3d-sheet-handle{
   width:100%;height:46px;display:flex;align-items:center;gap:9px;text-align:left;
-  padding:8px 12px;background:#fffdf8;color:#4b7b63;
-  position:sticky;top:0;z-index:2;border-bottom:1px solid #ebeee7!important;
+  padding:8px 12px;background:var(--paper);color:var(--g-accent-text);
+  position:sticky;top:0;z-index:2;border-bottom:1px solid var(--g-outline)!important;
 }
-.game3d-handle-dash{width:5px;height:21px;flex:0 0 5px;border-radius:9px;background:#b7d5bf}
+.game3d-handle-dash{width:5px;height:21px;flex:0 0 5px;border-radius:9px;background:var(--g-soft)}
 .game3d-sheet-handle strong{flex:1;font-size:.77rem;font-weight:900}
 .game3d-sheet-content{padding:12px 12px max(16px,env(safe-area-inset-bottom));display:grid;gap:12px}
 .game3d-missions{display:grid;gap:6px;max-height:135px;overflow:auto;scrollbar-width:thin}
-.game3d-mission{display:flex;align-items:center;gap:9px;font-size:.72rem;padding:10px;border-radius:11px;background:#f6f8f2;color:#5b7f69}
+.game3d-mission{display:flex;align-items:center;gap:9px;font-size:.72rem;padding:10px;border-radius:11px;background:var(--paper);color:var(--g-accent-text)}
 .game3d-mission svg{flex:0 0 18px}
 .game3d-mission span{flex:1;overflow:hidden;text-overflow:ellipsis}
-.game3d-mission small{color:#879b8e;font-size:.61rem;white-space:nowrap}
+.game3d-mission small{color:var(--g-accent-text);font-size:.61rem;white-space:nowrap}
 .game3d-mission.done{opacity:.64}
-.game3d-main-cta{display:block;text-align:center;background:#588a70;color:white;font-weight:880;font-size:.76rem;padding:12px;border-radius:11px;text-decoration:none}
-.game3d-object-context{display:flex;flex-direction:column;gap:5px;background:#eff5ee;border-radius:11px;padding:11px}
+.game3d-main-cta{display:block;text-align:center;background:var(--g-accent);color:var(--paper);font-weight:880;font-size:.76rem;padding:12px;border-radius:11px;text-decoration:none}
+.game3d-object-context{display:flex;flex-direction:column;gap:5px;background:var(--paper);border-radius:11px;padding:11px}
 .game3d-object-context strong{font-size:.76rem}
-.game3d-object-context span{font-size:.66rem;color:#82998b;line-height:1.4}
-.game3d-empty,.game3d-sheet-note{margin:0;color:#85958b;font-size:.70rem;line-height:1.45}
+.game3d-object-context span{font-size:.66rem;color:var(--g-accent-text);line-height:1.4}
+.game3d-empty,.game3d-sheet-note{margin:0;color:var(--g-accent-text);font-size:.70rem;line-height:1.45}
 .game3d-catalog{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:2px 2px 10px}
 .game3d-catalog button{
   flex:0 0 77px;display:flex;flex-direction:column;align-items:center;
-  gap:4px;min-height:91px;padding:8px 4px;border:1px solid #dfe9dc;
-  border-radius:12px;background:#f7faf4;color:#5b826a;
+  gap:4px;min-height:91px;padding:8px 4px;border:1px solid var(--g-outline);
+  border-radius:12px;background:var(--paper);color:var(--g-accent-text);
 }
-.game3d-catalog button.active{border-color:#7eae8d;background:#e6f2e5}
+.game3d-catalog button.active{border-color:var(--g-outline-active);background:var(--g-pale)}
 .game3d-catalog button:disabled{opacity:.4}
 .game3d-catalog button span{display:grid;place-items:center;height:31px;font-size:1.55rem}
 .game3d-catalog button strong{font-size:.62rem;line-height:1.1;white-space:nowrap}
-.game3d-catalog button small{font-size:.58rem;color:#9cad9f}
+.game3d-catalog button small{font-size:.58rem;color:var(--g-muted)}
 .game3d-finish-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.game3d-finish-tabs button{padding:10px;border-radius:11px;color:#69836f;background:#eef3eb;font-weight:850;font-size:.70rem}
-.game3d-finish-tabs button.active{background:#dcebdd;color:#427257}
+.game3d-finish-tabs button{padding:10px;border-radius:11px;color:var(--g-accent-text);background:var(--paper);font-weight:850;font-size:.70rem}
+.game3d-finish-tabs button.active{background:var(--g-pale);color:var(--g-accent-text)}
 .game3d-finishes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.game3d-finishes button{display:flex;align-items:center;gap:8px;text-align:left;min-height:43px;padding:7px;border:1px solid #e1e9df;background:#f9faf7;border-radius:10px;color:#618473}
-.game3d-finishes button.selected{border-color:#80b596;background:#ebf5ea}
+.game3d-finishes button{display:flex;align-items:center;gap:8px;text-align:left;min-height:43px;padding:7px;border:1px solid var(--g-outline);background:var(--paper);border-radius:10px;color:var(--g-accent-text)}
+.game3d-finishes button.selected{border-color:var(--g-outline);background:var(--paper)}
 .game3d-finishes button strong{flex:1;min-width:0;font-size:.67rem}
-.game3d-finish-swatch{display:block;width:27px;height:27px;flex:0 0 27px;border-radius:7px;border:1px solid #8c998b45}
+.game3d-finish-swatch{display:block;width:27px;height:27px;flex:0 0 27px;border-radius:7px;border:1px solid color-mix(in srgb, var(--rose-deep) 27%, transparent)}
 .game3d-tabs{
   z-index:11;flex:0 0 calc(72px + env(safe-area-inset-bottom));
   width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:6px;align-items:stretch;padding:6px 8px calc(6px + env(safe-area-inset-bottom));
-  background:#fffefa;box-shadow:0 -6px 26px #446f5122;
-  border-top:1px solid #e6eae2;
+  background:var(--paper);box-shadow:0 -6px 26px color-mix(in srgb, var(--ink) 13%, transparent);
+  border-top:1px solid var(--g-outline);
 }
 .game3d-tabs button{
   display:flex;flex-direction:column;justify-content:center;align-items:center;
   gap:4px;min-width:0;border-radius:13px;background:transparent;
-  color:#91a497;font-size:.68rem;font-weight:830;
+  color:var(--g-accent-text);font-size:.68rem;font-weight:830;
 }
-.game3d-tabs button.active{background:#e6f1e6;box-shadow:inset 0 0 0 1px #c1dac7;color:#39795b}
+.game3d-tabs button.active{background:var(--g-pale);box-shadow:inset 0 0 0 1px var(--g-shadow);color:var(--g-accent-text)}
 @media (max-width:370px){
   .game3d-header{gap:5px;padding-left:7px;padding-right:7px}
   .game3d-coins{padding:8px 6px;font-size:.67rem}
@@ -206,28 +217,28 @@
 }
 
 
-.game3d-demo-choice { display:grid;gap:9px;padding:10px;border-radius:12px;background:#eff5ee; }
+.game3d-demo-choice { display:grid;gap:9px;padding:10px;border-radius:12px;background:var(--paper); }
 .game3d-demo-choice > div { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
-.game3d-demo-choice button { border-radius:10px;background:#dfe8df;color:#5b7c6a;padding:11px 6px;font-size:.68rem;font-weight:850; }
-.game3d-demo-choice button:last-child { color:#fff;background:#568d70; }
+.game3d-demo-choice button { border-radius:10px;background:var(--g-pale);color:var(--g-accent-text);padding:11px 6px;font-size:.68rem;font-weight:850; }
+.game3d-demo-choice button:last-child { color:var(--paper);background:var(--g-accent); }
 
 
 /* GameLab 3D 2.1: room/whole-house switch + touch-first tile editor. */
 .game3d-view-switch {
   position:absolute;top:75px;left:12px;z-index:7;
   display:inline-flex;align-items:center;gap:4px;
-  padding:4px;border:1px solid #dce9dc;border-radius:15px;
-  background:#fffefaee;box-shadow:0 6px 18px #4e70501a;
+  padding:4px;border:1px solid var(--g-outline);border-radius:15px;
+  background:color-mix(in srgb, var(--paper) 93%, transparent);box-shadow:0 6px 18px color-mix(in srgb, var(--ink) 10%, transparent);
   backdrop-filter:blur(7px);
 }
 .game3d-view-switch button {
   padding:9px 13px;min-height:37px;border-radius:11px;
-  background:transparent;color:#7c9687;
+  background:transparent;color:var(--g-accent-text);
   font-size:.69rem;font-weight:850;white-space:nowrap;
 }
 .game3d-view-switch button.active {
-  background:#deeee1;color:#377458;
-  box-shadow:inset 0 0 0 1px #b6d7c0;
+  background:var(--g-pale);color:var(--g-accent-text);
+  box-shadow:inset 0 0 0 1px var(--g-shadow);
 }
 .game3d-progress {top:131px;}
 .game3d-tile-actions {
@@ -236,19 +247,19 @@
 .game3d-tile-actions button {
   display:flex;align-items:center;justify-content:center;gap:8px;
   min-height:49px;padding:8px 4px;border-radius:12px;
-  background:#eef3e9;color:#6f8d79;border:1px solid #e0e9de;
+  background:var(--paper);color:var(--g-accent-text);border:1px solid var(--g-outline);
   font-size:.68rem;font-weight:870;
 }
 .game3d-tile-actions button.active {
-  background:#dcefe0;color:#367654;border-color:#a9d1b5;
+  background:var(--g-pale);color:var(--g-accent-text);border-color:var(--g-outline);
 }
 .game3d-tile-summary {
   display:flex;align-items:center;justify-content:space-between;
   gap:10px;min-height:39px;padding:9px 12px;
-  color:#638573;background:#f7faf3;border-radius:11px;
+  color:var(--g-accent-text);background:var(--paper);border-radius:11px;
   font-size:.69rem;
 }
-.game3d-tile-summary span {color:#8d9c8e;font-size:.65rem}
+.game3d-tile-summary span {color:var(--g-accent-text);font-size:.65rem}
 .game3d-tabs {grid-template-columns:repeat(4,minmax(0,1fr));}
 .game3d-tabs button {font-size:.63rem;gap:3px;min-width:0}
 .game3d-tabs button svg {width:22px;height:22px}
@@ -273,22 +284,22 @@
 .game3d-organize-entry button {
   display:flex;align-items:center;justify-content:center;gap:7px;
   min-height:38px;padding:8px 12px;border-radius:14px;
-  background:#55896f;color:#fff;
-  border:1px solid #3e7458;
-  box-shadow:0 6px 20px #315f482e;
+  background:var(--g-accent);color:var(--paper);
+  border:1px solid var(--g-outline-active);
+  box-shadow:0 6px 20px color-mix(in srgb, var(--ink) 18%, transparent);
   font-size:.68rem;font-weight:870;
 }
 .game3d-arrangement-panel{
   display:grid;gap:10px;
   padding:8px;border-radius:12px;
-  background:#f4f8f1;
-  border:1px solid #e3ecdf;
+  background:var(--paper);
+  border:1px solid var(--g-outline);
 }
 .game3d-auto-layout{
   width:100%;min-height:43px;display:flex;align-items:center;
   justify-content:center;gap:8px;
-  border-radius:11px;background:#578b70;
-  color:#fff;font-weight:900;font-size:.72rem;
+  border-radius:11px;background:var(--g-accent);
+  color:var(--paper);font-weight:900;font-size:.72rem;
 }
 .game3d-room-order{
   display:grid;gap:6px;max-height:155px;
@@ -298,25 +309,25 @@
 .game3d-order-item {
   display:flex;align-items:center;gap:7px;
   min-height:42px;border-radius:10px;
-  border:1px solid #e5eade;background:#fffdf8;
+  border:1px solid var(--g-outline);background:var(--paper);
   padding:4px 7px;
 }
 .game3d-order-number{
   display:grid;place-items:center;
   width:24px;height:24px;border-radius:8px;
-  background:#e6f1e5;color:#49785c;
+  background:var(--g-pale);color:var(--g-accent-text);
   font-size:.68rem;font-weight:900;
 }
 .game3d-order-name{
   min-width:0;flex:1;text-align:left;
-  background:transparent;color:#446d58;
+  background:transparent;color:var(--g-accent-text);
   overflow:hidden;text-overflow:ellipsis;
   white-space:nowrap;font-size:.71rem;font-weight:840;
 }
 .game3d-order-item button:not(.game3d-order-name){
   flex:0 0 33px;width:33px;height:33px;
   display:grid;place-items:center;
-  border-radius:9px;background:#e8f1e7;color:#567e68;
+  border-radius:9px;background:var(--g-pale);color:var(--g-accent-text);
 }
 .game3d-order-item button:disabled {
   opacity:.3;cursor:not-allowed;
@@ -347,38 +358,38 @@
   display:flex;align-items:center;justify-content:space-between;
   min-width:0;flex:1 1 0;max-width: min(69%,350px);
   height:46px;padding:4px 5px;
-  border-radius:16px;border:1px solid #e0e8db;
-  background:#fffdf9ef;box-shadow:0 5px 20px #4b74571a;
+  border-radius:16px;border:1px solid var(--g-outline);
+  background:color-mix(in srgb, var(--paper) 94%, transparent);box-shadow:0 5px 20px color-mix(in srgb, var(--ink) 10%, transparent);
   backdrop-filter:blur(6px);pointer-events:auto;
 }
 .game3d-room-nav button {
   width:36px;height:36px;flex:0 0 36px;
   display:grid;place-items:center;
-  color:#578366;background:#edf4e9;border-radius:11px;
+  color:var(--g-accent-text);background:var(--paper);border-radius:11px;
 }
 .game3d-room-nav button:disabled {opacity:.3;cursor:not-allowed}
 .game3d-room-title {
   min-width:0;flex:1;display:flex;align-items:center;justify-content:center;
-  gap:6px;font-size:.76rem;font-weight:900;color:#416e56;
+  gap:6px;font-size:.76rem;font-weight:900;color:var(--g-accent-text);
   text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .game3d-view-toggle {
   display:flex;align-items:center;justify-content:center;gap:6px;
   max-width:38%;min-width:101px;min-height:46px;padding:7px 11px;
-  border:1px solid #dae8db;border-radius:16px;
-  background:#fffdf9ef;color:#578065;
+  border:1px solid var(--g-outline);border-radius:16px;
+  background:color-mix(in srgb, var(--paper) 94%, transparent);color:var(--g-accent-text);
   font-size:.68rem;font-weight:900;white-space:nowrap;
-  box-shadow:0 5px 20px #4b74571a;pointer-events:auto;
+  box-shadow:0 5px 20px color-mix(in srgb, var(--ink) 10%, transparent);pointer-events:auto;
 }
-.game3d-view-toggle.active {background:#dfeee0;color:#3c7656}
+.game3d-view-toggle.active {background:var(--g-pale);color:var(--g-accent-text)}
 .game3d-autoplace-pill {
   position:absolute;top:73px;right:10px;z-index:7;
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
   min-height:41px;padding:8px 13px;
-  border:1px solid #9fc8ac;border-radius:14px;
-  color:#47795f;background:#f8fcf5ed;
+  border:1px solid var(--g-outline);border-radius:14px;
+  color:var(--g-accent-text);background:color-mix(in srgb, var(--paper) 93%, transparent);
   font-size:.69rem;font-weight:900;
-  box-shadow:0 5px 22px #46734c22;
+  box-shadow:0 5px 22px color-mix(in srgb, var(--ink) 13%, transparent);
 }
 .game3d-progress {
   top:72px;left:10px;
@@ -388,7 +399,7 @@
   display:block;text-align:left;cursor:pointer;
 }
 .game3d-progress--touch:active {
-  background:#e6f1e5;
+  background:var(--g-pale);
 }
 .game3d-camera-dock--simple {
   top:47%;right:9px;gap:3px;padding:5px;
@@ -402,28 +413,28 @@
   transform:translateX(-50%);
   display:grid;grid-template-columns:1fr 1fr;gap:5px;
   width:min(262px,calc(100% - 76px));
-  border:1px solid #dce8d9;padding:5px;
-  border-radius:17px;background:#fffdf9f1;
-  box-shadow:0 8px 25px #466f4f24;
+  border:1px solid var(--g-outline);padding:5px;
+  border-radius:17px;background:color-mix(in srgb, var(--paper) 95%, transparent);
+  box-shadow:0 8px 25px color-mix(in srgb, var(--ink) 14%, transparent);
   backdrop-filter:blur(8px);
 }
 .game3d-quicktools button {
   min-height:42px;display:flex;align-items:center;justify-content:center;
   gap:6px;min-width:0;
-  border-radius:12px;color:#668574;background:#f2f6ee;
+  border-radius:12px;color:var(--g-accent-text);background:var(--paper);
   font-weight:900;font-size:.73rem;
 }
 .game3d-quicktools button.active {
-  background:#dceee0;color:#397454;
+  background:var(--g-pale);color:var(--g-accent-text);
 }
 .game3d-add-furniture {
   position:absolute;left:50%;bottom:66px;z-index:8;
   transform:translateX(-50%);
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   min-height:46px;min-width:180px;padding:10px 17px;
-  border-radius:17px;color:#fff;background:#53896b;
+  border-radius:17px;color:var(--paper);background:var(--g-accent);
   font-size:.75rem;font-weight:890;white-space:nowrap;
-  box-shadow:0 8px 25px #3d694727;
+  box-shadow:0 8px 25px color-mix(in srgb, var(--ink) 15%, transparent);
 }
 .game3d-sheet {
   max-height:min(39dvh,320px);
@@ -448,11 +459,11 @@
 .game3d-tabs button svg {width:23px;height:23px}
 .game3d-toast {
   bottom:51px;max-width:min(340px,calc(100% - 38px));
-  background:#fffefaed;font-size:.66rem;z-index:10;
+  background:color-mix(in srgb, var(--paper) 93%, transparent);font-size:.66rem;z-index:10;
 }
 .game3d-showcase {
   right:62px;bottom:96px;padding:10px 11px;gap:6px;
-  box-shadow:0 5px 24px #4b5a481c;
+  box-shadow:0 5px 24px color-mix(in srgb, var(--ink) 11%, transparent);
 }
 .game3d-showcase-actions button {padding:9px 5px}
 @media(max-width:380px){
@@ -482,8 +493,8 @@
   width:auto;max-width:470px;margin:0;
   min-height:68px;padding:7px;
   display:flex;align-items:center;gap:5px;
-  border:1px solid #d5e4d7;border-radius:17px;
-  background:#fffefaef;box-shadow:0 5px 26px #3f644a2c;
+  border:1px solid var(--g-outline);border-radius:17px;
+  background:color-mix(in srgb, var(--paper) 94%, transparent);box-shadow:0 5px 26px color-mix(in srgb, var(--ink) 17%, transparent);
   backdrop-filter:blur(10px);
 }
 .game3d-object-menu .game3d-object-label {
@@ -491,11 +502,11 @@
   min-width:66px;padding:0 4px 0 7px;
 }
 .game3d-object-menu .game3d-object-label strong {
-  font-size:.75rem;font-weight:900;color:#3e7157;
+  font-size:.75rem;font-weight:900;color:var(--g-accent-text);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .game3d-object-menu .game3d-object-label span {
-  font-size:.59rem;line-height:1.28;color:#839c89;
+  font-size:.59rem;line-height:1.28;color:var(--g-accent-text);
   overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;
   -webkit-box-orient:vertical;white-space:normal;
 }
@@ -503,7 +514,7 @@
   flex:0 0 47px;min-width:0;width:47px;height:52px;
   padding:5px 2px;display:flex;flex-direction:column;
   gap:4px;align-items:center;justify-content:center;
-  border-radius:12px;background:#e8f1e7;color:#558069;
+  border-radius:12px;background:var(--g-pale);color:var(--g-accent-text);
   font-weight:850;
 }
 .game3d-object-menu button small {
@@ -511,20 +522,20 @@
 }
 .game3d-object-menu button.active,
 .game3d-object-menu--moving button.active {
-  background:#4f8a69;color:#fff;
-  box-shadow:inset 0 0 0 1px #377659;
+  background:var(--g-accent);color:var(--paper);
+  box-shadow:inset 0 0 0 1px var(--g-shadow);
 }
 .game3d-object-menu button.game3d-object-close {
   flex:0 0 30px;width:30px;height:36px;
   align-self:flex-start;border-radius:9px;
-  color:#718b79;background:transparent;
+  color:var(--g-accent-text);background:transparent;
 }
 .game3d-object-menu button.game3d-object-save {
-  flex:0 0 90px;width:90px;background:#528f6c;color:#fff;
+  flex:0 0 90px;width:90px;background:var(--g-accent);color:var(--paper);
 }
 .game3d-object-menu--moving {
-  border-color:#93cba6;
-  box-shadow:0 0 0 2px #88c89d55,0 6px 25px #3f644a24;
+  border-color:var(--g-outline);
+  box-shadow:0 0 0 2px color-mix(in srgb, var(--rose-deep) 33%, transparent),0 6px 25px color-mix(in srgb, var(--ink) 14%, transparent);
 }
 .game3d-object-menu ~ .game3d-toast {
   bottom:87px;
@@ -581,3 +592,52 @@
 .game3d-camera-dock--overview{top:132px;}
 @media(max-width:380px){.game3d-camera-dock--overview{top:126px;}}
 @media(min-width:860px){.game3d-camera-dock--overview{top:145px;}}
+
+
+/* Match the five-theme bottom navigation rather than painting an independent dock. */
+.game3d-tabs {
+  background:var(--nav-surface);
+  border-color:var(--g-outline);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.game3d-tabs button:not(.active) { color:var(--nav-muted); }
+.game3d-tabs button.active {
+  color:var(--paper);
+  background:linear-gradient(145deg,var(--theme-cta),var(--theme-cta-hover));
+  box-shadow:0 5px 15px var(--g-shadow);
+}
+.game3d-header { border-color:var(--g-outline); }
+.game3d-page .game3d-brand strong { color:var(--ink); }
+.game3d-page .game3d-brand .game3d-overline { color:var(--rose-deep); }
+.game3d-progress-track span { background:linear-gradient(90deg,var(--theme-finish-light),var(--theme-finish)); }
+.game3d-page .game3d-mission.done { color:var(--muted); }
+.game3d-page .game3d-showcase-actions button:last-child,
+.game3d-page .game3d-demo-choice button:last-child,
+.game3d-page .game3d-main-cta,
+.game3d-page .game3d-add-furniture,
+.game3d-page .game3d-object-menu button.active,
+.game3d-page .game3d-object-menu--moving button.active,
+.game3d-page .game3d-object-menu button.game3d-object-save {
+  background:linear-gradient(145deg,var(--theme-cta),var(--theme-cta-hover));
+  color:var(--paper);
+}
+.game3d-page .game3d-object-menu--moving {
+  border-color:var(--theme-cta);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--theme-cta) 24%,transparent),
+    0 6px 25px var(--g-shadow);
+}
+.game3d-page .game3d-finish-tabs button.active,
+.game3d-page .game3d-catalog button.active,
+.game3d-page .game3d-finishes button.selected,
+.game3d-page .game3d-quicktools button.active {
+  background:var(--theme-finish-light);
+  border-color:var(--theme-cta);
+  color:var(--rose-deep);
+}
+.game3d-page button:focus-visible,
+.game3d-page a:focus-visible,
+.game3d-page select:focus-visible {
+  outline:2px solid var(--theme-focus);
+  outline-offset:2px;
+}
