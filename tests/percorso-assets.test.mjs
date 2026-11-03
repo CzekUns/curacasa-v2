@@ -18,7 +18,10 @@ test("Every Shop preset has a real, selectable 3D asset",()=>{
   }
 });
 test("Every procedural model has unique dimensions and a readable label",()=>{
-  assert.equal(ADDITIONAL_ASSETS.length,58);
+  assert.equal(ADDITIONAL_ASSETS.length,96);
+  assert.equal(FURNITURE.length,106);
+  assert.equal(Object.keys(PRESET_ASSET_IDS).length,67);
+  assert.equal(new Set(chores.map(chore=>PRESET_ASSET_IDS[chore.icon])).size,67);
   assert.equal(registered.size,FURNITURE.length);
   for(const asset of ADDITIONAL_ASSETS){
     assert.ok(asset.label.trim());
