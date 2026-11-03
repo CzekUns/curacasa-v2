@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Box, Check, ChevronLeft, Eraser, Eye, EyeOff, Grid2X2, Hand, Layers3,
   Minus, Paintbrush, Plus, RotateCcw, RotateCw, Trash2, X, ZoomIn,
-  Coins, Trophy, Undo2, ChevronDown, ChevronUp, ClipboardList,
+  Coins, Trophy, Undo2, ChevronDown, ChevronUp, ClipboardList, Maximize2, Minimize2,
 } from "lucide-react";
 import { IsometricBoard } from "../components/percorso/IsometricBoard";
 import { isoDeltaToTiles, pinchCamera, clampStageZoom } from "../lib/percorso-gestures";
@@ -59,6 +59,7 @@ export function Percorso() {
   const houseRef = useRef(house);
   const [roomId, setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [view, setView] = useState<Direction>(0);
+  const [immersive, setImmersive] = useState(false);
   const [mode, setMode] = useState<Mode>("gioca");
   const [toolsOpen, setToolsOpen] = useState(false);
   const undoStack = useRef<HouseLayout[]>([]);
@@ -74,6 +75,7 @@ export function Percorso() {
   const [snapTarget, setSnapTarget] = useState("");
   const [message, setMessage] = useState("Tocca pavimenti e pareti per personalizzarli.");
   const [resetConfirm, setResetConfirm] = useState(false);
+  const pageRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
@@ -98,6 +100,27 @@ export function Percorso() {
   const doneToday = new Set(appData.logs.filter((log) =>
     new Date(log.completedAt).toDateString() === new Date().toDateString()).map((log) => log.choreId)).size;
   const walletBalance = getWallet(appData).balance;
+
+  useEffect(() => {
+    const refreshFullscreen = () => setImmersive(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", refreshFullscreen);
+    return () => document.removeEventListener("fullscreenchange", refreshFullscreen);
+  }, []);
+
+  async function toggleImmersive() {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else if (pageRef.current?.requestFullscreen) {
+        // Fullscreen only applies to this laboratory screen, not the whole app.
+        await pageRef.current.requestFullscreen();
+      } else {
+        setMessage("Per togliere la barra del browser, installa CuraCasa nella schermata Home.");
+      }
+    } catch {
+      setMessage("Questo browser blocca lo schermo intero. Apri CuraCasa dalla schermata Home.");
+    }
+  }
 
   useEffect(() => { cameraRef.current = camera; }, [camera]);
   useEffect(() => { houseRef.current = house; }, [house]);
@@ -176,15 +199,16 @@ export function Percorso() {
     setSelectedId(null);
     setPalette(null);
     setResetConfirm(false);
-    setToolsOpen(true);
+    setToolsOpen(false);
     setCamera(defaultCamera);
     setMessage("Stanza selezionata: il progetto è salvato separatamente dalle faccende.");
   }
-  function chooseMode(next: Mode) {
+  function chooseMode(next: Mode, revealTools = false) {
     setMode(next);
     setPalette(null);
     setSelectedId(null);
-    setToolsOpen(true);
+    // Keep the room visible when switching the main tab. Editing controls open on demand.
+    setToolsOpen(revealTools);
     if (next === "sposta") setShowAll(true);
     if (next === "gioca" || next === "forma" || next === "arredi") setShowAll(false);
     setMessage({
@@ -425,7 +449,7 @@ export function Percorso() {
     });
   }
 
-  return <div className="percorso-page">
+  return <div className="percorso-page" ref={pageRef}>
     <header className="pc-mobile-header">
       <Link to="/app" className="pc-back" aria-label="Torna a CuraCasa"><ChevronLeft size={21} /> CuraCasa</Link>
       <div className="pc-header-center"><span className="pc-lab-label">LAB</span><strong>Percorso Casa</strong></div>
@@ -438,7 +462,7 @@ export function Percorso() {
     </header>
 
     <main className="pc-workspace">
-      <section className="pc-stage" aria-label="Editor isometrico">
+      <section className={"pc-stage" + (toolsOpen ? " pc-stage--tools-open" : "")} aria-label="Editor isometrico">
         <div className="pc-stage-toolbar">
           <label className="pc-room-picker"><span>Stanza</span>
             <select value={activeRoomId} aria-label="Scegli stanza"
@@ -488,6 +512,12 @@ export function Percorso() {
             <button type="button" title="Ruota a sinistra" aria-label="Ruota a sinistra" onClick={() => setView((before) => direction(before - 1))}><RotateCcw size={18} /></button>
             <span>{view * 90}°</span>
             <button type="button" title="Ruota a destra" aria-label="Ruota a destra" onClick={() => setView((before) => direction(before + 1))}><RotateCw size={18} /></button>
+            <button type="button" className="pc-fullscreen-toggle"
+              title={immersive ? "Esci dallo schermo intero" : "Schermo intero"}
+              aria-label={immersive ? "Esci dallo schermo intero" : "Apri a schermo intero"}
+              aria-pressed={immersive} onClick={toggleImmersive}>
+              {immersive ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
           </div>
           <div className="pc-zoom-controls">
             <button type="button" aria-label="Rimpicciolisci scena" onClick={() => zoomBy(1 / 1.3)}><Minus size={17} /></button>
@@ -527,9 +557,9 @@ export function Percorso() {
           <p className="pc-tip">Le finiture vengono applicate all'intera superficie di questa stanza.</p>
         </div> : <>
           {(mode === "forma" || mode === "arredi" || mode === "sposta") && <div className="pc-builder-tabs" role="group" aria-label="Strumenti di costruzione">
-            <button type="button" className={mode === "forma" ? "active" : ""} aria-pressed={mode === "forma"} onClick={() => chooseMode("forma")}><Eraser size={17} /> Forma</button>
-            <button type="button" className={mode === "arredi" ? "active" : ""} aria-pressed={mode === "arredi"} onClick={() => chooseMode("arredi")}><Box size={17} /> Arredi</button>
-            <button type="button" className={mode === "sposta" ? "active" : ""} aria-pressed={mode === "sposta"} onClick={() => chooseMode("sposta")}><Grid2X2 size={17} /> Stanze</button>
+            <button type="button" className={mode === "forma" ? "active" : ""} aria-pressed={mode === "forma"} onClick={() => chooseMode("forma", true)}><Eraser size={17} /> Forma</button>
+            <button type="button" className={mode === "arredi" ? "active" : ""} aria-pressed={mode === "arredi"} onClick={() => chooseMode("arredi", true)}><Box size={17} /> Arredi</button>
+            <button type="button" className={mode === "sposta" ? "active" : ""} aria-pressed={mode === "sposta"} onClick={() => chooseMode("sposta", true)}><Grid2X2 size={17} /> Stanze</button>
           </div>}
           {mode === "gioca" && <div className="pc-context-content pc-missions">
             <div className="pc-context-heading">

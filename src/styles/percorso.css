@@ -310,3 +310,162 @@
 @media (max-width: 850px) {
   .pc-explore-tip { display: flex; min-height: 82px; }
 }
+
+
+/*
+ * Percorso 2.1 — mobile fullscreen canvas.
+ * This screen occupies the whole *available web viewport*. Browser/OS chrome is
+ * outside the page; the installed standalone PWA hides the browser address bar.
+ */
+@media (max-width: 850px) {
+  .percorso-page {
+    --pc-dock-height: calc(70px + env(safe-area-inset-bottom));
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0 !important;
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .pc-mobile-header {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 0 0 55px;
+    height: 55px;
+  }
+  .pc-workspace {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    padding: 0 0 var(--pc-dock-height);
+    margin: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .pc-stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 0;
+  }
+  .pc-stage-toolbar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 0 0 58px;
+    height: 58px;
+  }
+  .pc-room-picker {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  .pc-stage-actions { flex-shrink: 0; }
+  .pc-game-hud {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+  }
+  .pc-game-metrics { min-width: 0; }
+  .pc-stage-view {
+    flex: 1 1 0;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .pc-scene-camera,
+  .pc-svg-anchor,
+  .percorso-scene { width: 100%; max-width: 100%; }
+  .pc-stage-status {
+    position: absolute;
+    bottom: 55px;
+    left: 10px;
+    right: 10px;
+    width: fit-content;
+    max-width: calc(100% - 20px);
+    min-height: 0;
+    z-index: 3;
+    pointer-events: none;
+    margin: 0;
+    padding: 7px 10px;
+    background: rgba(255,253,249,.91);
+    border: 1px solid rgba(215,229,213,.75);
+    border-radius: 13px;
+    box-shadow: 0 4px 16px rgba(69,94,77,.08);
+    font-size: .62rem;
+    line-height: 1.3;
+  }
+  .pc-stage--tools-open .pc-stage-status { opacity: 0; }
+  .pc-gesture-panel {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: var(--pc-dock-height);
+    z-index: 30;
+    max-height: min(36dvh, 280px);
+    min-width: 0;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    border-radius: 17px;
+  }
+  .pc-gesture-panel--closed {
+    max-height: 46px;
+    overflow: hidden;
+  }
+  .pc-sheet-toggle {
+    min-height: 46px;
+    border-radius: 16px 16px 0 0;
+  }
+  .pc-builder-tabs {
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+  }
+  .pc-mode-dock {
+    position: fixed;
+    z-index: 40;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: var(--pc-dock-height);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    margin: 0;
+    border-radius: 18px 18px 0 0;
+  }
+  .pc-mode-dock button {
+    min-height: 0;
+    height: 100%;
+  }
+}
