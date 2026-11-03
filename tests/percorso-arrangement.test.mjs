@@ -4,7 +4,7 @@ import { newRoom, roomsOverlap } from "../src/lib/percorso.ts";
 import { editHouseTile } from "../src/lib/percorso-grid.ts";
 import {
   autoArrangeRooms, reconcileRoomArrangement, positionedRooms,
-  changeRoomOrder, moveRoomInArrangement,
+  changeRoomOrder, moveRoomInArrangement, migrateLegacyArrangement,
 } from "../src/lib/percorso-arrangement.ts";
 
 const create = () => ["Cucina","Salone","Bagno","Camera","Balcone"].map(newRoom);
@@ -75,4 +75,19 @@ test("restoring settings keeps user-defined positions while adding a new room",(
   assert.deepEqual(restored.positions[rooms[0].id],{x:17,y:11});
   assert.ok(restored.positions.Bagno);
   assert.equal(restored.order.length,3);
+});
+
+test("legacy overview placement is retained if it does not overlap",()=>{
+  const rooms=create().slice(0,2);
+  rooms[1].offsetX=14;
+  const migrated=migrateLegacyArrangement(rooms);
+  assert.deepEqual(migrated.positions[rooms[1].id],{x:14,y:rooms[1].offsetY});
+});
+
+test("overlapping legacy placements use an independent automatic layout",()=>{
+  const rooms=create().slice(0,2);
+  rooms[1].offsetX=1;rooms[1].offsetY=0;
+  const migrated=migrateLegacyArrangement(rooms);
+  const visible=positionedRooms(rooms,migrated);
+  assert.equal(roomsOverlap(visible[0],visible[1]),false);
 });
