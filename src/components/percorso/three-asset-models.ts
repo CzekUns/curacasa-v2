@@ -5,11 +5,9 @@ import { ADDITIONAL_ASSETS } from "../../lib/percorso-asset-catalog.ts";
  * Units are the same 1x1 floor cells used by the room designer. The renderer
  * rotates this parent around its center for all four camera directions.
  */
-const materialCache = new Map<string, THREE.MeshStandardMaterial>();
+// Each mesh owns its material: room disposal and previews may safely free them.
 function mat(color:string) {
-  let material=materialCache.get(color);
-  if(!material){material=new THREE.MeshStandardMaterial({color,roughness:.85,metalness:0});materialCache.set(color,material);}
-  return material;
+  return new THREE.MeshStandardMaterial({color,roughness:.85,metalness:0});
 }
 function mesh(g:THREE.Group, geometry:THREE.BufferGeometry, color:string, x=0,y=0,z=0) {
   const obj=new THREE.Mesh(geometry,mat(color));
