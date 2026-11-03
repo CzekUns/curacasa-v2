@@ -575,3 +575,9 @@
   .game3d-quicktools,.game3d-add-furniture{left:24px;bottom:12px}
   .game3d-showcase{left:22px;bottom:12px}
 }
+
+
+/* Do not stack the house arrangement pill and the camera controls. */
+.game3d-camera-dock--overview{top:132px;}
+@media(max-width:380px){.game3d-camera-dock--overview{top:126px;}}
+@media(min-width:860px){.game3d-camera-dock--overview{top:145px;}}
