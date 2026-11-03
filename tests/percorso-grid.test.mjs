@@ -25,17 +25,17 @@ test("editing an outside tile extends east without filling the entire new column
   assert.ok(!changed.room.cells.includes("5,0"));
 });
 
-test("expansion to north and west preserves original absolute coordinates and furniture",()=>{
+test("expansion to north and west preserves standalone room position and moves furniture locally",()=>{
   const room=newRoom("Salone",0);
   room.furniture=[{id:"sofa",type:"divano",x:1,y:1,rotation:0}];
   const x=editHouseTile(room,[room],-1,1);
   assert.ok(x.room);
-  assert.equal(x.room.offsetX,-1);
+  assert.equal(x.room.offsetX,room.offsetX);
   assert.equal(x.room.furniture[0].x,2);
   assert.ok(x.room.cells.includes("1,1"));
   const y=editHouseTile(x.room,[x.room],1,-1);
   assert.ok(y.room);
-  assert.equal(y.room.offsetY,-1);
+  assert.equal(y.room.offsetY,room.offsetY);
   assert.equal(y.room.furniture[0].y,2);
 });
 
@@ -47,10 +47,14 @@ test("cannot remove tile underneath furniture or split a room",()=>{
   assert.equal(editHouseTile(bridge,[bridge],1,0).room,null);
 });
 
-test("expansion rejects overlap with adjacent room",()=>{
+test("expansion remains independent even when overview rooms are adjacent",()=>{
   const a=newRoom("Cucina",0), b=newRoom("Salone",1);
   b.offsetX=5;b.offsetY=0;
-  assert.equal(editHouseTile(a,[a,b],5,1).room,null);
+  const edited=editHouseTile(a,[a,b],5,1);
+  assert.ok(edited.room);
+  assert.equal(edited.room.width,6);
+  assert.equal(b.width,5);
+  assert.equal(b.offsetX,5);
 });
 
 test("whole-house room drag stays collision safe and keeps furniture local",()=>{

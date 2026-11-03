@@ -8,10 +8,14 @@ const neighbors = (x: number, y: number) =>
   [key(x-1,y),key(x+1,y),key(x,y-1),key(x,y+1)];
 
 /**
- * A tile at the edge can extend a room by one row or column. We never alter
- * the world coordinates of existing floor or furniture when extending west/north.
+ * A tile at the edge can extend an independent room by one row or column.
+ * Its shape is never constrained by other rooms' overview positions.
+ * Furniture remains at the same position relative to the existing tiles.
  */
-export function editHouseTile(room: HouseRoom, all: HouseRoom[], x: number, y: number): TileEditResult {
+export function editHouseTile(room: HouseRoom, _all: HouseRoom[], x: number, y: number): TileEditResult {
+  // Keep the historical signature for callers, but never couple room geometry
+  // to the purely illustrative placement of other rooms in the overview.
+  void _all;
   if (!Number.isInteger(x) || !Number.isInteger(y) || x < -1 || y < -1 ||
     x > room.width || y > room.height) return {room:null,reason:"Casella non valida."};
   const expandX = x === -1 || x === room.width;
@@ -23,7 +27,6 @@ export function editHouseTile(room: HouseRoom, all: HouseRoom[], x: number, y: n
     if (!changed) return {room:null,reason:alreadyThere
       ? "Non puoi dividere la stanza o togliere una casella sotto un mobile."
       : "La casella deve toccarne un'altra."};
-    if (!canMoveRoom(all,changed)) return {room:null,reason:"La casella si sovrappone a un'altra stanza."};
     return {room:changed,reason:alreadyThere?"Casella rimossa.":"Casella aggiunta."};
   }
   if ((expandX && room.width >= 12) || (expandY && room.height >= 12))
@@ -36,8 +39,6 @@ export function editHouseTile(room: HouseRoom, all: HouseRoom[], x: number, y: n
     ...room,
     width:room.width+(expandX?1:0),
     height:room.height+(expandY?1:0),
-    offsetX:room.offsetX-shiftX,
-    offsetY:room.offsetY-shiftY,
     cells:room.cells.map(cell=>{
       const [cx,cy]=cell.split(",").map(Number);
       return key(cx+shiftX,cy+shiftY);
@@ -46,7 +47,6 @@ export function editHouseTile(room: HouseRoom, all: HouseRoom[], x: number, y: n
   };
   const changed=toggleCell(expanded,x+shiftX,y+shiftY);
   if (!changed) return {room:null,reason:"Non è possibile aggiungere questa casella."};
-  if (!canMoveRoom(all,changed)) return {room:null,reason:"La casella si sovrappone a un'altra stanza."};
   return {room:changed,reason:"Stanza ampliata di una casella."};
 }
 
