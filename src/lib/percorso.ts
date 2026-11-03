@@ -1,11 +1,12 @@
 import { guessRoomKind, type RoomKind } from "./rooms.ts";
+import { ADDITIONAL_ASSETS, type AdditionalAssetId } from "./percorso-asset-catalog.ts";
 
 export type Tile = { x: number; y: number };
 export type Direction = 0 | 1 | 2 | 3;
 export type FloorStyle = "parquet" | "piastrelle" | "cotto" | "terrazzo" | "pietra";
 export type WallStyle = "avorio" | "salvia" | "cipria" | "righe" | "carta";
-export type FurnitureType = "divano" | "letto" | "tavolo" | "sedia" | "armadio" | "lavatrice" | "vasca" | "pianta" | "tappeto" | "frigo";
-export type FurnitureSpec = { id: FurnitureType; label: string; width: number; height: number; elevation: number; color: string; accent: string; icon: string };
+export type FurnitureType = "divano" | "letto" | "tavolo" | "sedia" | "armadio" | "lavatrice" | "vasca" | "pianta" | "tappeto" | "frigo" | AdditionalAssetId;
+export type FurnitureSpec = { id: FurnitureType; label: string; width: number; height: number; elevation: number; color: string; accent: string; icon: string; category?: string; choreIcon?: string };
 export type Furniture = { id: string; type: FurnitureType; x: number; y: number; rotation: Direction };
 export type HouseRoom = {
   id: string;
@@ -42,6 +43,7 @@ export const FURNITURE: FurnitureSpec[] = [
   { id: "pianta", label: "Pianta", width: 1, height: 1, elevation: 43, color: "#63917c", accent: "#c9e1a6", icon: "✿" },
   { id: "tappeto", label: "Tappeto", width: 2, height: 2, elevation: 3, color: "#d8a49b", accent: "#fff0d9", icon: "✧" },
   { id: "frigo", label: "Frigorifero", width: 1, height: 1, elevation: 62, color: "#92afb0", accent: "#edf2ea", icon: "▥" },
+  ...ADDITIONAL_ASSETS,
 ];
 const KEY = "curacasa_percorso_lab_v1";
 const cellKey = (x: number, y: number) => `${x},${y}`;
