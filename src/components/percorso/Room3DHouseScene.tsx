@@ -457,7 +457,8 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       }
       if(active.moved)return;
       const hit=pick(pos.x,pos.y);
-      if(hit&&p.showAll&&hit.roomId!==p.room.id) {
+      // Any single tap in the overview enters that room. No extra "select" step.
+      if(hit&&p.showAll) {
         p.onPickRoom(hit.roomId);
         return;
       }
