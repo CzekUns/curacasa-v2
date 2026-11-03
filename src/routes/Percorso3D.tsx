@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, Armchair, Brush, Check, ChevronDown, ChevronUp, Coins,
   Eye, EyeOff, Maximize, Minus, Plus, RotateCcw, RotateCw,
-  Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, Move, type LucideIcon,
+  Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, Move, ArrowUp, ArrowDown, LayoutGrid, WandSparkles, type LucideIcon,
 } from "lucide-react";
 import { Room3DHouseScene, type House3DHandle, type GameMode } from "../components/percorso/Room3DHouseScene";
-import { editHouseTile, moveHouseRoom } from "../lib/percorso-grid";
+import { editHouseTile } from "../lib/percorso-grid";
+import {
+  autoArrangeRooms, changeRoomOrder, loadRoomArrangement,
+  moveRoomInArrangement, positionedRooms, reconcileRoomArrangement,
+  saveRoomArrangement, type RoomArrangement,
+} from "../lib/percorso-arrangement";
 import { sampleFurniture } from "../components/percorso/three-room-model";
 import {
   FLOOR_STYLES, WALL_STYLES, FURNITURE, loadHouse, saveHouse,
@@ -39,6 +44,8 @@ const wallSwatches: Record<WallStyle,string> = {
 export function Percorso3D() {
   const [data,setData] = useState<AppData>(loadData);
   const [house,setHouse] = useState<HouseLayout>(()=>loadHouse(loadData().rooms));
+  const [arrangement,setArrangement] = useState<RoomArrangement>(() =>
+    loadRoomArrangement(loadHouse(loadData().rooms).rooms));
   const [roomId,setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [mode,setMode] = useState<GameMode>("play");
   const [showAll,setShowAll] = useState(false);
@@ -54,9 +61,17 @@ export function Percorso3D() {
   const [immersive,setImmersive] = useState(false);
   const sceneRef=useRef<House3DHandle|null>(null);
   const pageRef=useRef<HTMLDivElement|null>(null);
-  const undoRef=useRef<HouseLayout[]>([]);
+  const undoRef=useRef<Array<{house:HouseLayout; arrangement:RoomArrangement}>>([]);
   const [canUndo,setCanUndo] = useState(false);
   const room=house.rooms.find(r=>r.id===roomId) ?? house.rooms[0];
+  const currentArrangement=useMemo(()=>
+    reconcileRoomArrangement(house.rooms,arrangement),[house.rooms,arrangement]);
+  const overviewRooms=useMemo(()=>
+    positionedRooms(house.rooms,currentArrangement),[house.rooms,currentArrangement]);
+  // Editing a room always uses its own coordinates; overview placement is cosmetic.
+  const sceneRoom=useMemo(()=>room?
+    (showAll ? overviewRooms.find(r=>r.id===room.id) ?? room : {...room,offsetX:0,offsetY:0})
+    : undefined,[room,showAll,overviewRooms]);
   const roomName=room?.name ?? "La tua casa";
   const preview = Boolean(room && showcase && room.furniture.length===0 && mode!=="tiles");
   const demoItems=useMemo(()=>room?sampleFurniture(room.kind,room):[],[room]);
@@ -104,11 +119,20 @@ export function Percorso3D() {
     };
   },[]);
 
-  function persist(next: HouseLayout) {
-    undoRef.current=[...undoRef.current.slice(-19),house];
+  function rememberChange() {
+    undoRef.current=[...undoRef.current.slice(-19),{house,arrangement:currentArrangement}];
     setCanUndo(true);
+  }
+  function persist(next: HouseLayout) {
+    rememberChange();
     setHouse(next);
     saveHouse(next);
+  }
+  function persistArrangement(next: RoomArrangement) {
+    if(next===currentArrangement)return;
+    rememberChange();
+    setArrangement(next);
+    saveRoomArrangement(next);
   }
   function updateRoom(next: HouseRoom) {
     persist({...house,rooms:house.rooms.map(r=>r.id===next.id?next:r)});
@@ -116,7 +140,8 @@ export function Percorso3D() {
   function undo() {
     const previous=undoRef.current.pop();
     if(!previous)return;
-    setHouse(previous);saveHouse(previous);
+    setHouse(previous.house);saveHouse(previous.house);
+    setArrangement(previous.arrangement);saveRoomArrangement(previous.arrangement);
     setCanUndo(undoRef.current.length>0);
     setSelectedId(null);setAdding(null);
     setToast("Ultima modifica annullata.");
@@ -143,7 +168,26 @@ export function Percorso3D() {
   }
   function changeView(all:boolean){
     setShowAll(all);setAdding(null);setSelectedId(null);setMovingRooms(false);setPanelOpen(false);
-    setToast(all?"Tocca una stanza per selezionarla. Entra in Tile per spostarla.":"Ora stai modificando una sola stanza.");
+    setToast(all?
+      "La disposizione è indicativa: ogni stanza resta indipendente. Tocca Organizza per sistemarle.":
+      "Stanza indipendente: puoi ampliare o togliere tile senza vincoli con le altre.");
+  }
+  function resetArrangement() {
+    persistArrangement(autoArrangeRooms(house.rooms,currentArrangement.order));
+    sceneRef.current?.fit();
+    setToast("Stanze disposte automaticamente. Puoi riordinarle o trascinarle.");
+  }
+  function reorderRoom(id:string,direction:-1|1) {
+    const next=changeRoomOrder(house.rooms,currentArrangement,id,direction);
+    if(next===currentArrangement)return;
+    persistArrangement(next);
+    sceneRef.current?.fit();
+    setToast("Ordine aggiornato. Puoi rifinire la disposizione trascinando.");
+  }
+  function organizeHouse() {
+    setShowAll(true);setMode("tiles");setMovingRooms(true);
+    setAdding(null);setSelectedId(null);setPanelOpen(true);
+    setToast("Sposta le stanze liberamente o modifica il loro ordine nel pannello.");
   }
   function changeTile(id:string,x:number,y:number){
     const source=house.rooms.find(r=>r.id===id);
@@ -155,12 +199,11 @@ export function Percorso3D() {
     setToast(result.reason+" Puoi usare Annulla.");
   }
   function shiftRoom(id:string,dx:number,dy:number){
-    const source=house.rooms.find(r=>r.id===id);
-    if(!source)return;
-    const result=moveHouseRoom(source,house.rooms,dx,dy);
-    if(!result.room){setToast(result.reason);return;}
-    updateRoom(result.room);
-    setToast(source.name+" spostata. Puoi annullare.");
+    const result=moveRoomInArrangement(house.rooms,currentArrangement,id,dx,dy);
+    if(!result.arrangement){setToast(result.reason);return;}
+    persistArrangement(result.arrangement);
+    const selectedRoom=house.rooms.find(r=>r.id===id);
+    setToast((selectedRoom?.name??"Stanza")+" spostata nella vista Casa intera. Le sue misure non cambiano.");
   }
   function place(item: Furniture) {
     if(!room)return;
@@ -218,7 +261,8 @@ export function Percorso3D() {
       <button className="game3d-head-icon" type="button" onClick={fullscreen} aria-label={immersive?"Esci dallo schermo intero":"Schermo intero"}><Maximize size={19}/></button>
     </header>
     <div className="game3d-stage">
-      {room ? <Room3DHouseScene ref={sceneRef} room={room} rooms={house.rooms} items={items} mode={mode}
+      {sceneRoom ? <Room3DHouseScene ref={sceneRef} room={sceneRoom}
+        rooms={showAll ? overviewRooms : [sceneRoom]} items={items} mode={mode}
         showAll={showAll} movingRooms={movingRooms}
         adding={adding} rotation={rotation} selectedId={selectedId} showWalls={walls}
         panelOpen={panelOpen} onPlace={place} onMove={move}
@@ -244,6 +288,9 @@ export function Percorso3D() {
         <button type="button" className={showAll?"active":""} aria-pressed={showAll}
           onClick={()=>changeView(true)}>Casa intera</button>
       </div>
+      {showAll && <div className="game3d-organize-entry">
+        <button type="button" onClick={organizeHouse}><LayoutGrid size={17}/> Organizza la casa</button>
+      </div>}
       {mode==="play" && <div className="game3d-progress">
         <div className="game3d-progress-copy"><span>{showAll?"CASA · "+house.rooms.length+" STANZE":"OGGI · "+roomName}</span><strong>{completed}/{relevantChores.length} missioni</strong></div>
         <div className="game3d-progress-track"><span style={{width:completionPercent+"%"}}/></div>
@@ -287,6 +334,34 @@ export function Percorso3D() {
           {panelOpen?<ChevronDown size={19}/>:<ChevronUp size={19}/>}
         </button>
         {panelOpen && <div className="game3d-sheet-content">
+          {showAll && <div className="game3d-arrangement-panel">
+            <p className="game3d-sheet-note">
+              Le stanze non devono combaciare: questa è una disposizione indicativa, non una planimetria.
+              Le dimensioni e i tile restano indipendenti.
+            </p>
+            <button type="button" className="game3d-auto-layout" onClick={resetArrangement}>
+              <WandSparkles size={18}/> Disponi automaticamente
+            </button>
+            <div className="game3d-room-order" role="list" aria-label="Ordine delle stanze">
+              {currentArrangement.order.map((id,index)=>{
+                const entry=house.rooms.find(r=>r.id===id);
+                if(!entry)return null;
+                return <div key={id} className="game3d-order-item" role="listitem">
+                  <span className="game3d-order-number">{index+1}</span>
+                  <button type="button" className="game3d-order-name" onClick={()=>chooseRoom(id)}>
+                    {entry.name}
+                  </button>
+                  <button type="button" aria-label={"Sposta "+entry.name+" prima"}
+                    disabled={index===0} onClick={()=>reorderRoom(id,-1)}><ArrowUp size={17}/></button>
+                  <button type="button" aria-label={"Sposta "+entry.name+" dopo"}
+                    disabled={index===currentArrangement.order.length-1}
+                    onClick={()=>reorderRoom(id,1)}><ArrowDown size={17}/></button>
+                </div>;
+              })}
+            </div>
+            <p className="game3d-sheet-note">Puoi anche trascinare le stanze con «Sposta stanze».
+              Nessuna stanza è obbligata a toccare le altre.</p>
+          </div>}
           {mode==="play" && <>
             {selectedSpec && <div className="game3d-object-context">
               <strong>{selectedSpec.label}</strong>
@@ -323,8 +398,8 @@ export function Percorso3D() {
           </>}
           {mode==="tiles" && <>
             <p className="game3d-sheet-note">{movingRooms
-              ? "Trascina una stanza nella vista Casa intera. Se tocca un'altra stanza, il movimento non viene salvato."
-              : "Tocca una casella esistente per rimuoverla, o una casella verde trasparente per aggiungerla. Puoi estendere i bordi una casella per volta."}</p>
+              ? "Trascina una stanza nella vista Casa intera; la forma e gli arredi non cambieranno."
+              : "Ogni stanza è indipendente. Tocca un tile per rimuoverlo oppure una casella verde per estenderlo, anche se nella vista generale ci sono altre stanze vicine."}</p>
             <div className="game3d-tile-actions" role="group" aria-label="Strumenti di costruzione">
               <button type="button" className={!movingRooms?"active":""} aria-pressed={!movingRooms}
                 onClick={()=>{setMovingRooms(false);setPanelOpen(false);}}>
@@ -339,7 +414,7 @@ export function Percorso3D() {
               <strong>{roomName}</strong>
               <span>{room?.cells.length??0} tile · {room?.width??0} × {room?.height??0}</span>
             </div>
-            <p className="game3d-sheet-note">Le modifiche si salvano automaticamente; premi <strong>Annulla</strong> se vuoi tornare indietro. Non si eliminano tile sotto i mobili.</p>
+            <p className="game3d-sheet-note">Le modifiche si salvano automaticamente; premi <strong>Annulla</strong> se vuoi tornare indietro. Non si eliminano tile sotto i mobili. La posizione nella vista generale è separata dalle dimensioni.</p>
           </>}
           {mode==="finishes" && <>
             <div className="game3d-finish-tabs">
