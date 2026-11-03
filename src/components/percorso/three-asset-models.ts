@@ -385,6 +385,227 @@ export function renderAdditionalAsset(parent:THREE.Group,type:string):boolean {
       ball(g,.055,0,.27,-.16,"#e0a7a8");
       for(const x of [-.25,.25])box(g,.10,.035,.08,x,.06,.13,wood);
       break;
+
+    // Extra furniture pieces: unlike the 67 chore assets these are freely decorative.
+    case "poltrona":
+      box(g,.82,.34,.74,0,.35,0,"#c79488");
+      box(g,.82,.67,.16,0,.67,-.30,"#a77871");
+      for(const x of [-.37,.37])box(g,.13,.52,.72,x,.47,0,"#b98b84");
+      box(g,.61,.10,.47,0,.54,.12,pale);
+      break;
+    case "divano-angolare":
+      box(g,1.87,.37,.79,0,.29,-.46,"#c59384");
+      box(g,.85,.37,1.89,-.51,.29,0,"#c59384");
+      box(g,1.87,.60,.16,0,.62,-.81,"#aa7b72");
+      box(g,.17,.60,1.89,-.89,.62,0,"#aa7b72");
+      for(const x of [-.50,.20,.63])box(g,.47,.10,.54,x,.52,-.44,pale);
+      break;
+    case "tavolino":
+      box(g,.80,.10,.76,0,.51,0,wood);
+      for(const x of [-.31,.31])for(const z of [-.29,.29])box(g,.09,.47,.09,x,.25,z,dark);
+      break;
+    case "mobile-tv":
+      box(g,1.82,.51,.70,0,.34,0,"#c7a68b");
+      for(const x of [-.47,.47])box(g,.83,.36,.035,x,.36,.37,pale);
+      for(const x of [-.77,.77])box(g,.08,.10,.08,x,.05,.20,wood);
+      break;
+    case "televisore":
+      box(g,.73,.99,.10,0,1.15,0,dark);
+      box(g,.64,.79,.022,0,1.16,.062,"#7497a8");
+      rod(g,[0,.24,0],[0,.66,0],.06,chrome);
+      box(g,.49,.08,.34,0,.20,0,wood);
+      break;
+    case "libreria":
+      box(g,1.75,1.86,.61,0,1.0,0,wood);
+      box(g,1.59,1.72,.04,0,1.02,.33,pale);
+      for(let j=0;j<4;j++) {
+        box(g,1.72,.075,.64,0,.28+j*.49,0,"#ad8b6e");
+        for(let i=0;i<8;i++)box(g,.12,.31+(i%3)*.035,.32,-.65+i*.18,.51+j*.49,0,["#8d9b93","#bd9998","#d4bb99"][i%3]);
+      }
+      break;
+    case "lampada-terra":
+      cyl(g,.25,.09,0,.06,0,dark);
+      rod(g,[0,.09,0],[0,1.75,0],.03,chrome);
+      cyl(g,.29,.40,0,1.58,0,"#e7cda7",.17);
+      ball(g,.10,0,1.56,0,"#fff2cb");
+      break;
+    case "credenza":
+      box(g,1.85,.98,.68,0,.53,0,wood);
+      for(const x of [-.55,0,.55])box(g,.49,.72,.025,x,.59,.36,"#e7cfb7");
+      for(const x of [-.55,0,.55])ball(g,.037,x,.56,.39,"#d0b17e");
+      break;
+    case "console":
+      box(g,1.84,.10,.55,0,.90,0,wood);
+      for(const x of [-.77,.77])box(g,.11,.85,.10,x,.46,0,"#957a65");
+      box(g,.60,.31,.30,-.30,1.1,0,pale);
+      break;
+    case "sgabello":
+      cyl(g,.33,.09,0,.54,0,wood);
+      for(const x of [-.23,.23])for(const z of [-.23,.23])rod(g,[x,.08,z],[x,.51,z],.035,dark);
+      break;
+    case "ventilatore":
+      cyl(g,.26,.08,0,.06,0,dark);
+      rod(g,[0,.08,0],[0,1.16,0],.045,chrome);
+      hoop(g,.32,.04,0,1.37,.08,chrome,true);
+      fanFace(g,1.37,.10);
+      break;
+    case "comodino":
+      box(g,.73,.67,.67,0,.41,0,wood);
+      for(const y of [.28,.54]){box(g,.62,.24,.04,0,y,.36,pale);ball(g,.027,0,y,.39,dark);}
+      break;
+    case "cassettiera":
+      box(g,.79,1.34,.70,0,.71,0,wood);
+      for(let i=0;i<4;i++){box(g,.70,.25,.035,0,.28+i*.29,.37,pale);box(g,.17,.032,.06,0,.28+i*.29,.41,chrome);}
+      break;
+    case "letto-singolo":
+      box(g,.86,.23,1.87,0,.23,0,wood);
+      box(g,.79,.16,1.72,0,.43,.04,pale);
+      box(g,.81,.07,1.11,0,.53,.32,"#bcd2c2");
+      box(g,.90,.63,.12,0,.57,-.88,wood);
+      box(g,.53,.10,.28,0,.54,-.55,"#fffdf9");
+      break;
+    case "culla":
+      box(g,1.72,.18,.73,0,.40,0,"#ead7ba");
+      for(const z of [-.38,.38])box(g,1.8,.58,.07,0,.72,z,wood);
+      for(const x of [-.77,.77])box(g,.07,.66,.86,x,.70,0,wood);
+      for(let i=0;i<7;i++)rod(g,[-.64+i*.21,.52,-.39],[-.64+i*.21,1.0,-.39],.023,pale);
+      break;
+    case "specchiera":
+      box(g,.79,1.47,.11,0,1.01,0,wood);
+      box(g,.68,1.35,.02,0,1.01,.07,"#a3c7c8");
+      box(g,.87,.71,.47,0,.40,-.02,"#d6b799");
+      break;
+    case "appendiabiti":
+      rod(g,[0,.10,0],[0,1.82,0],.055,wood);
+      cyl(g,.32,.07,0,.08,0,wood);
+      for(let i=0;i<4;i++){
+        const a=i*Math.PI/2;
+        rod(g,[0,1.62,0],[Math.cos(a)*.33,1.70,Math.sin(a)*.33],.032,wood);
+        ball(g,.065,Math.cos(a)*.34,1.70,Math.sin(a)*.34,chrome);
+      }
+      break;
+    case "scarpiera":
+      box(g,.84,1.11,.51,0,.61,0,"#bca28a");
+      for(let i=0;i<3;i++){
+        box(g,.78,.30,.055,0,.25+i*.35,.27,pale);
+        box(g,.19,.025,.04,0,.25+i*.35,.32,chrome);
+      }
+      break;
+    case "abat-jour":
+      cyl(g,.18,.08,0,.09,0,wood);
+      rod(g,[0,.10,0],[0,.60,0],.033,chrome);
+      cyl(g,.29,.36,0,.78,0,"#e9d2bd",.15);
+      ball(g,.075,0,.70,0,"#fff0c9");
+      break;
+    case "scrittoio":
+      box(g,1.76,.10,.77,0,.79,0,wood);
+      for(const x of [-.76,.76])for(const z of [-.29,.29])box(g,.08,.73,.08,x,.39,z,wood);
+      box(g,.65,.12,.38,-.28,.89,-.12,pale);
+      box(g,.39,.36,.08,.31,1.08,-.11,dark);
+      break;
+    case "microonde":
+      box(g,.81,.52,.56,0,.34,0,"#aebec0");
+      box(g,.55,.31,.04,-.07,.36,.31,dark);
+      for(const y of [.26,.41])cyl(g,.034,.03,.34,y,.32,chrome);
+      break;
+    case "tostapane":
+      box(g,.55,.43,.38,0,.29,0,"#bfc6bc");
+      for(const x of [-.13,.13])box(g,.035,.03,.22,x,.51,0,dark);
+      box(g,.07,.06,.10,.31,.31,.14,wood);
+      break;
+    case "bollitore":
+      cyl(g,.23,.56,0,.33,0,chrome,.16);
+      cyl(g,.20,.06,0,.66,0,dark);
+      rod(g,[.18,.22,0],[.35,.45,0],.046,dark);
+      rod(g,[.35,.45,0],[.18,.62,0],.046,dark);
+      break;
+    case "lavello-cucina":
+      box(g,.84,.87,.73,0,.48,0,wood);
+      box(g,.88,.08,.77,0,.93,0,pale);
+      box(g,.55,.024,.45,0,.98,0,"#8faeb9");
+      rod(g,[0,.98,-.26],[0,1.23,-.26],.024,chrome);
+      rod(g,[0,1.23,-.26],[0,1.23,-.05],.025,chrome);
+      break;
+    case "tavolo-pranzo":
+      box(g,1.84,.13,1.82,0,.76,0,"#c2a083");
+      for(const x of [-.72,.72])for(const z of [-.70,.70])box(g,.11,.73,.11,x,.37,z,wood);
+      break;
+    case "sgabello-bar":
+      cyl(g,.27,.08,0,1.12,0,wood);
+      for(const x of [-.19,.19])for(const z of [-.19,.19])rod(g,[x,.07,z],[x,1.10,z],.029,dark);
+      box(g,.47,.035,.035,0,.41,.18,chrome);
+      break;
+    case "dispensa":
+      box(g,1.85,1.90,.74,0,.98,0,wood);
+      for(const x of [-.47,.47]) {
+        box(g,.87,1.72,.035,x,.99,.39,pale);
+        ball(g,.035,x<0?-.10:.10,1.01,.43,dark);
+      }
+      break;
+    case "asciugatrice":
+      appliance(g,pale);
+      hoop(g,.25,.05,0,.46,.41,"#728c97",true);
+      ball(g,.17,0,.46,.43,"#bed7da");
+      for(const x of [-.25,.25])ball(g,.04,x,.84,.41,dark);
+      break;
+    case "bidet":
+      cyl(g,.31,.43,0,.28,0,pale);
+      hoop(g,.26,.05,0,.52,0,"#e2ece8");
+      rod(g,[0,.51,-.20],[0,.73,-.20],.025,chrome);
+      rod(g,[0,.72,-.20],[0,.72,-.03],.025,chrome);
+      break;
+    case "termoarredo":
+      for(let i=0;i<8;i++)box(g,.69,.055,.12,0,.19+i*.18,0,chrome);
+      for(const x of [-.33,.33])box(g,.06,1.5,.12,x,.83,0,dark);
+      break;
+    case "stendino":
+      for(const x of [-.85,.85])rod(g,[x,.10,-.25],[x,1.21,-.25],.035,chrome);
+      for(let i=0;i<6;i++)rod(g,[-.85,1.22,-.33+i*.13],[.85,1.22,-.33+i*.13],.024,chrome);
+      for(const x of [-.45,.23])box(g,.28,.38,.035,x,1.04,.23,x<0?"#e3b5b4":"#bed3c1");
+      break;
+    case "portabiancheria":
+      cyl(g,.35,.77,0,.43,0,"#bc9e81",.30);
+      hoop(g,.34,.03,0,.83,0,pale);
+      for(let i=0;i<8;i++)box(g,.03,.63,.04,-.26+i*.075,.40,.28,"#f2dec7");
+      break;
+    case "fioriera":
+      box(g,1.78,.58,.57,0,.33,0,"#ba8d72");
+      box(g,1.71,.07,.52,0,.65,0,"#695c4e");
+      for(let i=0;i<7;i++){
+        const x=-.73+i*.24;
+        rod(g,[x,.67,0],[x,1.13+(i%3)*.1,0],.032,"#648873");
+        ball(g,.16,x,1.15+(i%3)*.1,0,i%2?"#e7b8ad":"#80ad8c");
+      }
+      break;
+    case "panca-esterno":
+      box(g,1.83,.17,.60,0,.52,0,wood);
+      box(g,1.85,.61,.13,0,.85,-.24,wood);
+      for(const x of [-.75,.75])box(g,.12,.51,.12,x,.29,.16,dark);
+      break;
+    case "ombrellone":
+      cyl(g,.31,.08,0,.08,0,chrome);
+      rod(g,[0,.12,0],[0,2.0,0],.035,wood);
+      mesh(g,new THREE.ConeGeometry(.85,.41,8), "#c68e85",0,1.79,0);
+      break;
+    case "barbecue":
+      box(g,.75,.19,.59,0,.77,0,dark);
+      for(const x of [-.27,.27])for(const z of [-.21,.21])rod(g,[x,.10,z],[x,.74,z],.045,chrome);
+      for(let i=0;i<6;i++)rod(g,[-.32,.87,-.24+i*.09],[.32,.87,-.24+i*.09],.02,chrome);
+      box(g,.69,.10,.11,0,.30,-.26,wood);
+      break;
+    case "sedia-giardino":
+      box(g,.68,.11,.64,0,.48,0,"#87a9a3");
+      box(g,.66,.75,.10,0,.92,-.26,"#87a9a3");
+      for(const x of [-.25,.25])for(const z of [-.24,.24])rod(g,[x,.08,z],[x,.48,z],.036,dark);
+      break;
+    case "portaombrelli":
+      cyl(g,.27,.68,0,.38,0,"#a1b4b5");
+      hoop(g,.26,.03,0,.74,0,chrome);
+      for(const x of [-.10,.10]) {
+        rod(g,[x,.30,0],[x,1.40,0],.025,wood);
+        hoop(g,.12,.026,x+.12,1.38,0,wood,true);
+      }
+      break;
     default:
       box(g,Math.min(spec.width*.85,1.8),.75,Math.min(spec.height*.82,.84),0,.42,0,a);
       box(g,.25,.12,.08,0,.84,.39,b);
