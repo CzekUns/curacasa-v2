@@ -6,6 +6,7 @@ import {
   type FurnitureType, type HouseRoom,
 } from "../../lib/percorso";
 import { moveHouseRoom } from "../../lib/percorso-grid";
+import { draggedFurniturePosition, tappedFurniturePosition, canDragFurniture } from "../../lib/percorso-furniture-touch";
 
 export type GameMode = "play" | "furniture" | "finishes" | "tiles";
 export type House3DHandle = {
@@ -23,6 +24,8 @@ type Props = {
   adding:FurnitureType|null;
   rotation:Direction;
   selectedId:string|null;
+  movingFurnitureId:string|null;
+  isShowcasePreview:boolean;
   showWalls:boolean;
   panelOpen:boolean;
   onPlace:(item:Furniture)=>void;
@@ -271,6 +274,11 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       const roots=[...models.values()].map(v=>v.root);
       for(const hit of raycaster.intersectObjects(roots,true)){
         const node=hit.object;
+        // Three.js raycasting can still return invisible walls/objects. Never
+        // let a visually hidden surface steal a furniture tap.
+        let ancestor:THREE.Object3D|null=node, isVisible=true;
+        while(ancestor){if(!ancestor.visible){isVisible=false;break;}ancestor=ancestor.parent;}
+        if(!isVisible)continue;
         const roomId=roomOf(node);
         if(!roomId)continue;
         if(node.userData.roomLabel) return {kind:"label",roomId};
@@ -316,15 +324,14 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       requestDraw();
       return {x:gx,y:gy,valid};
     }
-    function moveFurniture(id:string,x:number,y:number):Candidate|null{
+    function moveFurniture(id:string,x:number,y:number,startWorld:THREE.Vector3|null):Candidate|null{
       const p=current.current;
       const item=p.items.find(obj=>obj.id===id);
       const hit=worldOnFloor(x,y);
-      if(!item||!hit)return null;
+      if(!item||!hit||!startWorld)return null;
+      const candidate=draggedFurniturePosition(p.room,item,startWorld,hit);
+      const gx=candidate.x,gy=candidate.y,valid=candidate.valid;
       const sz=furnitureSize(item);
-      const gx=Math.round(hit.x-p.room.offsetX-sz.width/2);
-      const gy=Math.round(hit.z-p.room.offsetY-sz.height/2);
-      const valid=validPlacement(p.room,{...item,x:gx,y:gy},id);
       const obj=models.get(p.room.id)?.objects.get(id);
       if(obj){
         obj.position.set(gx+sz.width/2,.035,gy+sz.height/2);
@@ -368,12 +375,17 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       }
       const hit=pick(pos.x,pos.y);
       const p=current.current;
+      const selectedFurniture = hit?.kind==="furniture" && hit.roomId===p.room.id &&
+        !p.showAll && !p.isShowcasePreview;
+      const movableObject = selectedFurniture &&
+        canDragFurniture(hit?.itemId??null,p.mode,p.movingFurnitureId,
+          Boolean(p.adding),p.isShowcasePreview);
       gesture={
         pointerId:e.pointerId,start:pos,last:pos,moved:false,candidate:null,
-        objectId:p.mode==="furniture"&&!p.adding&&hit?.kind==="furniture"
-          &&hit.roomId===p.room.id?hit.itemId??null:null,
+        objectId:movableObject?hit?.itemId??null:null,
         roomId:p.showAll&&p.movingRooms?hit?.roomId??null:null,
-        startWorld:p.showAll&&p.movingRooms?worldOnFloor(pos.x,pos.y):null,
+        startWorld:(p.showAll&&p.movingRooms)||movableObject ?
+          worldOnFloor(pos.x,pos.y):null,
       };
       if(p.mode==="furniture"&&p.adding)ghostAt(pos.x,pos.y);
     }
@@ -405,7 +417,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       } else if(p.mode==="furniture" && p.adding && !p.showAll){
         gesture.candidate=ghostAt(pos.x,pos.y);
       } else if(gesture.objectId) {
-        gesture.candidate=moveFurniture(gesture.objectId,pos.x,pos.y);
+        gesture.candidate=moveFurniture(gesture.objectId,pos.x,pos.y,gesture.startWorld);
       } else {
         yaw+=dx*.012;targetYaw=yaw;
         pitch=Math.max(.48,Math.min(1.15,pitch+dy*.003));
@@ -457,6 +469,20 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       }
       if(active.moved)return;
       const hit=pick(pos.x,pos.y);
+      if(p.movingFurnitureId && !p.isShowcasePreview &&
+        (hit?.kind==="floor" || hit?.kind==="missing")) {
+        const item=p.items.find(v=>v.id===p.movingFurnitureId);
+        const ground=worldOnFloor(pos.x,pos.y);
+        if(item && ground) {
+          const candidate=tappedFurniturePosition(p.room,item,ground);
+          if(candidate.valid) {
+            if(candidate.x!==item.x || candidate.y!==item.y)
+              p.onMove(item.id,candidate.x,candidate.y);
+            else p.onSelect(item.id);
+          } else p.onError("Qui non c'è spazio. Tocca un tile libero.");
+        }
+        return;
+      }
       // Any single tap in the overview enters that room. No extra "select" step.
       if(hit&&p.showAll) {
         p.onPickRoom(hit.roomId);
