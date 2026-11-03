@@ -268,7 +268,7 @@
   .pc-game-intro strong { font-size: .93rem; }
   .pc-game-metrics span { padding: 6px 7px; font-size: .62rem; }
   .pc-gesture-panel {
-    bottom: calc(72px + env(safe-area-inset-bottom));
+    bottom: 0;
     max-height: min(48dvh, 390px);
     overflow-y: auto; display: block;
     scrollbar-width: thin;
