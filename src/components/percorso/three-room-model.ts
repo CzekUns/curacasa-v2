@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { renderAdditionalAsset } from "./three-asset-models.ts";
 import { FURNITURE, furnitureSize, type Furniture, type FurnitureType, type HouseRoom } from "../../lib/percorso.ts";
 import { editableTileSlots } from "../../lib/percorso-grid.ts";
 
@@ -205,7 +206,7 @@ export function createFurniture(item: Furniture): THREE.Group {
       sbox(.045,.32,.055,.31,.80,.47,"#788d89");
       break;
     default:
-      box(sx*.8,.5,sz*.8,0,.25,0,swatch?.color ?? palette.cream);
+      if (!renderAdditionalAsset(primitive,item.type)) box(sx*.8,.5,sz*.8,0,.25,0,swatch?.color ?? palette.cream);
   }
   if (item.rotation % 2) primitive.rotation.y = -Math.PI / 2;
   // Furniture geometry is authored at the catalog footprint center; rotate it.
