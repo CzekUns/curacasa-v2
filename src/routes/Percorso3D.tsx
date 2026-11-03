@@ -378,7 +378,7 @@ export function Percorso3D() {
         </>}
         <button type="button" className="game3d-object-close" aria-label="Chiudi menu mobile"
           onClick={()=>selectFurniture(null)}><X size={17}/></button>
-      </div>
+      </div>}
       {toast && <p className="game3d-toast" role="status">{toast}</p>}
       {panelOpen && <section className="game3d-sheet open" aria-label="Comandi contestuali">
         <button type="button" className="game3d-sheet-handle" aria-expanded={panelOpen}
