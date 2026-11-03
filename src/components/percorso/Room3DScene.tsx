@@ -144,10 +144,17 @@ export const Room3DScene = forwardRef<Room3DHandle, Props>(function Room3DScene(
         const facing=new THREE.Vector3(Math.cos(yaw),0,Math.sin(yaw));
         model.walls.forEach(({mesh,normal})=>{
           const faded = !propsRef.current.showWalls || facing.dot(normal)>.10;
-          const material=mesh.material as THREE.MeshStandardMaterial;
-          material.opacity = !propsRef.current.showWalls ? 0 : faded ? .13 : 1;
           mesh.visible = propsRef.current.showWalls;
-          material.depthWrite = !faded;
+          mesh.traverse(node=>{
+            if(node instanceof THREE.Mesh) {
+              const materials=Array.isArray(node.material)?node.material:[node.material];
+              for(const material of materials) {
+                material.transparent=true;
+                material.opacity = faded ? .12 : 1;
+                material.depthWrite = !faded;
+              }
+            }
+          });
         });
       }
       renderer.render(scene,camera);
@@ -225,7 +232,11 @@ export const Room3DScene = forwardRef<Room3DHandle, Props>(function Room3DScene(
       for(const hit of hits) {
         const node=hit.object;
         if(typeof node.userData.furnitureId==="string") return {kind:"furniture" as const,id:node.userData.furnitureId as string};
-        if(node.userData.wall===true || node.parent?.userData.wall===true) return {kind:"wall" as const};
+        if(node.userData.wall===true || node.parent?.userData.wall===true) {
+          const wall = node.userData.wall ? node : node.parent;
+          if (wall instanceof THREE.Mesh && (wall.material as THREE.MeshStandardMaterial).opacity<.2) continue;
+          return {kind:"wall" as const};
+        }
         if(node.userData.tile) return {kind:"floor" as const};
       }
       return null;
