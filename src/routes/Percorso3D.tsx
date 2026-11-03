@@ -175,6 +175,7 @@ export function Percorso3D() {
   }
   function startMovingFurniture() {
     if(!selected || preview)return;
+    setMode("play");
     setMovingFurnitureId(selected.id);
     setPanelOpen(false);
     setToast("Trascina il mobile oppure tocca un tile libero per spostarlo.");
@@ -323,7 +324,7 @@ export function Percorso3D() {
           <button type="button" onClick={applyShowcase} disabled={!demoItems.length}>Usa questa</button>
         </div>
       </div>}
-      <div className="game3d-camera-dock game3d-camera-dock--simple" role="group" aria-label="Visuale">
+      <div className={"game3d-camera-dock game3d-camera-dock--simple"+(showAll?" game3d-camera-dock--overview":"")} role="group" aria-label="Visuale">
         <button type="button" aria-label="Ruota a sinistra" onClick={()=>sceneRef.current?.turn(-1)}><RotateCcw size={19}/></button>
         <button type="button" aria-label="Ruota a destra" onClick={()=>sceneRef.current?.turn(1)}><RotateCw size={19}/></button>
         <button type="button" aria-label="Mostra o nascondi le pareti"
@@ -342,7 +343,7 @@ export function Percorso3D() {
           <Brush size={18}/> Colori
         </button>
       </div>}
-      {!showAll && mode==="furniture"&&!adding&&!panelOpen && <button
+      {!showAll && mode==="furniture"&&!adding&&!selected&&!panelOpen && <button
         type="button" className="game3d-add-furniture"
         onClick={()=>setPanelOpen(true)}><PlusCircle size={19}/> Scegli un mobile</button>}
       {mode==="furniture"&&adding && <div className="game3d-placement-hint">
