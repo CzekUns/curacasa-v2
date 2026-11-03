@@ -306,3 +306,7 @@
 @media (max-width: 390px) {
   .pc-builder-tabs button { font-size: .64rem; gap: 4px; }
 }
+
+@media (max-width: 850px) {
+  .pc-explore-tip { display: flex; min-height: 82px; }
+}
