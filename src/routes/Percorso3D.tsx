@@ -288,7 +288,7 @@ export function Percorso3D() {
         <button type="button" className={showAll?"active":""} aria-pressed={showAll}
           onClick={()=>changeView(true)}>Casa intera</button>
       </div>
-      {showAll && <div className="game3d-organize-entry">
+      {showAll && <div className={"game3d-organize-entry"+(mode==="play"?" game3d-organize-entry--play":"")}>
         <button type="button" onClick={organizeHouse}><LayoutGrid size={17}/> Organizza la casa</button>
       </div>}
       {mode==="play" && <div className="game3d-progress">
