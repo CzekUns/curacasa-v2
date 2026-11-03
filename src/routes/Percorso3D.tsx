@@ -14,6 +14,7 @@ import {
   saveRoomArrangement, type RoomArrangement,
 } from "../lib/percorso-arrangement";
 import { sampleFurniture } from "../components/percorso/three-room-model";
+import { ASSET_CATEGORIES, PRESET_ASSET_IDS, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
 import {
   FLOOR_STYLES, WALL_STYLES, FURNITURE, loadHouse, saveHouse,
   validPlacement, type Direction, type Furniture, type FurnitureType,
@@ -28,10 +29,6 @@ const tabs: {id: "play"|"furniture"|"tiles"; title:string; Icon:LucideIcon}[] = 
   {id:"furniture",title:"Arreda",Icon:Armchair},
   {id:"tiles",title:"Modifica",Icon:Grid2X2},
 ];
-const icons: Record<string,string> = {
-  divano:"🛋️",letto:"🛏️",tavolo:"▣",sedia:"♧",armadio:"▤",
-  lavatrice:"◉",vasca:"◠",pianta:"🌿",tappeto:"▦",frigo:"▥",
-};
 const floorSwatches: Record<FloorStyle,string> = {
   parquet:"#c6a783",piastrelle:"#dce6dd",cotto:"#c99276",
   terrazzo:"#e2d4d1",pietra:"#b8c8c4",
@@ -52,6 +49,8 @@ export function Percorso3D() {
   const [panelOpen,setPanelOpen] = useState(false);
   const [walls,setWalls] = useState(true);
   const [adding,setAdding] = useState<FurnitureType|null>(null);
+  const [assetSearch,setAssetSearch] = useState("");
+  const [assetCategory,setAssetCategory] = useState<AssetCategory|"Tutti">("Tutti");
   const [rotation,setRotation] = useState<Direction>(0);
   const [selectedId,setSelectedId] = useState<string|null>(null);
   const [movingFurnitureId,setMovingFurnitureId] = useState<string|null>(null);
@@ -84,6 +83,12 @@ export function Percorso3D() {
   const items=room?(preview?demoItems:room.furniture):[];
   const selected=items.find(item=>item.id===selectedId);
   const selectedSpec=FURNITURE.find(x=>x.id===selected?.type);
+  const visibleFurniture=useMemo(()=>FURNITURE.filter(entry=>{
+    const matchesCategory=assetCategory==="Tutti" || categoryForFurniture(entry.id)===assetCategory;
+    const q=assetSearch.trim().toLocaleLowerCase("it");
+    return matchesCategory && (!q || entry.label.toLocaleLowerCase("it").includes(q) ||
+      entry.id.toLocaleLowerCase("it").includes(q));
+  }),[assetSearch,assetCategory]);
   const relevantChores=room?data.chores.filter(chore =>
     eligibleRoomNames(data.rooms,data.roomDetails,getRoomRule(chore)).includes(room.name)):[];
   const completed=relevantChores.filter(chore=>hasCompletedToday(data,chore.id)).length;
@@ -92,7 +97,8 @@ export function Percorso3D() {
   const objectChores=selectedSpec?relevantChores.filter(chore=>{
     const title=chore.title.toLocaleLowerCase("it");
     const label=selectedSpec.label.toLocaleLowerCase("it");
-    return title.includes(label)|| (selected?.type==="frigo"&&title.includes("frigorifero"));
+    return PRESET_ASSET_IDS[chore.icon]===selected?.type ||
+      title.includes(label) || (selected?.type==="frigo"&&title.includes("frigorifero"));
   }):[];
 
   useEffect(()=>{
@@ -380,7 +386,7 @@ export function Percorso3D() {
           onClick={()=>selectFurniture(null)}><X size={17}/></button>
       </div>}
       {toast && <p className="game3d-toast" role="status">{toast}</p>}
-      {panelOpen && <section className="game3d-sheet open" aria-label="Comandi contestuali">
+      {panelOpen && <section className={"game3d-sheet open"+(mode==="furniture"?" game3d-sheet--catalog":"")} aria-label="Comandi contestuali">
         <button type="button" className="game3d-sheet-handle" aria-expanded={panelOpen}
           onClick={()=>setPanelOpen(v=>!v)}>
           <span className="game3d-handle-dash"/>
@@ -412,13 +418,25 @@ export function Percorso3D() {
                 <button type="button" onClick={()=>{applyShowcase();setPanelOpen(false);}}>Usa questa stanza</button>
               </div>
             </div>}
+            <div className="game3d-asset-tools">
+              <input type="search" value={assetSearch} onChange={event=>setAssetSearch(event.target.value)}
+                placeholder="Cerca arredi o faccende…" aria-label="Cerca un oggetto 3D" />
+              <span>{visibleFurniture.length} oggetti</span>
+            </div>
+            <div className="game3d-asset-categories" role="group" aria-label="Filtra gli arredi per ambiente">
+              {ASSET_CATEGORIES.map(category=><button type="button" key={category}
+                className={assetCategory===category?"active":""}
+                aria-pressed={assetCategory===category}
+                onClick={()=>setAssetCategory(category)}>{category}</button>)}
+            </div>
             <div className="game3d-catalog">
-              {FURNITURE.map(entry=><button type="button" key={entry.id} disabled={preview}
+              {visibleFurniture.map(entry=><button type="button" key={entry.id} disabled={preview}
                 className={adding===entry.id?"active":""}
                 onClick={()=>{setAdding(entry.id);setSelectedId(null);setPanelOpen(false);}}>
-                <span aria-hidden="true">{icons[entry.id]}</span><strong>{entry.label}</strong>
+                <span aria-hidden="true">{entry.icon}</span><strong>{entry.label}</strong>
                 <small>{entry.width}×{entry.height}</small>
               </button>)}
+              {!visibleFurniture.length && <p className="game3d-empty">Nessun asset corrisponde alla ricerca.</p>}
             </div>
             <p className="game3d-sheet-note">Scegli un mobile e tocca o trascina sulla stanza: l'anteprima diventa rossa se la posizione è occupata.</p>
           </>}
