@@ -1,0 +1,212 @@
+/* CuraCasa GameLab 3D — phone first, full available viewport, no scrolling shell. */
+.game3d-page {
+  --g-ink:#35594c;--g-muted:#819589;--g-accent:#598e75;
+  --g-pane:#fffdf9f0;--g-stroke:#e5ece2;
+  position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
+  width:100vw;height:100dvh;min-width:0;min-height:0;overflow:hidden;
+  overscroll-behavior:none;background:#eef3ec;color:var(--g-ink);
+  font-family:Montserrat,"Segoe UI",Arial,sans-serif;
+}
+.game3d-page *{box-sizing:border-box}
+.game3d-page button,.game3d-page select{font:inherit}
+.game3d-page button{border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.game3d-page button:focus-visible,.game3d-page a:focus-visible,.game3d-page select:focus-visible{
+  outline:3px solid #6db68d;outline-offset:2px;
+}
+.game3d-header{
+  position:relative;z-index:12;flex:0 0 calc(64px + env(safe-area-inset-top));
+  min-width:0;display:flex;align-items:center;gap:9px;
+  padding:env(safe-area-inset-top) 12px 0;
+  background:linear-gradient(100deg,#fcfaf7,#f2f4eb 74%,#f7e9e7);
+  border-bottom:1px solid #e3e8df;
+}
+.game3d-back,.game3d-head-icon{
+  flex:0 0 41px;display:grid;place-items:center;width:41px;height:41px;
+  color:var(--g-ink);border-radius:13px;background:#e8f0e7;
+}
+.game3d-head-icon:disabled{opacity:.35;cursor:not-allowed}
+.game3d-brand{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.game3d-overline{letter-spacing:.115em;font-size:.54rem;font-weight:900;color:#b3888e}
+.game3d-brand strong{font-size:clamp(.89rem,3.4vw,1.13rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game3d-coins{
+  display:flex;align-items:center;gap:4px;white-space:nowrap;max-width:76px;
+  font-size:.75rem;font-weight:900;color:#54876a;background:#fffdf8;
+  border:1px solid #e3e8dd;border-radius:50px;padding:10px 10px;
+}
+.game3d-stage{
+  position:relative;isolation:isolate;flex:1 1 0;min-height:0;min-width:0;
+  overflow:hidden;background:radial-gradient(ellipse at 50% 39%,#fdf9f0,#ecf3e8 68%,#e1ece3);
+}
+.game3d-scene,.game3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.game3d-scene{touch-action:none;user-select:none;overscroll-behavior:contain}
+.game3d-canvas{touch-action:none;user-select:none;outline:none}
+.game3d-no-room,.game3d-error{
+  position:absolute;z-index:6;top:42%;left:8%;right:8%;padding:22px;
+  border-radius:18px;background:#fffdf8;text-align:center;font-size:.82rem;
+  box-shadow:0 12px 40px #3b514b22;
+}
+.game3d-no-room a{color:#568c6f;text-decoration:underline}
+.game3d-stage-top{
+  position:absolute;top:12px;left:12px;right:12px;z-index:5;
+  display:flex;justify-content:space-between;align-items:start;gap:9px;pointer-events:none;
+}
+.game3d-stage-top > *{pointer-events:auto}
+.game3d-room-picker{
+  display:flex;flex-direction:column;gap:3px;min-width:130px;max-width:min(54vw,260px);
+  padding:9px 12px;background:var(--g-pane);border:1px solid var(--g-stroke);
+  border-radius:16px;box-shadow:0 7px 28px #43645319;
+}
+.game3d-room-picker span{font-size:.53rem;font-weight:900;letter-spacing:.14em;color:#a8858d}
+.game3d-room-picker select{
+  min-width:0;border:0;outline:none;color:var(--g-ink);background:transparent;
+  font-weight:900;font-size:.91rem;max-width:100%;
+}
+.game3d-top-actions{display:flex;gap:7px}
+.game3d-top-actions button{
+  width:43px;height:43px;display:grid;place-items:center;
+  border-radius:14px;background:var(--g-pane);color:#557a66;
+  border:1px solid var(--g-stroke);box-shadow:0 7px 28px #43645319;
+}
+.game3d-progress{
+  position:absolute;top:80px;left:12px;z-index:4;
+  width:min(266px,calc(100% - 24px));padding:11px 13px;
+  border:1px solid #e6ece1;border-radius:15px;background:#fffdf8e8;
+  box-shadow:0 5px 21px #4e746313;backdrop-filter:blur(6px);
+}
+.game3d-progress-copy{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:.65rem}
+.game3d-progress-copy span{font-size:.56rem;color:#aa8a8d;font-weight:860;letter-spacing:.06em}
+.game3d-progress-copy strong{color:#41795e;white-space:nowrap}
+.game3d-progress-track{height:6px;background:#e6eae0;border-radius:100px;margin-top:7px;overflow:hidden}
+.game3d-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#b9d7aa,#63a581);border-radius:inherit;transition:width .3s ease}
+.game3d-camera-dock{
+  position:absolute;z-index:5;right:10px;top:48%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:6px;
+  padding:6px;border-radius:19px;border:1px solid #e5e9df;
+  background:#fffdf9df;box-shadow:0 7px 28px #4364531c;backdrop-filter:blur(8px);
+}
+.game3d-camera-dock button{
+  width:39px;height:39px;display:grid;place-items:center;
+  border-radius:12px;background:#eff4ed;color:#5e866f;
+}
+.game3d-camera-dock button:active{background:#d6e8d7}
+.game3d-showcase{
+  position:absolute;z-index:6;left:12px;right:70px;bottom:122px;
+  max-width:400px;display:flex;flex-direction:column;gap:8px;
+  padding:12px 13px;background:#fffefaed;border:1px solid #e6ecdf;
+  box-shadow:0 10px 30px #4b5a481c;border-radius:17px;
+}
+.game3d-showcase > div:first-child{display:flex;flex-direction:column;gap:3px}
+.game3d-showcase strong{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#46775e}
+.game3d-showcase small{font-size:.61rem;color:#849289;line-height:1.4}
+.game3d-showcase-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.game3d-showcase-actions button{
+  padding:10px 6px;border-radius:11px;background:#e8eee6;color:#5a7b68;
+  font-weight:840;font-size:.67rem;
+}
+.game3d-showcase-actions button:last-child{background:#5b9073;color:white}
+.game3d-showcase-actions button:disabled{opacity:.35}
+.game3d-placement-hint,.game3d-selected{
+  position:absolute;z-index:7;left:10px;right:10px;bottom:110px;
+  max-width:450px;margin:auto;min-height:54px;display:flex;align-items:center;gap:8px;
+  border:1px solid #dfeadd;border-radius:16px;
+  padding:7px 9px;background:#fffefaef;box-shadow:0 7px 28px #36564125;
+}
+.game3d-placement-hint span{flex:1;font-size:.71rem;line-height:1.35}
+.game3d-placement-hint button,.game3d-selected button{
+  flex:0 0 39px;height:39px;display:grid;place-items:center;border-radius:11px;
+  background:#e8f1e6;color:#4a8065;font-size:.72rem;font-weight:800;
+}
+.game3d-selected > div{min-width:0;display:flex;flex:1;flex-direction:column;gap:3px}
+.game3d-selected strong{font-size:.77rem}
+.game3d-selected span{font-size:.62rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#8b9d8c}
+.game3d-toast{
+  position:absolute;left:50%;bottom:63px;z-index:4;transform:translateX(-50%);
+  max-width:calc(100% - 30px);margin:0;padding:7px 12px;
+  border-radius:30px;border:1px solid #e5eae1;background:#fffefaad;
+  color:#708878;font-size:.60rem;font-weight:750;line-height:1.35;
+  text-align:center;pointer-events:none;white-space:normal;box-shadow:0 4px 14px #35533d11;
+}
+.game3d-sheet{
+  position:absolute;z-index:9;bottom:0;left:8px;right:8px;
+  background:#fffefaed;border:1px solid #e5e9df;
+  border-radius:17px 17px 0 0;box-shadow:0 -8px 35px #37584321;
+  max-height:min(40dvh,340px);overflow:hidden;backdrop-filter:blur(12px);
+}
+.game3d-sheet.open{overflow-y:auto;overscroll-behavior:contain}
+.game3d-sheet-handle{
+  width:100%;height:46px;display:flex;align-items:center;gap:9px;text-align:left;
+  padding:8px 12px;background:#fffdf8;color:#4b7b63;
+  position:sticky;top:0;z-index:2;border-bottom:1px solid #ebeee7!important;
+}
+.game3d-handle-dash{width:5px;height:21px;flex:0 0 5px;border-radius:9px;background:#b7d5bf}
+.game3d-sheet-handle strong{flex:1;font-size:.77rem;font-weight:900}
+.game3d-sheet-content{padding:12px 12px max(16px,env(safe-area-inset-bottom));display:grid;gap:12px}
+.game3d-missions{display:grid;gap:6px;max-height:135px;overflow:auto;scrollbar-width:thin}
+.game3d-mission{display:flex;align-items:center;gap:9px;font-size:.72rem;padding:10px;border-radius:11px;background:#f6f8f2;color:#5b7f69}
+.game3d-mission svg{flex:0 0 18px}
+.game3d-mission span{flex:1;overflow:hidden;text-overflow:ellipsis}
+.game3d-mission small{color:#879b8e;font-size:.61rem;white-space:nowrap}
+.game3d-mission.done{opacity:.64}
+.game3d-main-cta{display:block;text-align:center;background:#588a70;color:white;font-weight:880;font-size:.76rem;padding:12px;border-radius:11px;text-decoration:none}
+.game3d-object-context{display:flex;flex-direction:column;gap:5px;background:#eff5ee;border-radius:11px;padding:11px}
+.game3d-object-context strong{font-size:.76rem}
+.game3d-object-context span{font-size:.66rem;color:#82998b;line-height:1.4}
+.game3d-empty,.game3d-sheet-note{margin:0;color:#85958b;font-size:.70rem;line-height:1.45}
+.game3d-catalog{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding:2px 2px 10px}
+.game3d-catalog button{
+  flex:0 0 77px;display:flex;flex-direction:column;align-items:center;
+  gap:4px;min-height:91px;padding:8px 4px;border:1px solid #dfe9dc;
+  border-radius:12px;background:#f7faf4;color:#5b826a;
+}
+.game3d-catalog button.active{border-color:#7eae8d;background:#e6f2e5}
+.game3d-catalog button:disabled{opacity:.4}
+.game3d-catalog button span{display:grid;place-items:center;height:31px;font-size:1.55rem}
+.game3d-catalog button strong{font-size:.62rem;line-height:1.1;white-space:nowrap}
+.game3d-catalog button small{font-size:.58rem;color:#9cad9f}
+.game3d-finish-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.game3d-finish-tabs button{padding:10px;border-radius:11px;color:#69836f;background:#eef3eb;font-weight:850;font-size:.70rem}
+.game3d-finish-tabs button.active{background:#dcebdd;color:#427257}
+.game3d-finishes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.game3d-finishes button{display:flex;align-items:center;gap:8px;text-align:left;min-height:43px;padding:7px;border:1px solid #e1e9df;background:#f9faf7;border-radius:10px;color:#618473}
+.game3d-finishes button.selected{border-color:#80b596;background:#ebf5ea}
+.game3d-finishes button strong{flex:1;min-width:0;font-size:.67rem}
+.game3d-finish-swatch{display:block;width:27px;height:27px;flex:0 0 27px;border-radius:7px;border:1px solid #8c998b45}
+.game3d-tabs{
+  z-index:11;flex:0 0 calc(72px + env(safe-area-inset-bottom));
+  width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;align-items:stretch;padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+  background:#fffefa;box-shadow:0 -6px 26px #446f5122;
+  border-top:1px solid #e6eae2;
+}
+.game3d-tabs button{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:4px;min-width:0;border-radius:13px;background:transparent;
+  color:#91a497;font-size:.68rem;font-weight:830;
+}
+.game3d-tabs button.active{background:#e6f1e6;box-shadow:inset 0 0 0 1px #c1dac7;color:#39795b}
+@media (max-width:370px){
+  .game3d-header{gap:5px;padding-left:7px;padding-right:7px}
+  .game3d-coins{padding:8px 6px;font-size:.67rem}
+  .game3d-back,.game3d-head-icon{width:36px;height:36px;flex-basis:36px}
+  .game3d-brand strong{font-size:.82rem}
+  .game3d-room-picker{min-width:112px}
+  .game3d-showcase{right:58px;bottom:114px;padding:9px}
+  .game3d-progress{top:72px}
+}
+@media (min-width:860px){
+  .game3d-stage-top{top:18px;left:24px;right:24px}
+  .game3d-progress{left:24px;top:88px}
+  .game3d-showcase{left:24px}
+  .game3d-camera-dock{right:24px}
+  .game3d-sheet{left:50%;right:auto;transform:translateX(-50%);width:min(520px,calc(100% - 30px))}
+  .game3d-tabs{max-width:620px;align-self:center;border-radius:18px 18px 0 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .game3d-page *{transition:none!important}
+}
+
+
+.game3d-demo-choice { display:grid;gap:9px;padding:10px;border-radius:12px;background:#eff5ee; }
+.game3d-demo-choice > div { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+.game3d-demo-choice button { border-radius:10px;background:#dfe8df;color:#5b7c6a;padding:11px 6px;font-size:.68rem;font-weight:850; }
+.game3d-demo-choice button:last-child { color:#fff;background:#568d70; }

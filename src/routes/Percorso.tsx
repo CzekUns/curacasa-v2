@@ -452,7 +452,7 @@ export function Percorso() {
   return <div className="percorso-page" ref={pageRef}>
     <header className="pc-mobile-header">
       <Link to="/app" className="pc-back" aria-label="Torna a CuraCasa"><ChevronLeft size={21} /> CuraCasa</Link>
-      <div className="pc-header-center"><span className="pc-lab-label">LAB</span><strong>Percorso Casa</strong></div>
+      <div className="pc-header-center"><Link to="/percorso3d" className="pc-lab-label pc-lab-3d-link" title="Prova la nuova casa 3D">PROVA 3D</Link><strong>Percorso Casa</strong></div>
       <div className="pc-header-actions">
         <button type="button" className="pc-icon-button" disabled={!undoAvailable}
           aria-label="Annulla ultima modifica" onClick={undoLastChange}><Undo2 size={19} /></button>
