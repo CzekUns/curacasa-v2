@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Box, Check, ChevronLeft, Eraser, Eye, EyeOff, Grid2X2, Hand, Layers3,
   Minus, Paintbrush, Plus, RotateCcw, RotateCw, Trash2, X, ZoomIn,
-  Coins, Trophy, Undo2, ChevronDown, ChevronUp, ClipboardList,
+  Coins, Trophy, Undo2, ChevronDown, ChevronUp, ClipboardList, Maximize2, Minimize2,
 } from "lucide-react";
 import { IsometricBoard } from "../components/percorso/IsometricBoard";
 import { isoDeltaToTiles, pinchCamera, clampStageZoom } from "../lib/percorso-gestures";
@@ -59,6 +59,7 @@ export function Percorso() {
   const houseRef = useRef(house);
   const [roomId, setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [view, setView] = useState<Direction>(0);
+  const [immersive, setImmersive] = useState(false);
   const [mode, setMode] = useState<Mode>("gioca");
   const [toolsOpen, setToolsOpen] = useState(false);
   const undoStack = useRef<HouseLayout[]>([]);
@@ -98,6 +99,27 @@ export function Percorso() {
   const doneToday = new Set(appData.logs.filter((log) =>
     new Date(log.completedAt).toDateString() === new Date().toDateString()).map((log) => log.choreId)).size;
   const walletBalance = getWallet(appData).balance;
+
+  useEffect(() => {
+    const refreshFullscreen = () => setImmersive(Boolean(document.fullscreenElement));
+    document.addEventListener("fullscreenchange", refreshFullscreen);
+    return () => document.removeEventListener("fullscreenchange", refreshFullscreen);
+  }, []);
+
+  async function toggleImmersive() {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else if (document.documentElement.requestFullscreen) {
+        // A user tap is required; the in-app browser can still decline the request.
+        await document.documentElement.requestFullscreen();
+      } else {
+        setMessage("Per togliere la barra del browser, installa CuraCasa nella schermata Home.");
+      }
+    } catch {
+      setMessage("Questo browser blocca lo schermo intero. Apri CuraCasa dalla schermata Home.");
+    }
+  }
 
   useEffect(() => { cameraRef.current = camera; }, [camera]);
   useEffect(() => { houseRef.current = house; }, [house]);
@@ -489,6 +511,12 @@ export function Percorso() {
             <button type="button" title="Ruota a sinistra" aria-label="Ruota a sinistra" onClick={() => setView((before) => direction(before - 1))}><RotateCcw size={18} /></button>
             <span>{view * 90}°</span>
             <button type="button" title="Ruota a destra" aria-label="Ruota a destra" onClick={() => setView((before) => direction(before + 1))}><RotateCw size={18} /></button>
+            <button type="button" className="pc-fullscreen-toggle"
+              title={immersive ? "Esci dallo schermo intero" : "Schermo intero"}
+              aria-label={immersive ? "Esci dallo schermo intero" : "Apri a schermo intero"}
+              aria-pressed={immersive} onClick={toggleImmersive}>
+              {immersive ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
           </div>
           <div className="pc-zoom-controls">
             <button type="button" aria-label="Rimpicciolisci scena" onClick={() => zoomBy(1 / 1.3)}><Minus size={17} /></button>
