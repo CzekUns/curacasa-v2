@@ -54,6 +54,7 @@ export function Percorso3D() {
   const [adding,setAdding] = useState<FurnitureType|null>(null);
   const [rotation,setRotation] = useState<Direction>(0);
   const [selectedId,setSelectedId] = useState<string|null>(null);
+  const [movingFurnitureId,setMovingFurnitureId] = useState<string|null>(null);
   const [finishPart,setFinishPart] = useState<"floor"|"wall">("floor");
   const [showcase,setShowcase] = useState(true);
   const [toast,setToast] = useState("");
@@ -154,30 +155,45 @@ export function Percorso3D() {
     setHouse(previous.house);saveHouse(previous.house);
     setArrangement(previous.arrangement);saveRoomArrangement(previous.arrangement);
     setCanUndo(undoRef.current.length>0);
-    setSelectedId(null);setAdding(null);
+    setSelectedId(null);setAdding(null);setMovingFurnitureId(null);
     setToast("Ultima modifica annullata.");
   }
   function applyShowcase() {
     if(!room || !preview || !demoItems.length)return;
-    updateRoom({...room,furniture:demoItems.map(item=>({...item,id:"arredo_"+crypto.randomUUID()}))});
+    const saved=demoItems.map(item=>({...item,id:"arredo_"+crypto.randomUUID()}));
+    const chosen=selectedId && demoItems.find(item=>item.id===selectedId);
+    updateRoom({...room,furniture:saved});
+    setSelectedId(chosen?saved.find(item=>item.type===chosen.type)?.id??null:null);
+    setMovingFurnitureId(null);
     setShowcase(false);
-    setToast("Stanza d'esempio salvata! Puoi spostare ogni oggetto.");
+    setToast("Stanza salvata. Tocca un mobile e usa Sposta.");
+  }
+  function selectFurniture(id:string|null) {
+    setSelectedId(id);
+    setMovingFurnitureId(null);
+    if(id){setAdding(null);setPanelOpen(false);}
+  }
+  function startMovingFurniture() {
+    if(!selected || preview)return;
+    setMovingFurnitureId(selected.id);
+    setPanelOpen(false);
+    setToast("Trascina il mobile oppure tocca un tile libero per spostarlo.");
   }
   function chooseRoom(id:string) {
-    setRoomId(id);setSelectedId(null);setAdding(null);
+    setRoomId(id);setSelectedId(null);setAdding(null);setMovingFurnitureId(null);
     setShowcase(true);setPanelOpen(false);
     setShowAll(false);
     setMode("play");
     sceneRef.current?.fit();
   }
   function chooseMode(next:GameMode) {
-    setMode(next);setAdding(null);setSelectedId(null);
+    setMode(next);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);
     if(next==="furniture")setShowAll(false);
     setPanelOpen(next==="furniture");
     if(next==="tiles")setToast("Tocca il pavimento per togliere tile; tocca le caselle verdi per aggiungerli.");
   }
   function changeView(all:boolean){
-    setShowAll(all);setAdding(null);setSelectedId(null);setPanelOpen(false);
+    setShowAll(all);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setPanelOpen(false);
     if(all)setMode("play");
     setToast(all?"Trascina una stanza per sistemarla. Toccala per entrarci.":"");
   }
@@ -208,7 +224,7 @@ export function Percorso3D() {
     if(preview){setToast("Prima usa l'esempio oppure scegli «Parti da zero».");return;}
     if(!validPlacement(room,item)){setToast("Spazio occupato: prova un'altra casella.");return;}
     updateRoom({...room,furniture:[...room.furniture,item]});
-    setSelectedId(item.id);setAdding(null);
+    setSelectedId(item.id);setAdding(null);setMovingFurnitureId(null);
     setPanelOpen(false);
     setToast("Arredo posizionato. Toccalo per spostarlo o ruotarlo.");
   }
@@ -217,6 +233,8 @@ export function Percorso3D() {
     const item=room.furniture.find(obj=>obj.id===id);
     if(!item || !validPlacement(room,{...item,x,y},id))return;
     updateRoom({...room,furniture:room.furniture.map(obj=>obj.id===id?{...obj,x,y}:obj)});
+    setSelectedId(id);
+    setMovingFurnitureId(null);
     setToast("Mobile spostato.");
   }
   function rotateSelected() {
@@ -232,6 +250,7 @@ export function Percorso3D() {
   function deleteSelected() {
     if(!room || !selected || preview)return;
     updateRoom({...room,furniture:room.furniture.filter(obj=>obj.id!==selected.id)});
+    setMovingFurnitureId(null);
     setSelectedId(null);setToast("Arredo rimosso. Puoi annullare.");
   }
   function finish(style:FloorStyle|WallStyle) {
@@ -262,10 +281,11 @@ export function Percorso3D() {
       {sceneRoom ? <Room3DHouseScene ref={sceneRef} room={sceneRoom}
         rooms={showAll ? overviewRooms : [sceneRoom]} items={items} mode={mode}
         showAll={showAll} movingRooms={showAll}
-        adding={adding} rotation={rotation} selectedId={selectedId} showWalls={walls}
-        panelOpen={panelOpen} onPlace={place} onMove={move}
+        adding={adding} rotation={rotation} selectedId={selectedId}
+        movingFurnitureId={movingFurnitureId} isShowcasePreview={preview}
+        showWalls={walls} panelOpen={panelOpen} onPlace={place} onMove={move}
         onPickRoom={chooseRoom} onMoveRoom={shiftRoom} onTile={changeTile}
-        onSelect={(id)=>{setSelectedId(id);if(id){setAdding(null);setPanelOpen(false);}}}
+        onSelect={selectFurniture}
         onFinish={(part)=>{setFinishPart(part);setPanelOpen(true);}}
         onError={setToast}/> : <div className="game3d-no-room">Aggiungi una stanza in CuraCasa per iniziare. <Link to="/app">Vai alle stanze</Link></div>}
       <div className="game3d-stage-top game3d-stage-top--simple">
@@ -296,7 +316,7 @@ export function Percorso3D() {
         <div className="game3d-progress-copy"><span>{showAll?"CASA · "+house.rooms.length+" STANZE":"OGGI · "+roomName}</span><strong>{completed}/{relevantChores.length} missioni</strong></div>
         <div className="game3d-progress-track"><span style={{width:completionPercent+"%"}}/></div>
       </button>}
-      {preview && !showAll && <div className="game3d-showcase">
+      {preview && !showAll && !selected && <div className="game3d-showcase">
         <div><strong><Sparkles size={15}/> Stanza d'esempio</strong><small>Anteprima: nulla viene salvato automaticamente</small></div>
         <div className="game3d-showcase-actions">
           <button type="button" onClick={()=>{setShowcase(false);setToast("Stanza vuota: inizia ad arredare.");}}>Parti da zero</button>
@@ -331,16 +351,33 @@ export function Percorso3D() {
           onClick={()=>setRotation(v=>((v+1)%4) as Direction)}><RotateCw size={18}/></button>
         <button type="button" aria-label="Annulla aggiunta" onClick={()=>{setAdding(null);setPanelOpen(true);}}><X size={19}/></button>
       </div>}
-      {selected && !preview && !adding && <div className="game3d-selected">
-        <div><strong>{selectedSpec?.label}</strong><span>{objectChores.length ?
-          objectChores.filter(c=>hasCompletedToday(data,c.id)).length+"/"+objectChores.length+" faccende completate":
-          "Tocca e trascina per spostare"}</span></div>
-        {mode==="furniture" ? <>
-          <button type="button" aria-label="Ruota mobile" onClick={rotateSelected}><RotateCw size={18}/></button>
-          <button type="button" aria-label="Elimina mobile" onClick={deleteSelected}><Trash2 size={18}/></button>
-        </> : <button type="button" onClick={()=>setPanelOpen(true)}>Dettagli</button>}
-        <button type="button" aria-label="Deseleziona mobile" onClick={()=>setSelectedId(null)}><X size={18}/></button>
-      </div>}
+      {selected && !adding && !showAll && mode!=="tiles" && <div
+        className={"game3d-selected game3d-object-menu"+(movingFurnitureId?" game3d-object-menu--moving":"")}
+        role="group" aria-label={"Azioni per "+(selectedSpec?.label??"mobile")}>
+        <div className="game3d-object-label">
+          <strong>{selectedSpec?.label}</strong>
+          <span>{preview?"Anteprima non salvata":movingFurnitureId?
+            "Trascina o tocca dove posizionarlo":
+            objectChores.length?objectChores.filter(c=>hasCompletedToday(data,c.id)).length+"/"+objectChores.length+" faccende":
+            "Tocca un'azione"}</span>
+        </div>
+        {preview ? <button type="button" className="game3d-object-save"
+          onClick={applyShowcase}><Check size={19}/><small>Usa questa</small></button> : <>
+          <button type="button" className={movingFurnitureId?"active":""}
+            aria-pressed={Boolean(movingFurnitureId)} onClick={()=>
+              movingFurnitureId?setMovingFurnitureId(null):startMovingFurniture()}>
+            <Move size={19}/><small>{movingFurnitureId?"Annulla":"Sposta"}</small>
+          </button>
+          <button type="button" aria-label="Ruota mobile" onClick={rotateSelected}>
+            <RotateCw size={19}/><small>Ruota</small>
+          </button>
+          <button type="button" aria-label="Rimuovi mobile" onClick={deleteSelected}>
+            <Trash2 size={19}/><small>Rimuovi</small>
+          </button>
+        </>}
+        <button type="button" className="game3d-object-close" aria-label="Chiudi menu mobile"
+          onClick={()=>selectFurniture(null)}><X size={17}/></button>
+      </div>
       {toast && <p className="game3d-toast" role="status">{toast}</p>}
       {panelOpen && <section className="game3d-sheet open" aria-label="Comandi contestuali">
         <button type="button" className="game3d-sheet-handle" aria-expanded={panelOpen}
