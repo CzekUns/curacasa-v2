@@ -176,15 +176,16 @@ export function Percorso() {
     setSelectedId(null);
     setPalette(null);
     setResetConfirm(false);
-    setToolsOpen(true);
+    setToolsOpen(false);
     setCamera(defaultCamera);
     setMessage("Stanza selezionata: il progetto è salvato separatamente dalle faccende.");
   }
-  function chooseMode(next: Mode) {
+  function chooseMode(next: Mode, revealTools = false) {
     setMode(next);
     setPalette(null);
     setSelectedId(null);
-    setToolsOpen(true);
+    // Keep the room visible when switching the main tab. Editing controls open on demand.
+    setToolsOpen(revealTools);
     if (next === "sposta") setShowAll(true);
     if (next === "gioca" || next === "forma" || next === "arredi") setShowAll(false);
     setMessage({
@@ -438,7 +439,7 @@ export function Percorso() {
     </header>
 
     <main className="pc-workspace">
-      <section className="pc-stage" aria-label="Editor isometrico">
+      <section className={"pc-stage" + (toolsOpen ? " pc-stage--tools-open" : "")} aria-label="Editor isometrico">
         <div className="pc-stage-toolbar">
           <label className="pc-room-picker"><span>Stanza</span>
             <select value={activeRoomId} aria-label="Scegli stanza"
@@ -527,9 +528,9 @@ export function Percorso() {
           <p className="pc-tip">Le finiture vengono applicate all'intera superficie di questa stanza.</p>
         </div> : <>
           {(mode === "forma" || mode === "arredi" || mode === "sposta") && <div className="pc-builder-tabs" role="group" aria-label="Strumenti di costruzione">
-            <button type="button" className={mode === "forma" ? "active" : ""} aria-pressed={mode === "forma"} onClick={() => chooseMode("forma")}><Eraser size={17} /> Forma</button>
-            <button type="button" className={mode === "arredi" ? "active" : ""} aria-pressed={mode === "arredi"} onClick={() => chooseMode("arredi")}><Box size={17} /> Arredi</button>
-            <button type="button" className={mode === "sposta" ? "active" : ""} aria-pressed={mode === "sposta"} onClick={() => chooseMode("sposta")}><Grid2X2 size={17} /> Stanze</button>
+            <button type="button" className={mode === "forma" ? "active" : ""} aria-pressed={mode === "forma"} onClick={() => chooseMode("forma", true)}><Eraser size={17} /> Forma</button>
+            <button type="button" className={mode === "arredi" ? "active" : ""} aria-pressed={mode === "arredi"} onClick={() => chooseMode("arredi", true)}><Box size={17} /> Arredi</button>
+            <button type="button" className={mode === "sposta" ? "active" : ""} aria-pressed={mode === "sposta"} onClick={() => chooseMode("sposta", true)}><Grid2X2 size={17} /> Stanze</button>
           </div>}
           {mode === "gioca" && <div className="pc-context-content pc-missions">
             <div className="pc-context-heading">
