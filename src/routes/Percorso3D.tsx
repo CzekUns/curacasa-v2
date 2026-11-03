@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft, Armchair, Brush, Check, ChevronDown, ChevronUp, Coins,
-  Eye, EyeOff, Maximize, Minus, Plus, RotateCcw, RotateCw,
+  ArrowLeft, Armchair, Brush, Check, Coins,
+  Eye, EyeOff, Maximize, RotateCcw, RotateCw,
   Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, WandSparkles,
   ChevronLeft, ChevronRight, House, PlusCircle, type LucideIcon,
 } from "lucide-react";
@@ -49,7 +49,6 @@ export function Percorso3D() {
   const [roomId,setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [mode,setMode] = useState<GameMode>("play");
   const [showAll,setShowAll] = useState(false);
-  const [movingRooms,setMovingRooms] = useState(false);
   const [panelOpen,setPanelOpen] = useState(false);
   const [walls,setWalls] = useState(true);
   const [adding,setAdding] = useState<FurnitureType|null>(null);
@@ -167,18 +166,18 @@ export function Percorso3D() {
   function chooseRoom(id:string) {
     setRoomId(id);setSelectedId(null);setAdding(null);
     setShowcase(true);setPanelOpen(false);
-    setShowAll(false);setMovingRooms(false);
+    setShowAll(false);
     setMode("play");
     sceneRef.current?.fit();
   }
   function chooseMode(next:GameMode) {
-    setMode(next);setAdding(null);setSelectedId(null);setMovingRooms(false);
+    setMode(next);setAdding(null);setSelectedId(null);
     if(next==="furniture")setShowAll(false);
     setPanelOpen(next==="furniture");
     if(next==="tiles")setToast("Tocca il pavimento per togliere tile; tocca le caselle verdi per aggiungerli.");
   }
   function changeView(all:boolean){
-    setShowAll(all);setAdding(null);setSelectedId(null);setMovingRooms(all);setPanelOpen(false);
+    setShowAll(all);setAdding(null);setSelectedId(null);setPanelOpen(false);
     if(all)setMode("play");
     setToast(all?"Trascina una stanza per sistemarla. Toccala per entrarci.":"");
   }
@@ -307,7 +306,10 @@ export function Percorso3D() {
       <div className="game3d-camera-dock game3d-camera-dock--simple" role="group" aria-label="Visuale">
         <button type="button" aria-label="Ruota a sinistra" onClick={()=>sceneRef.current?.turn(-1)}><RotateCcw size={19}/></button>
         <button type="button" aria-label="Ruota a destra" onClick={()=>sceneRef.current?.turn(1)}><RotateCw size={19}/></button>
-        <button type="button" aria-label="Centra la visuale" onClick={()=>sceneRef.current?.fit()}><Maximize size={17}/></button>
+        <button type="button" aria-label="Mostra o nascondi le pareti"
+          aria-pressed={walls} onClick={()=>setWalls(value=>!value)}>
+          {walls?<Eye size={18}/>:<EyeOff size={18}/>}
+        </button>
       </div>
       {!showAll && (mode==="tiles"||mode==="finishes") && <div className="game3d-quicktools"
         role="group" aria-label="Strumenti per modificare la stanza">
