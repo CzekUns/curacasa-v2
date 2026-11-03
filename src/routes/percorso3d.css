@@ -336,3 +336,140 @@
 @media(min-width:860px) {
   .game3d-organize-entry--play {top:213px;}
 }
+
+
+/* GameLab touch-first — 3 clear actions, no room dropdown or permanent sheet. */
+.game3d-stage-top--simple {
+  top:12px;left:10px;right:10px;
+  align-items:center;gap:8px;
+}
+.game3d-room-nav {
+  display:flex;align-items:center;justify-content:space-between;
+  min-width:0;flex:1 1 0;max-width: min(69%,350px);
+  height:46px;padding:4px 5px;
+  border-radius:16px;border:1px solid #e0e8db;
+  background:#fffdf9ef;box-shadow:0 5px 20px #4b74571a;
+  backdrop-filter:blur(6px);pointer-events:auto;
+}
+.game3d-room-nav button {
+  width:36px;height:36px;flex:0 0 36px;
+  display:grid;place-items:center;
+  color:#578366;background:#edf4e9;border-radius:11px;
+}
+.game3d-room-nav button:disabled {opacity:.3;cursor:not-allowed}
+.game3d-room-title {
+  min-width:0;flex:1;display:flex;align-items:center;justify-content:center;
+  gap:6px;font-size:.76rem;font-weight:900;color:#416e56;
+  text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.game3d-view-toggle {
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  max-width:38%;min-width:101px;min-height:46px;padding:7px 11px;
+  border:1px solid #dae8db;border-radius:16px;
+  background:#fffdf9ef;color:#578065;
+  font-size:.68rem;font-weight:900;white-space:nowrap;
+  box-shadow:0 5px 20px #4b74571a;pointer-events:auto;
+}
+.game3d-view-toggle.active {background:#dfeee0;color:#3c7656}
+.game3d-autoplace-pill {
+  position:absolute;top:73px;right:10px;z-index:7;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:41px;padding:8px 13px;
+  border:1px solid #9fc8ac;border-radius:14px;
+  color:#47795f;background:#f8fcf5ed;
+  font-size:.69rem;font-weight:900;
+  box-shadow:0 5px 22px #46734c22;
+}
+.game3d-progress {
+  top:72px;left:10px;
+  width:min(242px,calc(100% - 83px));
+}
+.game3d-progress--touch {
+  display:block;text-align:left;cursor:pointer;
+}
+.game3d-progress--touch:active {
+  background:#e6f1e5;
+}
+.game3d-camera-dock--simple {
+  top:47%;right:9px;gap:3px;padding:5px;
+  border-radius:17px;
+}
+.game3d-camera-dock--simple button {
+  width:36px;height:36px;border-radius:10px;
+}
+.game3d-quicktools {
+  position:absolute;left:50%;bottom:63px;z-index:8;
+  transform:translateX(-50%);
+  display:grid;grid-template-columns:1fr 1fr;gap:5px;
+  width:min(262px,calc(100% - 76px));
+  border:1px solid #dce8d9;padding:5px;
+  border-radius:17px;background:#fffdf9f1;
+  box-shadow:0 8px 25px #466f4f24;
+  backdrop-filter:blur(8px);
+}
+.game3d-quicktools button {
+  min-height:42px;display:flex;align-items:center;justify-content:center;
+  gap:6px;min-width:0;
+  border-radius:12px;color:#668574;background:#f2f6ee;
+  font-weight:900;font-size:.73rem;
+}
+.game3d-quicktools button.active {
+  background:#dceee0;color:#397454;
+}
+.game3d-add-furniture {
+  position:absolute;left:50%;bottom:66px;z-index:8;
+  transform:translateX(-50%);
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:46px;min-width:180px;padding:10px 17px;
+  border-radius:17px;color:#fff;background:#53896b;
+  font-size:.75rem;font-weight:890;white-space:nowrap;
+  box-shadow:0 8px 25px #3d694727;
+}
+.game3d-sheet {
+  max-height:min(39dvh,320px);
+  border-radius:20px 20px 0 0;
+}
+.game3d-sheet-handle {
+  height:47px;
+}
+.game3d-sheet-content {
+  padding:9px 11px 12px;
+  gap:9px;
+}
+.game3d-sheet-note {font-size:.64rem}
+.game3d-tabs {
+  flex-basis:calc(68px + env(safe-area-inset-bottom));
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  max-width:100%;
+  gap:7px;
+  padding:5px 9px calc(5px + env(safe-area-inset-bottom));
+}
+.game3d-tabs button {font-size:.69rem;gap:2px}
+.game3d-tabs button svg {width:23px;height:23px}
+.game3d-toast {
+  bottom:51px;max-width:min(340px,calc(100% - 38px));
+  background:#fffefaed;font-size:.66rem;z-index:10;
+}
+.game3d-showcase {
+  right:62px;bottom:96px;padding:10px 11px;gap:6px;
+  box-shadow:0 5px 24px #4b5a481c;
+}
+.game3d-showcase-actions button {padding:9px 5px}
+@media(max-width:380px){
+  .game3d-stage-top--simple {left:7px;right:7px;gap:5px}
+  .game3d-room-nav {max-width:65%;height:44px}
+  .game3d-room-nav button{width:30px;height:33px;flex-basis:30px}
+  .game3d-room-title{font-size:.69rem}
+  .game3d-view-toggle{min-width:95px;min-height:44px;padding:6px 8px;font-size:.63rem}
+  .game3d-autoplace-pill{top:69px;right:7px}
+  .game3d-progress{top:68px;left:7px}
+  .game3d-quicktools{bottom:59px}
+  .game3d-add-furniture{bottom:63px}
+}
+@media(min-width:860px){
+  .game3d-stage-top--simple{top:18px;left:24px;right:24px}
+  .game3d-progress{top:85px;left:24px}
+  .game3d-autoplace-pill{top:85px;right:24px}
+  .game3d-quicktools{bottom:70px}
+  .game3d-add-furniture{bottom:70px}
+}

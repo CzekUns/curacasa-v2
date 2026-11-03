@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft, Armchair, Brush, Check, ChevronDown, ChevronUp, Coins,
-  Eye, EyeOff, Maximize, Minus, Plus, RotateCcw, RotateCw,
-  Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, Move, ArrowUp, ArrowDown, LayoutGrid, WandSparkles, type LucideIcon,
+  ArrowLeft, Armchair, Brush, Check, Coins,
+  Eye, EyeOff, Maximize, RotateCcw, RotateCw,
+  Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, WandSparkles,
+  ChevronLeft, ChevronRight, House, PlusCircle, type LucideIcon,
 } from "lucide-react";
 import { Room3DHouseScene, type House3DHandle, type GameMode } from "../components/percorso/Room3DHouseScene";
 import { editHouseTile } from "../lib/percorso-grid";
 import {
-  autoArrangeRooms, changeRoomOrder, loadRoomArrangement,
+  autoArrangeRooms, loadRoomArrangement,
   moveRoomInArrangement, positionedRooms, reconcileRoomArrangement,
   saveRoomArrangement, type RoomArrangement,
 } from "../lib/percorso-arrangement";
@@ -22,11 +23,10 @@ import { eligibleRoomNames, getRoomRule } from "../lib/chore-rooms";
 import { getWallet, hasCompletedToday, loadData, type AppData } from "../lib/store";
 import "./percorso3d.css";
 
-const tabs: {id: GameMode; title:string; Icon:LucideIcon}[] = [
-  {id:"play", title:"Gioca",Icon:Trophy},
+const tabs: {id: "play"|"furniture"|"tiles"; title:string; Icon:LucideIcon}[] = [
+  {id:"play", title:"Casa",Icon:Trophy},
   {id:"furniture",title:"Arreda",Icon:Armchair},
-  {id:"finishes",title:"Decora",Icon:Brush},
-  {id:"tiles",title:"Tile",Icon:Grid2X2},
+  {id:"tiles",title:"Modifica",Icon:Grid2X2},
 ];
 const icons: Record<string,string> = {
   divano:"🛋️",letto:"🛏️",tavolo:"▣",sedia:"♧",armadio:"▤",
@@ -49,7 +49,6 @@ export function Percorso3D() {
   const [roomId,setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [mode,setMode] = useState<GameMode>("play");
   const [showAll,setShowAll] = useState(false);
-  const [movingRooms,setMovingRooms] = useState(false);
   const [panelOpen,setPanelOpen] = useState(false);
   const [walls,setWalls] = useState(true);
   const [adding,setAdding] = useState<FurnitureType|null>(null);
@@ -57,7 +56,7 @@ export function Percorso3D() {
   const [selectedId,setSelectedId] = useState<string|null>(null);
   const [finishPart,setFinishPart] = useState<"floor"|"wall">("floor");
   const [showcase,setShowcase] = useState(true);
-  const [toast,setToast] = useState("Benvenuto nella tua nuova casa 3D");
+  const [toast,setToast] = useState("");
   const [immersive,setImmersive] = useState(false);
   const sceneRef=useRef<House3DHandle|null>(null);
   const pageRef=useRef<HTMLDivElement|null>(null);
@@ -73,6 +72,12 @@ export function Percorso3D() {
     (showAll ? overviewRooms.find(r=>r.id===room.id) ?? room : {...room,offsetX:0,offsetY:0})
     : undefined,[room,showAll,overviewRooms]);
   const roomName=room?.name ?? "La tua casa";
+  const roomIndex=house.rooms.findIndex(r=>r.id===room?.id);
+  function nextRoom(step:-1|1) {
+    if(house.rooms.length<2)return;
+    const next=(roomIndex+step+house.rooms.length)%house.rooms.length;
+    chooseRoom(house.rooms[next].id);
+  }
   const preview = Boolean(room && showcase && room.furniture.length===0 && mode!=="tiles");
   const demoItems=useMemo(()=>room?sampleFurniture(room.kind,room):[],[room]);
   const items=room?(preview?demoItems:room.furniture):[];
@@ -88,6 +93,12 @@ export function Percorso3D() {
     const label=selectedSpec.label.toLocaleLowerCase("it");
     return title.includes(label)|| (selected?.type==="frigo"&&title.includes("frigorifero"));
   }):[];
+
+  useEffect(()=>{
+    if(!toast)return;
+    const timeout=window.setTimeout(()=>setToast(""),3100);
+    return ()=>window.clearTimeout(timeout);
+  },[toast]);
 
   useEffect(()=>{
     const original=document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
@@ -155,40 +166,27 @@ export function Percorso3D() {
   function chooseRoom(id:string) {
     setRoomId(id);setSelectedId(null);setAdding(null);
     setShowcase(true);setPanelOpen(false);
+    setShowAll(false);
+    setMode("play");
     sceneRef.current?.fit();
   }
   function chooseMode(next:GameMode) {
-    setMode(next);setAdding(null);setSelectedId(null);setMovingRooms(false);
+    setMode(next);setAdding(null);setSelectedId(null);
     if(next==="furniture")setShowAll(false);
-    setPanelOpen(next!=="play"&&next!=="tiles");
-    setToast(next==="play"?"Completa le missioni per avanzare":next==="furniture"?
-      "Scegli un arredo e posizionalo.":next==="tiles"?
-      "Tocca un tile per rimuoverlo; tocca una casella verde per aggiungerlo.":
-      "Tocca il pavimento o una parete per scegliere una finitura.");
+    setPanelOpen(next==="furniture");
+    if(next==="tiles")setToast("Tocca il pavimento per togliere tile; tocca le caselle verdi per aggiungerli.");
   }
   function changeView(all:boolean){
-    setShowAll(all);setAdding(null);setSelectedId(null);setMovingRooms(false);setPanelOpen(false);
-    setToast(all?
-      "La disposizione è indicativa: ogni stanza resta indipendente. Tocca Organizza per sistemarle.":
-      "Stanza indipendente: puoi ampliare o togliere tile senza vincoli con le altre.");
+    setShowAll(all);setAdding(null);setSelectedId(null);setPanelOpen(false);
+    if(all)setMode("play");
+    setToast(all?"Trascina una stanza per sistemarla. Toccala per entrarci.":"");
   }
   function resetArrangement() {
     persistArrangement(autoArrangeRooms(house.rooms,currentArrangement.order));
     sceneRef.current?.fit();
     setToast("Stanze disposte automaticamente. Puoi riordinarle o trascinarle.");
   }
-  function reorderRoom(id:string,direction:-1|1) {
-    const next=changeRoomOrder(house.rooms,currentArrangement,id,direction);
-    if(next===currentArrangement)return;
-    persistArrangement(next);
-    sceneRef.current?.fit();
-    setToast("Ordine aggiornato. Puoi rifinire la disposizione trascinando.");
-  }
-  function organizeHouse() {
-    setShowAll(true);setMode("tiles");setMovingRooms(true);
-    setAdding(null);setSelectedId(null);setPanelOpen(true);
-    setToast("Sposta le stanze liberamente o modifica il loro ordine nel pannello.");
-  }
+
   function changeTile(id:string,x:number,y:number){
     const source=house.rooms.find(r=>r.id===id);
     if(!source || id!==room?.id)return;
@@ -263,38 +261,41 @@ export function Percorso3D() {
     <div className="game3d-stage">
       {sceneRoom ? <Room3DHouseScene ref={sceneRef} room={sceneRoom}
         rooms={showAll ? overviewRooms : [sceneRoom]} items={items} mode={mode}
-        showAll={showAll} movingRooms={movingRooms}
+        showAll={showAll} movingRooms={showAll}
         adding={adding} rotation={rotation} selectedId={selectedId} showWalls={walls}
         panelOpen={panelOpen} onPlace={place} onMove={move}
         onPickRoom={chooseRoom} onMoveRoom={shiftRoom} onTile={changeTile}
         onSelect={(id)=>{setSelectedId(id);if(id){setAdding(null);setPanelOpen(false);}}}
         onFinish={(part)=>{setFinishPart(part);setPanelOpen(true);}}
         onError={setToast}/> : <div className="game3d-no-room">Aggiungi una stanza in CuraCasa per iniziare. <Link to="/app">Vai alle stanze</Link></div>}
-      <div className="game3d-stage-top">
-        <label className="game3d-room-picker"><span>AMBIENTE</span>
-          <select aria-label="Stanza" value={room?.id??""} onChange={e=>chooseRoom(e.target.value)}>
-            {house.rooms.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}
-          </select>
-        </label>
-        <div className="game3d-top-actions">
-          <button type="button" aria-label={walls?"Nascondi pareti":"Mostra pareti"} aria-pressed={walls}
-            onClick={()=>setWalls(v=>!v)}>{walls?<Eye size={19}/>:<EyeOff size={19}/>}</button>
-          <button type="button" aria-label="Centra la visuale" onClick={()=>sceneRef.current?.fit()}><RotateCcw size={19}/></button>
+      <div className="game3d-stage-top game3d-stage-top--simple">
+        <div className="game3d-room-nav" role="group" aria-label="Scegli ambiente">
+          {showAll ? <span className="game3d-room-title"><House size={16}/> Tutta la casa</span> : <>
+            <button type="button" disabled={house.rooms.length<2} aria-label="Stanza precedente"
+              onClick={()=>nextRoom(-1)}><ChevronLeft size={20}/></button>
+            <strong className="game3d-room-title">{roomName}</strong>
+            <button type="button" disabled={house.rooms.length<2} aria-label="Stanza successiva"
+              onClick={()=>nextRoom(1)}><ChevronRight size={20}/></button>
+          </>}
         </div>
+        <button type="button" className={"game3d-view-toggle"+(showAll?" active":"")}
+          aria-label={showAll?"Torna alla stanza":"Vedi tutta la casa"}
+          onClick={()=>changeView(!showAll)}>
+          {showAll?<ChevronLeft size={17}/>:<House size={19}/>}
+          <span>{showAll?"Stanza":"Casa intera"}</span>
+        </button>
       </div>
-      <div className="game3d-view-switch" role="group" aria-label="Visualizzazione della casa">
-        <button type="button" className={!showAll?"active":""} aria-pressed={!showAll}
-          onClick={()=>changeView(false)}>Stanza</button>
-        <button type="button" className={showAll?"active":""} aria-pressed={showAll}
-          onClick={()=>changeView(true)}>Casa intera</button>
-      </div>
-      {showAll && <div className={"game3d-organize-entry"+(mode==="play"?" game3d-organize-entry--play":"")}>
-        <button type="button" onClick={organizeHouse}><LayoutGrid size={17}/> Organizza la casa</button>
-      </div>}
-      {mode==="play" && <div className="game3d-progress">
+      {showAll && <button type="button" className="game3d-autoplace-pill"
+        onClick={resetArrangement} aria-label="Disponi automaticamente le stanze">
+        <WandSparkles size={16}/> Disponi
+      </button>}
+      {mode==="play" && !showAll && <button type="button"
+        className="game3d-progress game3d-progress--touch"
+        aria-label="Apri le missioni di questa stanza"
+        onClick={()=>setPanelOpen(true)}>
         <div className="game3d-progress-copy"><span>{showAll?"CASA · "+house.rooms.length+" STANZE":"OGGI · "+roomName}</span><strong>{completed}/{relevantChores.length} missioni</strong></div>
         <div className="game3d-progress-track"><span style={{width:completionPercent+"%"}}/></div>
-      </div>}
+      </button>}
       {preview && !showAll && <div className="game3d-showcase">
         <div><strong><Sparkles size={15}/> Stanza d'esempio</strong><small>Anteprima: nulla viene salvato automaticamente</small></div>
         <div className="game3d-showcase-actions">
@@ -302,12 +303,28 @@ export function Percorso3D() {
           <button type="button" onClick={applyShowcase} disabled={!demoItems.length}>Usa questa</button>
         </div>
       </div>}
-      <div className="game3d-camera-dock" role="group" aria-label="Visuale">
+      <div className="game3d-camera-dock game3d-camera-dock--simple" role="group" aria-label="Visuale">
         <button type="button" aria-label="Ruota a sinistra" onClick={()=>sceneRef.current?.turn(-1)}><RotateCcw size={19}/></button>
-        <button type="button" aria-label="Rimpicciolisci" onClick={()=>sceneRef.current?.zoom(1/1.2)}><Minus size={18}/></button>
-        <button type="button" aria-label="Ingrandisci" onClick={()=>sceneRef.current?.zoom(1.2)}><Plus size={18}/></button>
         <button type="button" aria-label="Ruota a destra" onClick={()=>sceneRef.current?.turn(1)}><RotateCw size={19}/></button>
+        <button type="button" aria-label="Mostra o nascondi le pareti"
+          aria-pressed={walls} onClick={()=>setWalls(value=>!value)}>
+          {walls?<Eye size={18}/>:<EyeOff size={18}/>}
+        </button>
       </div>
+      {!showAll && (mode==="tiles"||mode==="finishes") && <div className="game3d-quicktools"
+        role="group" aria-label="Strumenti per modificare la stanza">
+        <button type="button" className={mode==="tiles"?"active":""}
+          aria-pressed={mode==="tiles"} onClick={()=>{setMode("tiles");setPanelOpen(false);}}>
+          <Grid2X2 size={18}/> Forma
+        </button>
+        <button type="button" className={mode==="finishes"?"active":""}
+          aria-pressed={mode==="finishes"} onClick={()=>{setMode("finishes");setPanelOpen(true);}}>
+          <Brush size={18}/> Colori
+        </button>
+      </div>}
+      {!showAll && mode==="furniture"&&!adding&&!panelOpen && <button
+        type="button" className="game3d-add-furniture"
+        onClick={()=>setPanelOpen(true)}><PlusCircle size={19}/> Scegli un mobile</button>}
       {mode==="furniture"&&adding && <div className="game3d-placement-hint">
         <span>Posiziona: <strong>{FURNITURE.find(x=>x.id===adding)?.label}</strong></span>
         <button type="button" aria-label="Ruota arredo da aggiungere"
@@ -324,44 +341,15 @@ export function Percorso3D() {
         </> : <button type="button" onClick={()=>setPanelOpen(true)}>Dettagli</button>}
         <button type="button" aria-label="Deseleziona mobile" onClick={()=>setSelectedId(null)}><X size={18}/></button>
       </div>}
-      <p className="game3d-toast" role="status">{toast}</p>
-      <section className={"game3d-sheet"+(panelOpen?" open":"")} aria-label="Comandi contestuali">
+      {toast && <p className="game3d-toast" role="status">{toast}</p>}
+      {panelOpen && <section className="game3d-sheet open" aria-label="Comandi contestuali">
         <button type="button" className="game3d-sheet-handle" aria-expanded={panelOpen}
           onClick={()=>setPanelOpen(v=>!v)}>
           <span className="game3d-handle-dash"/>
-          <strong>{mode==="play"?"Le tue missioni":mode==="furniture"?"Catalogo arredamento":
-            mode==="tiles"?(movingRooms?"Sposta le stanze":"Modifica i tile"):"Finiture della stanza"}</strong>
-          {panelOpen?<ChevronDown size={19}/>:<ChevronUp size={19}/>}
+          <strong>{mode==="play"?"Missioni":mode==="furniture"?"Mobili":"Colori e materiali"}</strong>
+          <X size={18}/>
         </button>
-        {panelOpen && <div className="game3d-sheet-content">
-          {showAll && <div className="game3d-arrangement-panel">
-            <p className="game3d-sheet-note">
-              Le stanze non devono combaciare: questa è una disposizione indicativa, non una planimetria.
-              Le dimensioni e i tile restano indipendenti.
-            </p>
-            <button type="button" className="game3d-auto-layout" onClick={resetArrangement}>
-              <WandSparkles size={18}/> Disponi automaticamente
-            </button>
-            <div className="game3d-room-order" role="list" aria-label="Ordine delle stanze">
-              {currentArrangement.order.map((id,index)=>{
-                const entry=house.rooms.find(r=>r.id===id);
-                if(!entry)return null;
-                return <div key={id} className="game3d-order-item" role="listitem">
-                  <span className="game3d-order-number">{index+1}</span>
-                  <button type="button" className="game3d-order-name" onClick={()=>chooseRoom(id)}>
-                    {entry.name}
-                  </button>
-                  <button type="button" aria-label={"Sposta "+entry.name+" prima"}
-                    disabled={index===0} onClick={()=>reorderRoom(id,-1)}><ArrowUp size={17}/></button>
-                  <button type="button" aria-label={"Sposta "+entry.name+" dopo"}
-                    disabled={index===currentArrangement.order.length-1}
-                    onClick={()=>reorderRoom(id,1)}><ArrowDown size={17}/></button>
-                </div>;
-              })}
-            </div>
-            <p className="game3d-sheet-note">Puoi anche trascinare le stanze con «Sposta stanze».
-              Nessuna stanza è obbligata a toccare le altre.</p>
-          </div>}
+        <div className="game3d-sheet-content">
           {mode==="play" && <>
             {selectedSpec && <div className="game3d-object-context">
               <strong>{selectedSpec.label}</strong>
@@ -396,26 +384,7 @@ export function Percorso3D() {
             </div>
             <p className="game3d-sheet-note">Scegli un mobile e tocca o trascina sulla stanza: l'anteprima diventa rossa se la posizione è occupata.</p>
           </>}
-          {mode==="tiles" && <>
-            <p className="game3d-sheet-note">{movingRooms
-              ? "Trascina una stanza nella vista Casa intera; la forma e gli arredi non cambieranno."
-              : "Ogni stanza è indipendente. Tocca un tile per rimuoverlo oppure una casella verde per estenderlo, anche se nella vista generale ci sono altre stanze vicine."}</p>
-            <div className="game3d-tile-actions" role="group" aria-label="Strumenti di costruzione">
-              <button type="button" className={!movingRooms?"active":""} aria-pressed={!movingRooms}
-                onClick={()=>{setMovingRooms(false);setPanelOpen(false);}}>
-                <Grid2X2 size={19}/> Modifica tile
-              </button>
-              <button type="button" className={movingRooms?"active":""} aria-pressed={movingRooms}
-                onClick={()=>{setShowAll(true);setMovingRooms(true);setPanelOpen(false);}}>
-                <Move size={19}/> Sposta stanze
-              </button>
-            </div>
-            <div className="game3d-tile-summary">
-              <strong>{roomName}</strong>
-              <span>{room?.cells.length??0} tile · {room?.width??0} × {room?.height??0}</span>
-            </div>
-            <p className="game3d-sheet-note">Le modifiche si salvano automaticamente; premi <strong>Annulla</strong> se vuoi tornare indietro. Non si eliminano tile sotto i mobili. La posizione nella vista generale è separata dalle dimensioni.</p>
-          </>}
+
           {mode==="finishes" && <>
             <div className="game3d-finish-tabs">
               <button type="button" className={finishPart==="floor"?"active":""} onClick={()=>setFinishPart("floor")}>Pavimenti</button>
@@ -430,12 +399,15 @@ export function Percorso3D() {
               </button>)}
             </div>
           </>}
-        </div>}
-      </section>
+        </div>
+      </section>}
     </div>
-    <nav className="game3d-tabs" aria-label="Modalità di gioco">
-      {tabs.map(({id,title,Icon})=><button key={id} type="button" className={mode===id?"active":""}
-        aria-pressed={mode===id} onClick={()=>chooseMode(id)}><Icon size={23}/><span>{title}</span></button>)}
-    </nav>
+    {!showAll && <nav className="game3d-tabs" aria-label="Modalità di gioco">
+      {tabs.map(({id,title,Icon})=>{
+        const active=id==="tiles"?mode==="tiles"||mode==="finishes":mode===id;
+        return <button key={id} type="button" className={active?"active":""}
+          aria-pressed={active} onClick={()=>chooseMode(id)}><Icon size={23}/><span>{title}</span></button>;
+      })}
+    </nav>}
   </main>;
 }
