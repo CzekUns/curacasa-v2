@@ -236,7 +236,8 @@ export function Percorso() {
     setMessage("Il pattern si applica a tutto il pavimento della stanza.");
   }
   function handleWall(id: string) {
-    if (mode === "sposta" || mode === "gioca") return;
+    if (mode === "gioca") { if (id !== activeRoomId) selectRoom(id); return; }
+    if (mode === "sposta") return;
     setToolsOpen(true);
     if (id !== activeRoomId) setRoomId(id);
     setPalette({ type: "wall", roomId: id });
