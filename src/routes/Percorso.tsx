@@ -75,6 +75,7 @@ export function Percorso() {
   const [snapTarget, setSnapTarget] = useState("");
   const [message, setMessage] = useState("Tocca pavimenti e pareti per personalizzarli.");
   const [resetConfirm, setResetConfirm] = useState(false);
+  const pageRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
@@ -110,9 +111,9 @@ export function Percorso() {
     try {
       if (document.fullscreenElement) {
         await document.exitFullscreen();
-      } else if (document.documentElement.requestFullscreen) {
-        // A user tap is required; the in-app browser can still decline the request.
-        await document.documentElement.requestFullscreen();
+      } else if (pageRef.current?.requestFullscreen) {
+        // Fullscreen only applies to this laboratory screen, not the whole app.
+        await pageRef.current.requestFullscreen();
       } else {
         setMessage("Per togliere la barra del browser, installa CuraCasa nella schermata Home.");
       }
@@ -448,7 +449,7 @@ export function Percorso() {
     });
   }
 
-  return <div className="percorso-page">
+  return <div className="percorso-page" ref={pageRef}>
     <header className="pc-mobile-header">
       <Link to="/app" className="pc-back" aria-label="Torna a CuraCasa"><ChevronLeft size={21} /> CuraCasa</Link>
       <div className="pc-header-center"><span className="pc-lab-label">LAB</span><strong>Percorso Casa</strong></div>
