@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, Armchair, Brush, Check, Coins,
   Eye, EyeOff, Maximize, RotateCcw, RotateCw,
-  Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, WandSparkles,
+  Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, WandSparkles, Move,
   ChevronLeft, ChevronRight, House, PlusCircle, type LucideIcon,
 } from "lucide-react";
 import { Room3DHouseScene, type House3DHandle, type GameMode } from "../components/percorso/Room3DHouseScene";
