@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { FURNITURE, furnitureSize, type Furniture, type FurnitureType, type HouseRoom } from "../../lib/percorso";
+import { FURNITURE, furnitureSize, type Furniture, type FurnitureType, type HouseRoom } from "../../lib/percorso.ts";
 
 /**
  * CuraCasa 3D lab: procedural low-poly models. No downloaded models or branded
