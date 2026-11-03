@@ -40,7 +40,7 @@ test("house dragging changes only overview positions, preserving tiles and furni
   salone.furniture=[{id:"sofa",type:"divano",x:1,y:1,rotation:0}];
   const arrangement=autoArrangeRooms(rooms);
   const before=JSON.stringify(rooms);
-  const moved=moveRoomInArrangement(rooms,arrangement,salone.id,0,9);
+  const moved=moveRoomInArrangement(rooms,arrangement,salone.id,25,25);
   assert.ok(moved.arrangement);
   assert.notDeepEqual(moved.arrangement.positions[salone.id],arrangement.positions[salone.id]);
   assert.equal(JSON.stringify(rooms),before);
