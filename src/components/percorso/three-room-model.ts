@@ -3,9 +3,33 @@ import { FURNITURE, furnitureSize, type Furniture, type FurnitureType, type Hous
 import { editableTileSlots } from "../../lib/percorso-grid.ts";
 
 /**
- * CuraCasa 3D lab: procedural low-poly models. No downloaded models or branded
- * game assets. Coordinates are in real grid cells: x -> world x, y -> world z.
+ * CuraCasa's 3D game uses the SAME five application palettes for its interface
+ * highlights, floor editing hints, labels and scene ground. Existing furniture,
+ * user-selected wall paints and flooring are deliberately not recolored.
  */
+export type SceneThemeColors = {
+  accent: string;
+  finish: string;
+  soft: string;
+  paper: string;
+};
+const DEFAULT_SCENE_THEME:SceneThemeColors = {
+  accent:"#b8878d",finish:"#8d9684",soft:"#ead2d5",paper:"#fffdf9",
+};
+export function readSceneTheme():SceneThemeColors {
+  if(typeof document==="undefined")return DEFAULT_SCENE_THEME;
+  const computed=getComputedStyle(document.documentElement);
+  const token=(key:string,fallback:string)=>
+    computed.getPropertyValue(key).trim()||fallback;
+  return {
+    accent:token("--theme-cta",DEFAULT_SCENE_THEME.accent),
+    finish:token("--theme-finish",DEFAULT_SCENE_THEME.finish),
+    soft:token("--rose-soft",DEFAULT_SCENE_THEME.soft),
+    paper:token("--paper",DEFAULT_SCENE_THEME.paper),
+  };
+}
+
+/** Procedural low-poly models, coordinates in real grid cells. */
 const palette = {
   timber: "#b79478", cream: "#f8f0e6", rose: "#c78385",
   sage: "#719787", dark: "#45554d", brass: "#bd9d61",
@@ -210,7 +234,10 @@ export type RoomVisual = {
   dispose: () => void;
 };
 
-export function buildRoom(room: HouseRoom, furniture: Furniture[], editable = false, showLabel = false): RoomVisual {
+export function buildRoom(
+  room: HouseRoom, furniture: Furniture[], editable = false, showLabel = false,
+  theme: SceneThemeColors = DEFAULT_SCENE_THEME,
+): RoomVisual {
   const root = new THREE.Group(), floor: THREE.Mesh[] = [];
   root.userData.roomId = room.id;
   root.position.set(room.offsetX,0,room.offsetY);
@@ -265,7 +292,7 @@ export function buildRoom(room: HouseRoom, furniture: Furniture[], editable = fa
       const ghost = new THREE.Mesh(
         new THREE.BoxGeometry(.92,.035,.92),
         new THREE.MeshBasicMaterial({
-          color:"#78b89a", transparent:true, opacity:.34,
+          color:theme.finish, transparent:true, opacity:.34,
           depthWrite:false, side:THREE.DoubleSide,
         }),
       );
@@ -280,12 +307,12 @@ export function buildRoom(room: HouseRoom, furniture: Furniture[], editable = fa
     canvas.width=512;canvas.height=128;
     const ctx=canvas.getContext("2d");
     if(ctx) {
-      ctx.fillStyle="rgba(255,254,247,.94)";
+      ctx.fillStyle=theme.paper;
       ctx.beginPath();
       ctx.roundRect(8,10,496,104,46);
       ctx.fill();
-      ctx.lineWidth=7;ctx.strokeStyle="#b1cdb8";ctx.stroke();
-      ctx.fillStyle="#3d6f57";
+      ctx.lineWidth=7;ctx.strokeStyle=theme.soft;ctx.stroke();
+      ctx.fillStyle=theme.accent;
       ctx.textAlign="center";ctx.textBaseline="middle";
       ctx.font="bold 41px sans-serif";
       const name=room.name.length>22?room.name.slice(0,20)+"…":room.name;
