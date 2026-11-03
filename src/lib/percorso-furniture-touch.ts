@@ -34,6 +34,6 @@ export function canDragFurniture(
   addingFurniture: boolean,
   showroomPreview: boolean,
 ): boolean {
-  if (!itemId || addingFurniture || showroomPreview) return false;
+  if (!itemId || addingFurniture || showroomPreview || mode==="tiles" || mode==="finishes") return false;
   return mode==="furniture" || itemId===movingFurnitureId;
 }
