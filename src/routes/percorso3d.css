@@ -263,3 +263,68 @@
   .game3d-view-switch {top:88px;left:24px;}
   .game3d-progress {top:148px;}
 }
+
+
+/* Independent rooms and approximate house composition. */
+.game3d-organize-entry {
+  position:absolute;top:128px;right:12px;z-index:7;
+  pointer-events:auto;
+}
+.game3d-organize-entry button {
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  min-height:38px;padding:8px 12px;border-radius:14px;
+  background:#55896f;color:#fff;
+  border:1px solid #3e7458;
+  box-shadow:0 6px 20px #315f482e;
+  font-size:.68rem;font-weight:870;
+}
+.game3d-arrangement-panel{
+  display:grid;gap:10px;
+  padding:8px;border-radius:12px;
+  background:#f4f8f1;
+  border:1px solid #e3ecdf;
+}
+.game3d-auto-layout{
+  width:100%;min-height:43px;display:flex;align-items:center;
+  justify-content:center;gap:8px;
+  border-radius:11px;background:#578b70;
+  color:#fff;font-weight:900;font-size:.72rem;
+}
+.game3d-room-order{
+  display:grid;gap:6px;max-height:155px;
+  overflow-y:auto;overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+.game3d-order-item {
+  display:flex;align-items:center;gap:7px;
+  min-height:42px;border-radius:10px;
+  border:1px solid #e5eade;background:#fffdf8;
+  padding:4px 7px;
+}
+.game3d-order-number{
+  display:grid;place-items:center;
+  width:24px;height:24px;border-radius:8px;
+  background:#e6f1e5;color:#49785c;
+  font-size:.68rem;font-weight:900;
+}
+.game3d-order-name{
+  min-width:0;flex:1;text-align:left;
+  background:transparent;color:#446d58;
+  overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:.71rem;font-weight:840;
+}
+.game3d-order-item button:not(.game3d-order-name){
+  flex:0 0 33px;width:33px;height:33px;
+  display:grid;place-items:center;
+  border-radius:9px;background:#e8f1e7;color:#567e68;
+}
+.game3d-order-item button:disabled {
+  opacity:.3;cursor:not-allowed;
+}
+@media(max-width:380px){
+  .game3d-organize-entry{top:119px;right:9px}
+  .game3d-organize-entry button{font-size:.62rem;padding:7px 9px}
+}
+@media(min-width:860px){
+  .game3d-organize-entry{top:142px;right:24px}
+}
