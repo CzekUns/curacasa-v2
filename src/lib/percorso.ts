@@ -143,7 +143,7 @@ export function reconcileHouse(savedNames: string[], saved: unknown): HouseLayou
     const width = Math.max(2, Math.min(12, finiteInt(old.width, 5)));
     const height = Math.max(2, Math.min(12, finiteInt(old.height, 4)));
     const cells = Array.isArray(old.cells)
-      ? [...new Set(old.cells.filter((key): key is string => typeof key === "string" && /^\\d+,\\d+$/.test(key))
+      ? [...new Set(old.cells.filter((key): key is string => typeof key === "string" && /^\d+,\d+$/.test(key))
         .filter((key) => { const [x, y] = key.split(",").map(Number); return x < width && y < height; }))]
       : allCells(width, height);
     const room: HouseRoom = {

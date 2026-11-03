@@ -184,3 +184,129 @@
   .pc-material-swatch { width:25px; height:25px; }
   .pc-selected-actions button { flex-basis:45px; }
 }
+
+
+/* Percorso 2.0 — layered HUD and genuinely collapsible touch controls. */
+.percorso-page {
+  --pc-ink: #334b41;
+  --pc-muted: #70877a;
+  --pc-green: #427962;
+  background: var(--app-backdrop, linear-gradient(145deg, #faf5ef, #eef4ed));
+}
+.pc-mobile-header { gap: 8px; }
+.pc-header-actions { display: flex; align-items: center; gap: 6px; }
+.pc-header-actions .pc-icon-button:disabled { opacity: .35; cursor: not-allowed; }
+.pc-lab-label { display: inline-flex; align-self: center; border-radius: 50px; background: #fbe8e8; padding: 3px 8px; }
+.pc-stage { border-color: #eee5df; box-shadow: 0 18px 36px #6d615a13; }
+.pc-stage-toolbar { background: #fffdfa; }
+.pc-stage-view {
+  background: radial-gradient(ellipse at 50% 37%, #fffaf0 0%, #eaf0e5 68%, #dce9df 100%);
+}
+.pc-scene-help {
+  position: absolute; z-index: 1; left: 50%; bottom: 13px;
+  transform: translateX(-50%); pointer-events: none; white-space: nowrap;
+  padding: 7px 12px; border-radius: 99px; color: #697e72;
+  background: #fffffff0; box-shadow: 0 4px 16px #42634f12;
+  font-weight: 700; font-size: .62rem;
+}
+.pc-game-hud {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  gap: 9px 12px; padding: 13px 18px 10px; flex: 0 0 auto;
+  background: linear-gradient(110deg, #f5f8f0, #fff4f0);
+  border-bottom: 1px solid #e8e9df;
+}
+.pc-game-intro { display: flex; min-width: 0; flex-direction: column; gap: 3px; }
+.pc-game-kicker { color: #a37f80; letter-spacing: .14em; font-weight: 900; font-size: .56rem; }
+.pc-game-intro strong { color: #386850; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc-game-metrics { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+.pc-game-metrics span {
+  display: inline-flex; align-items: center; gap: 4px; padding: 7px 9px;
+  background: #fffefa; color: #557b68; border: 1px solid #e9ece1;
+  border-radius: 11px; font-size: .68rem; font-weight: 830;
+}
+.pc-game-progress { grid-column: 1 / -1; height: 7px; border-radius: 99px; overflow: hidden; background: #dce8d9; }
+.pc-game-progress > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#8aac8b,#4e9476); transition: width 260ms ease; }
+.pc-sheet-toggle {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  min-height: 45px; padding: 10px 14px; border: 1px solid #e5e9dd;
+  border-radius: 16px 16px 0 0; background: #fffdfa;
+  text-align: left; color: #557a67; box-shadow: 0 -3px 20px #526b5416;
+  pointer-events: auto;
+}
+.pc-sheet-toggle strong { flex: 1; font-size: .76rem; font-weight: 900; }
+.pc-sheet-handle { width: 5px; height: 18px; background: #b6d3bb; border-radius: 99px; }
+.pc-gesture-panel--closed .pc-sheet-toggle { border-radius: 16px; }
+.pc-gesture-panel .pc-context-content { box-shadow: none; border-radius: 0 0 16px 16px; border-top: 0; }
+.pc-missions { display: grid; gap: 12px; }
+.pc-missions .pc-context-heading { margin: 0; }
+.pc-mission-subtitle { margin: 0; font-size: .69rem; line-height: 1.5; color: #72887a; }
+.pc-progress-label { padding: 7px 11px; background: #e7f1e5; border-radius: 11px; font-weight: 900; color: #477a63; }
+.pc-missions-list { display: grid; gap: 8px; }
+.pc-mission {
+  display: flex; gap: 10px; align-items: center; width: 100%; padding: 11px;
+  background: #fafbf6; border: 1px solid #e4e9dc; border-radius: 12px;
+  color: #496b58; text-decoration: none; min-width: 0;
+}
+.pc-mission.complete { background: #eff5ef; opacity: .75; }
+.pc-mission-icon { width: 36px; height: 36px; border-radius: 12px; flex: 0 0 36px; display: grid; place-items: center; background: #e5efdf; color: #5c9273; }
+.pc-mission-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 3px; }
+.pc-mission-copy strong { font-size: .72rem; line-height: 1.35; }
+.pc-mission-copy small { font-size: .61rem; color: #82968a; }
+.pc-mission-chevron { transform: rotate(180deg); opacity: .6; flex-shrink: 0; }
+.pc-mission-empty { display: grid; justify-items: center; gap: 6px; padding: 20px 12px; color: #6d9077; background: #f5f8f1; border-radius: 13px; text-align: center; }
+.pc-mission-empty strong { font-size: .78rem; }
+.pc-mission-empty span { font-size: .66rem; line-height: 1.4; }
+.pc-missions-cta { display: flex; justify-content: center; align-items: center; gap: 7px; padding: 12px; background: #507f68; color: white; font-size: .77rem; font-weight: 850; border-radius: 12px; text-decoration: none; }
+.pc-missions-cta svg { transform: rotate(180deg); }
+.pc-mode-dock { grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(calc(100% - 32px), 500px); }
+.pc-mode-dock button { min-width: 0; }
+.pc-mode-dock button.active { box-shadow: inset 0 0 0 1px #badcc4; }
+@media (max-width: 850px) {
+  .percorso-page { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  .pc-stage { flex: 1; min-height: 0; }
+  .pc-game-hud { padding: 11px 13px 9px; gap: 8px; }
+  .pc-game-intro strong { font-size: .93rem; }
+  .pc-game-metrics span { padding: 6px 7px; font-size: .62rem; }
+  .pc-gesture-panel {
+    bottom: 0;
+    max-height: min(48dvh, 390px);
+    overflow-y: auto; display: block;
+    scrollbar-width: thin;
+  }
+  .pc-gesture-panel--closed { max-height: 48px; overflow: visible; }
+  .pc-sheet-toggle { position: sticky; top: 0; z-index: 1; min-height: 45px; }
+  .pc-gesture-panel .pc-context-content { pointer-events: auto; max-width: 620px; margin: 0 auto; border-radius: 0 0 16px 16px; }
+  .pc-stage-status { padding-right: 12px; padding-left: 12px; }
+  .pc-scene-help { bottom: 11px; font-size: .57rem; }
+  .pc-mode-dock { border-radius: 18px 18px 0 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pc-mode-dock button { font-size: .61rem; gap: 4px; min-height: 55px; }
+  .pc-mode-dock button svg { width: 21px; height: 21px; }
+}
+@media (max-width: 390px) {
+  .pc-mobile-header { padding: 0 10px; }
+  .pc-header-actions .pc-icon-button { min-width: 36px; min-height: 36px; }
+  .pc-game-metrics { gap: 4px; }
+  .pc-game-metrics span { font-size: .57rem; }
+  .pc-scene-help { display: none; }
+}
+
+.pc-builder-tabs {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px; padding: 10px; background: #fffdfa;
+  border-left: 1px solid #e5e9dd; border-right: 1px solid #e5e9dd;
+}
+.pc-builder-tabs button {
+  min-height: 42px; display: inline-flex; justify-content: center; align-items: center;
+  gap: 5px; border: 1px solid #e1e9dc; border-radius: 11px;
+  background: #f6f8f2; color: #6d8878; font-size: .69rem; font-weight: 820;
+}
+.pc-builder-tabs button.active {
+  background: #e4f0e5; border-color: #9ac4a8; color: #397559;
+}
+@media (max-width: 390px) {
+  .pc-builder-tabs button { font-size: .64rem; gap: 4px; }
+}
+
+@media (max-width: 850px) {
+  .pc-explore-tip { display: flex; min-height: 82px; }
+}

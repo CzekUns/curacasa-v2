@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Box, Check, ChevronLeft, Eraser, Eye, EyeOff, Grid2X2, Hand, Layers3,
   Minus, Paintbrush, Plus, RotateCcw, RotateCw, Trash2, X, ZoomIn,
+  Coins, Trophy, Undo2, ChevronDown, ChevronUp, ClipboardList,
 } from "lucide-react";
 import { IsometricBoard } from "../components/percorso/IsometricBoard";
 import { isoDeltaToTiles, pinchCamera, clampStageZoom } from "../lib/percorso-gestures";
@@ -12,10 +13,11 @@ import {
   type Direction, type FloorStyle, type Furniture, type FurnitureType,
   type HouseLayout, type HouseRoom, type WallStyle,
 } from "../lib/percorso";
-import { loadData } from "../lib/store";
+import { getWallet, hasCompletedToday, loadData, type AppData } from "../lib/store";
+import { eligibleRoomNames, getRoomRule } from "../lib/chore-rooms";
 import "../styles/percorso.css";
 
-type Mode = "esplora" | "forma" | "arredi" | "sposta";
+type Mode = "gioca" | "esplora" | "forma" | "arredi" | "sposta";
 type Hit = { kind: "floor" | "wall" | "object"; roomId: string; x: number; y: number; objectId: string };
 type Palette = { type: "floor" | "wall"; roomId: string; tile?: { x: number; y: number } };
 type Camera = { zoom: number; pan: { x: number; y: number } };
@@ -32,6 +34,8 @@ type Drag = {
   inverse: DOMMatrix | null;
   initialPan: { x: number; y: number };
   moved: boolean;
+  changed: boolean;
+  initialHouse: HouseLayout;
 };
 type Pinch = {
   distance: number;
@@ -44,18 +48,21 @@ const distance = (a: { x: number; y: number }, b: { x: number; y: number }) => M
 const mid = (a: { x: number; y: number }, b: { x: number; y: number }) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
 const defaultCamera: Camera = { zoom: 1, pan: { x: 0, y: 0 } };
 const modes = [
-  { id: "esplora", label: "Esplora", Icon: Hand },
-  { id: "forma", label: "Forma", Icon: Eraser },
-  { id: "arredi", label: "Arreda", Icon: Box },
-  { id: "sposta", label: "Sposta", Icon: Grid2X2 },
+  { id: "gioca", label: "Missioni", Icon: Trophy },
+  { id: "esplora", label: "Decora", Icon: Paintbrush },
+  { id: "forma", label: "Costruisci", Icon: Layers3 },
 ] as const;
 
 export function Percorso() {
+  const [appData, setAppData] = useState<AppData>(loadData);
   const [house, setHouse] = useState<HouseLayout>(() => loadHouse(loadData().rooms));
   const houseRef = useRef(house);
   const [roomId, setRoomId] = useState(() => loadData().rooms[0] ?? "");
   const [view, setView] = useState<Direction>(0);
-  const [mode, setMode] = useState<Mode>("esplora");
+  const [mode, setMode] = useState<Mode>("gioca");
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const undoStack = useRef<HouseLayout[]>([]);
+  const [undoAvailable, setUndoAvailable] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [showWalls, setShowWalls] = useState(true);
   const [furnitureType, setFurnitureType] = useState<FurnitureType>("divano");
@@ -82,6 +89,15 @@ export function Percorso() {
   const target = house.rooms.find((entry) => entry.id === snapTarget && entry.id !== activeRoomId)
     ?? house.rooms.find((entry) => entry.id !== activeRoomId);
   const placing = furnitureSize({ id: "preview", type: furnitureType, x: 0, y: 0, rotation: placementRotation });
+  const roomChores = room ? appData.chores.filter((chore) =>
+    eligibleRoomNames(appData.rooms, appData.roomDetails, getRoomRule(chore)).includes(room.name)) : [];
+  const doneInRoom = roomChores.filter((chore) => hasCompletedToday(appData, chore.id)).length;
+  const roomProgress = roomChores.length ? Math.round(doneInRoom / roomChores.length * 100) : 0;
+  const missions = [...roomChores].sort((a, b) =>
+    Number(hasCompletedToday(appData, a.id)) - Number(hasCompletedToday(appData, b.id)));
+  const doneToday = new Set(appData.logs.filter((log) =>
+    new Date(log.completedAt).toDateString() === new Date().toDateString()).map((log) => log.choreId)).size;
+  const walletBalance = getWallet(appData).balance;
 
   useEffect(() => { cameraRef.current = camera; }, [camera]);
   useEffect(() => { houseRef.current = house; }, [house]);
@@ -106,12 +122,16 @@ export function Percorso() {
 
   useEffect(() => {
     const syncRooms = () => {
+      const freshData = loadData();
+      setAppData(freshData);
       const current = houseRef.current;
-      const next = reconcileHouse(loadData().rooms, current);
+      const next = reconcileHouse(freshData.rooms, current);
       if (next.rooms.map((item) => item.name).join("|") !== current.rooms.map((item) => item.name).join("|")) {
         houseRef.current = next;
         setHouse(next);
         saveHouse(next);
+        undoStack.current = [];
+        setUndoAvailable(false);
       }
     };
     window.addEventListener("focus", syncRooms);
@@ -122,10 +142,25 @@ export function Percorso() {
     };
   }, []);
 
+  function pushUndo(previous: HouseLayout) {
+    undoStack.current = [...undoStack.current.slice(-14), previous];
+    setUndoAvailable(true);
+  }
   function applyHouse(next: HouseLayout, persist = true) {
+    if (persist && next !== houseRef.current) pushUndo(houseRef.current);
     houseRef.current = next;
     setHouse(next);
     if (persist) saveHouse(next);
+  }
+  function undoLastChange() {
+    const previous = undoStack.current.pop();
+    if (!previous) return;
+    applyHouse(previous, false);
+    saveHouse(previous);
+    setUndoAvailable(undoStack.current.length > 0);
+    setSelectedId(null);
+    setPalette(null);
+    setMessage("Ultima modifica annullata.");
   }
   function updateRoom(updated: HouseRoom, persist = true): boolean {
     const current = houseRef.current;
@@ -141,6 +176,7 @@ export function Percorso() {
     setSelectedId(null);
     setPalette(null);
     setResetConfirm(false);
+    setToolsOpen(true);
     setCamera(defaultCamera);
     setMessage("Stanza selezionata: il progetto è salvato separatamente dalle faccende.");
   }
@@ -148,8 +184,11 @@ export function Percorso() {
     setMode(next);
     setPalette(null);
     setSelectedId(null);
+    setToolsOpen(true);
     if (next === "sposta") setShowAll(true);
+    if (next === "gioca" || next === "forma" || next === "arredi") setShowAll(false);
     setMessage({
+      gioca: "Le missioni sono collegate alle tue faccende reali. Scegli una stanza.",
       esplora: "Tocca una parete o il pavimento per scegliere un pattern.",
       forma: "Tocca un tile per rimuoverlo o ripristinarlo. La stanza deve restare collegata.",
       arredi: "Tocca il pavimento per posare un arredo; trascina un mobile per spostarlo.",
@@ -160,7 +199,7 @@ export function Percorso() {
     if (!room) return;
     const changed = resizeRoom(room, room.width + (axis === "width" ? amount : 0),
       room.height + (axis === "height" ? amount : 0));
-    if (changed.furniture.length !== room.furniture.length) {
+    if (changed === room || changed.furniture.length !== room.furniture.length) {
       setMessage("Sposta prima gli arredi che occupano l'area da rimuovere.");
       return;
     }
@@ -170,7 +209,7 @@ export function Percorso() {
     const current = houseRef.current.rooms.find((entry) => entry.id === id);
     if (!current) return;
     if (id !== activeRoomId) { selectRoom(id); return; }
-    if (mode === "sposta") return;
+    if (mode === "sposta" || mode === "gioca") return;
     if (mode === "forma") {
       const result = toggleCell(current, x, y);
       if (!result) { setMessage("Non puoi eliminare l'ultimo collegamento né un tile occupato."); return; }
@@ -179,6 +218,7 @@ export function Percorso() {
       return;
     }
     if (mode === "arredi") {
+      if (selectedId) { setMessage("Deseleziona il mobile prima di aggiungerne un altro."); return; }
       const item: Furniture = { id: `arredo_${crypto.randomUUID()}`, type: furnitureType, x, y, rotation: placementRotation };
       if (!validPlacement(current, item)) {
         setMessage("Il mobile non entra nei tile liberi: scegli una zona più ampia.");
@@ -189,17 +229,21 @@ export function Percorso() {
       setMessage("Arredo aggiunto. Puoi prenderlo con un dito per trascinarlo.");
       return;
     }
+    setToolsOpen(true);
     setPalette({ type: "floor", roomId: id, tile: { x, y } });
     setMessage("Il pattern si applica a tutto il pavimento della stanza.");
   }
   function handleWall(id: string) {
+    if (mode === "gioca") { if (id !== activeRoomId) selectRoom(id); return; }
     if (mode === "sposta") return;
+    setToolsOpen(true);
     if (id !== activeRoomId) setRoomId(id);
     setPalette({ type: "wall", roomId: id });
     setMessage("Scegli il rivestimento per le pareti di questa stanza.");
   }
   function handleObject(id: string, objectId: string) {
-    if (mode === "sposta") { setRoomId(id); return; }
+    if (mode === "sposta" || mode === "gioca") { setRoomId(id); return; }
+    setToolsOpen(true);
     setRoomId(id);
     setMode("arredi");
     setSelectedId(objectId);
@@ -301,6 +345,7 @@ export function Percorso() {
       startX: event.clientX, startY: event.clientY,
       inverse: svgRef.current?.getScreenCTM()?.inverse() ?? null,
       initialPan: cameraRef.current.pan, moved: false,
+      changed: false, initialHouse: houseRef.current,
     };
     if (kind === "room" && hit && hit.roomId !== activeRoomId) {
       setRoomId(hit.roomId);
@@ -343,13 +388,13 @@ export function Percorso() {
     if (!current) return;
     if (gesture.kind === "room") {
       if (current.offsetX === x && current.offsetY === y) return;
-      updateRoom({ ...current, offsetX: x, offsetY: y }, false);
+      if (updateRoom({ ...current, offsetX: x, offsetY: y }, false)) gesture.changed = true;
     } else {
       const item = current.furniture.find((entry) => entry.id === gesture.objectId);
       if (!item || (item.x === x && item.y === y)) return;
       const updated = { ...item, x, y };
       if (!validPlacement(current, updated, item.id)) return;
-      updateRoom({ ...current, furniture: current.furniture.map((entry) => entry.id === item.id ? updated : entry) }, false);
+      if (updateRoom({ ...current, furniture: current.furniture.map((entry) => entry.id === item.id ? updated : entry) }, false)) gesture.changed = true;
     }
   }
   function onScenePointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
@@ -363,10 +408,13 @@ export function Percorso() {
       if (!pointers.current.size) drag.current = null;
       return;
     }
-    if (gesture.moved) {
+    if (event.type === "pointercancel" && gesture.changed) {
+      applyHouse(gesture.initialHouse, false);
+    } else if (gesture.changed) {
+      pushUndo(gesture.initialHouse);
       saveHouse(houseRef.current);
       setMessage(gesture.kind === "room" ? "Stanza spostata e salvata." : "Posizione aggiornata.");
-    } else if (event.type === "pointerup") handleTap(gesture.hit);
+    } else if (!gesture.moved && event.type === "pointerup") handleTap(gesture.hit);
     drag.current = null;
   }
   function zoomBy(factor: number) {
@@ -381,8 +429,12 @@ export function Percorso() {
     <header className="pc-mobile-header">
       <Link to="/app" className="pc-back" aria-label="Torna a CuraCasa"><ChevronLeft size={21} /> CuraCasa</Link>
       <div className="pc-header-center"><span className="pc-lab-label">LAB</span><strong>Percorso Casa</strong></div>
-      <button type="button" className="pc-icon-button" aria-label="Reimposta zoom e posizione della vista"
-        onClick={() => { cameraRef.current = defaultCamera; setCamera(defaultCamera); }}><RotateCcw size={19} /></button>
+      <div className="pc-header-actions">
+        <button type="button" className="pc-icon-button" disabled={!undoAvailable}
+          aria-label="Annulla ultima modifica" onClick={undoLastChange}><Undo2 size={19} /></button>
+        <button type="button" className="pc-icon-button" aria-label="Centra la visuale"
+          onClick={() => { cameraRef.current = defaultCamera; setCamera(defaultCamera); }}><RotateCcw size={19} /></button>
+      </div>
     </header>
 
     <main className="pc-workspace">
@@ -406,6 +458,17 @@ export function Percorso() {
             {showWalls ? <Eye size={20} /> : <EyeOff size={20} />}
           </button>
         </div>
+        {mode === "gioca" && <div className="pc-game-hud">
+          <div className="pc-game-intro"><span className="pc-game-kicker">IL TUO PERCORSO</span><strong>{room?.name ?? "La tua casa"}</strong></div>
+          <div className="pc-game-metrics">
+            <span title="Faccende completate oggi"><Check size={15} /> {doneToday} oggi</span>
+            <span title="Saldo CuraCoin"><Coins size={15} /> {walletBalance} coin</span>
+          </div>
+          <div className="pc-game-progress" role="progressbar" aria-valuemin={0} aria-valuemax={100}
+            aria-valuenow={roomProgress} aria-label="Faccende della stanza completate oggi">
+            <span style={{ width: roomProgress + "%" }} />
+          </div>
+        </div>}
         <div className="pc-stage-view" ref={sceneRef}
           onPointerDown={onScenePointerDown} onPointerMove={onScenePointerMove}
           onPointerUp={onScenePointerEnd} onPointerCancel={onScenePointerEnd}
@@ -420,6 +483,7 @@ export function Percorso() {
                 selectedObject={selectedId} onCell={handleFloor} onWall={handleWall} onObject={handleObject} />
             </div>
           </div>
+          <div className="pc-scene-help" aria-hidden="true">{mode === "gioca" ? "Ruota la casa · Zoom con due dita" : "Tocca per modificare · Usa due dita per lo zoom"}</div>
           <div className="pc-camera-controls">
             <button type="button" title="Ruota a sinistra" aria-label="Ruota a sinistra" onClick={() => setView((before) => direction(before - 1))}><RotateCcw size={18} /></button>
             <span>{view * 90}°</span>
@@ -435,8 +499,15 @@ export function Percorso() {
         <p className="pc-stage-status" role="status"><span>✦</span> {message}</p>
       </section>
 
-      <section className="pc-gesture-panel" aria-label="Strumenti contestuali">
-        {palette && chosenRoom ? <div className="pc-context-content pc-pattern-panel" key={palette.type + palette.roomId}>
+      <section className={"pc-gesture-panel" + (!toolsOpen ? " pc-gesture-panel--closed" : "")} aria-label="Strumenti contestuali">
+        <button type="button" className="pc-sheet-toggle" aria-expanded={toolsOpen}
+          onClick={() => { setToolsOpen((open) => !open); if (toolsOpen) setPalette(null); }}>
+          <span className="pc-sheet-handle" />
+          <strong>{palette ? "Finiture" : mode === "gioca" ? "Le tue missioni" : mode === "esplora" ? "Personalizza" : "Costruisci la tua casa"}</strong>
+          {toolsOpen ? <ChevronDown size={17} /> : <ChevronUp size={17} />}
+        </button>
+        {toolsOpen && (
+        palette && chosenRoom ? <div className="pc-context-content pc-pattern-panel" key={palette.type + palette.roomId}>
           <div className="pc-context-heading">
             <div><small>FINITURE · {chosenRoom.name}</small><strong>{palette.type === "floor" ? "Pavimento completo" : "Pareti"}</strong></div>
             <button type="button" className="pc-close" aria-label="Chiudi selettore pattern" onClick={() => setPalette(null)}><X size={19} /></button>
@@ -455,6 +526,29 @@ export function Percorso() {
             onClick={removeSelectedTile}><Eraser size={17} /> Rimuovi solo il tile {palette.tile.x + 1}, {palette.tile.y + 1}</button>}
           <p className="pc-tip">Le finiture vengono applicate all'intera superficie di questa stanza.</p>
         </div> : <>
+          {(mode === "forma" || mode === "arredi" || mode === "sposta") && <div className="pc-builder-tabs" role="group" aria-label="Strumenti di costruzione">
+            <button type="button" className={mode === "forma" ? "active" : ""} aria-pressed={mode === "forma"} onClick={() => chooseMode("forma")}><Eraser size={17} /> Forma</button>
+            <button type="button" className={mode === "arredi" ? "active" : ""} aria-pressed={mode === "arredi"} onClick={() => chooseMode("arredi")}><Box size={17} /> Arredi</button>
+            <button type="button" className={mode === "sposta" ? "active" : ""} aria-pressed={mode === "sposta"} onClick={() => chooseMode("sposta")}><Grid2X2 size={17} /> Stanze</button>
+          </div>}
+          {mode === "gioca" && <div className="pc-context-content pc-missions">
+            <div className="pc-context-heading">
+              <div><small>MISSIONI DI OGGI</small><strong>{room?.name ?? "La tua casa"}</strong></div>
+              <span className="pc-progress-label">{doneInRoom}/{roomChores.length}</span>
+            </div>
+            <p className="pc-mission-subtitle">Completa le faccende nell'app per far avanzare il tuo percorso.</p>
+            {missions.length ? <div className="pc-missions-list">
+              {missions.slice(0, 4).map((chore) => {
+                const complete = hasCompletedToday(appData, chore.id);
+                return <Link to="/app/faccende" key={chore.id} className={"pc-mission" + (complete ? " complete" : "")}>
+                  <span className="pc-mission-icon">{complete ? <Check size={18} /> : <ClipboardList size={18} />}</span>
+                  <span className="pc-mission-copy"><strong>{chore.title}</strong><small>{complete ? "Completata oggi" : "Da completare"}</small></span>
+                  <ChevronLeft className="pc-mission-chevron" size={16} />
+                </Link>;
+              })}
+            </div> : <div className="pc-mission-empty"><Trophy size={26} /><strong>Nessuna missione in questa stanza</strong><span>Aggiungi una faccenda dalla sezione Faccende.</span></div>}
+            <Link className="pc-missions-cta" to="/app/faccende">Vai alle faccende <ChevronLeft size={17} /></Link>
+          </div>}
           {mode === "esplora" && <div className="pc-context-content pc-explore-tip">
             <Paintbrush size={23} /><div><strong>Personalizza con un tocco</strong><span>Tocca il pavimento o una parete per scegliere il pattern. Due dita per lo zoom, frecce per ruotare.</span></div>
           </div>}
@@ -515,17 +609,18 @@ export function Percorso() {
               </div>
             </div>}
           </div>}
-        </>}
+        </>)}
       </section>
     </main>
 
     <nav className="pc-mode-dock" aria-label="Fasi di modifica">
-      {modes.map(({ id, label, Icon }) =>
-        <button type="button" key={id} className={mode === id ? "active" : ""}
-          aria-pressed={mode === id} onClick={() => chooseMode(id)}>
-          <Icon size={23} strokeWidth={mode === id ? 2.4 : 1.9} />
+      {modes.map(({ id, label, Icon }) => {
+        const active = id === "forma" ? mode === "forma" || mode === "arredi" || mode === "sposta" : mode === id;
+        return <button type="button" key={id} className={active ? "active" : ""}
+          aria-pressed={active} onClick={() => chooseMode(id)}>
+          <Icon size={23} strokeWidth={active ? 2.4 : 1.9} />
           <span>{label}</span>
-        </button>)}
+        </button>; })}
     </nav>
   </div>;
 }

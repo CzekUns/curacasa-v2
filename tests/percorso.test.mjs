@@ -67,3 +67,12 @@ test("Saved room designs are reconciled with the registered room list", () => {
   assert.equal(next.rooms[1].name, "Cucina");
   assert.deepEqual(reconcileHouse(["Cucina"], next).rooms.map((r) => r.name), ["Cucina"]);
 });
+
+test("An irregular saved floor survives reloading without losing its custom tiles", () => {
+  const edited = toggleCell(newRoom("Bagno", 0), 0, 0);
+  assert.ok(edited);
+  const restored = reconcileHouse(["Bagno"], { version: 1, rooms: [edited] });
+  assert.deepEqual(restored.rooms[0].cells, edited.cells);
+  assert.equal(restored.rooms[0].cells.length, 19);
+  assert.ok(!restored.rooms[0].cells.includes("0,0"));
+});

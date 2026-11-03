@@ -28,7 +28,7 @@ jobs:
         run: |
           npm run build
           grep -q 'name="robots" content="noindex"' dist/index.html
-          grep -q 'Organizza le pulizie di casa' dist/index.html
+          grep -q 'CuraCasa.*organizzare le pulizie di casa' dist/index.html
           grep -q 'property="og:title"' dist/index.html
           test ! -f dist/sitemap.xml
       - name: Check production SEO assets
