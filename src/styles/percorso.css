@@ -258,7 +258,7 @@
 .pc-mission-empty span { font-size: .66rem; line-height: 1.4; }
 .pc-missions-cta { display: flex; justify-content: center; align-items: center; gap: 7px; padding: 12px; background: #507f68; color: white; font-size: .77rem; font-weight: 850; border-radius: 12px; text-decoration: none; }
 .pc-missions-cta svg { transform: rotate(180deg); }
-.pc-mode-dock { grid-template-columns: repeat(5, minmax(0, 1fr)); width: min(calc(100% - 32px), 500px); }
+.pc-mode-dock { grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(calc(100% - 32px), 500px); }
 .pc-mode-dock button { min-width: 0; }
 .pc-mode-dock button.active { box-shadow: inset 0 0 0 1px #badcc4; }
 @media (max-width: 850px) {
@@ -278,7 +278,7 @@
   .pc-gesture-panel .pc-context-content { pointer-events: auto; max-width: 620px; margin: 0 auto; border-radius: 0 0 16px 16px; }
   .pc-stage-status { padding-right: 12px; padding-left: 12px; }
   .pc-scene-help { bottom: 11px; font-size: .57rem; }
-  .pc-mode-dock { border-radius: 18px 18px 0 0; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pc-mode-dock { border-radius: 18px 18px 0 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pc-mode-dock button { font-size: .61rem; gap: 4px; min-height: 55px; }
   .pc-mode-dock button svg { width: 21px; height: 21px; }
 }
@@ -288,4 +288,21 @@
   .pc-game-metrics { gap: 4px; }
   .pc-game-metrics span { font-size: .57rem; }
   .pc-scene-help { display: none; }
+}
+
+.pc-builder-tabs {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px; padding: 10px; background: #fffdfa;
+  border-left: 1px solid #e5e9dd; border-right: 1px solid #e5e9dd;
+}
+.pc-builder-tabs button {
+  min-height: 42px; display: inline-flex; justify-content: center; align-items: center;
+  gap: 5px; border: 1px solid #e1e9dc; border-radius: 11px;
+  background: #f6f8f2; color: #6d8878; font-size: .69rem; font-weight: 820;
+}
+.pc-builder-tabs button.active {
+  background: #e4f0e5; border-color: #9ac4a8; color: #397559;
+}
+@media (max-width: 390px) {
+  .pc-builder-tabs button { font-size: .64rem; gap: 4px; }
 }
