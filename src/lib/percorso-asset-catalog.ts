@@ -1,0 +1,500 @@
+/** Lightweight procedural 3D assets: one dedicated selectable object for every CuraCasa Shop preset.
+ * No third-party models, downloads, or external texture assets are required.
+ * Each row is [preset icon/id, display name, category, footprint width, footprint depth, symbol].
+ */
+export const ASSET_CATEGORIES = ["Tutti", "Pulizia", "Cucina", "Bagno", "Camera", "Salone", "Balcone", "Impianti", "Struttura"] as const;
+export type AssetCategory = Exclude<(typeof ASSET_CATEGORIES)[number], "Tutti">;
+const EXTRA_ASSET_ROWS = [
+  [
+    "casa",
+    "Casetta",
+    "Struttura",
+    1,
+    1,
+    "🏠"
+  ],
+  [
+    "scopa-elettrica",
+    "Aspirapolvere a stelo",
+    "Pulizia",
+    1,
+    1,
+    "🧹"
+  ],
+  [
+    "scopa",
+    "Scopa",
+    "Pulizia",
+    1,
+    1,
+    "🧹"
+  ],
+  [
+    "pavimento",
+    "Mocio",
+    "Pulizia",
+    1,
+    1,
+    "🧼"
+  ],
+  [
+    "spolverino",
+    "Spolverino",
+    "Pulizia",
+    1,
+    1,
+    "🪶"
+  ],
+  [
+    "pattumiera",
+    "Pattumiera",
+    "Cucina",
+    1,
+    1,
+    "🗑️"
+  ],
+  [
+    "bagno",
+    "Mobile bagno",
+    "Bagno",
+    2,
+    1,
+    "🚰"
+  ],
+  [
+    "cucina",
+    "Blocco cucina",
+    "Cucina",
+    2,
+    1,
+    "🍳"
+  ],
+  [
+    "balcone",
+    "Set balcone",
+    "Balcone",
+    2,
+    1,
+    "🪴"
+  ],
+  [
+    "doccia",
+    "Soffione doccia",
+    "Bagno",
+    1,
+    1,
+    "🚿"
+  ],
+  [
+    "wc",
+    "WC",
+    "Bagno",
+    1,
+    1,
+    "🚽"
+  ],
+  [
+    "lavandino",
+    "Lavandino",
+    "Bagno",
+    1,
+    1,
+    "🚰"
+  ],
+  [
+    "asciugamani",
+    "Portasciugamani",
+    "Bagno",
+    1,
+    1,
+    "🧺"
+  ],
+  [
+    "biancheria-letto",
+    "Biancheria letto",
+    "Camera",
+    1,
+    1,
+    "🛏️"
+  ],
+  [
+    "mocio-secchio",
+    "Secchio e mocio",
+    "Pulizia",
+    1,
+    1,
+    "🪣"
+  ],
+  [
+    "paletta",
+    "Paletta",
+    "Pulizia",
+    1,
+    1,
+    "🧹"
+  ],
+  [
+    "macchina-caffe",
+    "Macchina caffè",
+    "Cucina",
+    1,
+    1,
+    "☕"
+  ],
+  [
+    "cuscini",
+    "Cuscini",
+    "Salone",
+    1,
+    1,
+    "🛋️"
+  ],
+  [
+    "specchio",
+    "Specchio",
+    "Bagno",
+    1,
+    1,
+    "🪞"
+  ],
+  [
+    "mensole",
+    "Mensola",
+    "Struttura",
+    1,
+    1,
+    "📚"
+  ],
+  [
+    "maniglie",
+    "Maniglia porta",
+    "Struttura",
+    1,
+    1,
+    "🚪"
+  ],
+  [
+    "box-doccia",
+    "Box doccia",
+    "Bagno",
+    2,
+    1,
+    "🚿"
+  ],
+  [
+    "mattonelle",
+    "Mattonelle",
+    "Bagno",
+    1,
+    1,
+    "▦"
+  ],
+  [
+    "forno",
+    "Forno",
+    "Cucina",
+    1,
+    1,
+    "♨️"
+  ],
+  [
+    "cappa",
+    "Cappa aspirante",
+    "Cucina",
+    1,
+    1,
+    "🍳"
+  ],
+  [
+    "lavastoviglie-manutenzione",
+    "Lavastoviglie",
+    "Cucina",
+    1,
+    1,
+    "🍽️"
+  ],
+  [
+    "lavastoviglie-sale",
+    "Sale lavastoviglie",
+    "Cucina",
+    1,
+    1,
+    "🧂"
+  ],
+  [
+    "materasso",
+    "Materasso",
+    "Camera",
+    2,
+    1,
+    "🛏️"
+  ],
+  [
+    "battiscopa",
+    "Battiscopa",
+    "Struttura",
+    2,
+    1,
+    "📏"
+  ],
+  [
+    "porta",
+    "Porta",
+    "Struttura",
+    1,
+    1,
+    "🚪"
+  ],
+  [
+    "lampadario",
+    "Lampadario",
+    "Salone",
+    1,
+    1,
+    "💡"
+  ],
+  [
+    "vetri",
+    "Finestra",
+    "Struttura",
+    1,
+    1,
+    "🪟"
+  ],
+  [
+    "finestra-tende",
+    "Finestra con tende",
+    "Struttura",
+    1,
+    1,
+    "🪟"
+  ],
+  [
+    "infissi",
+    "Telaio infisso",
+    "Struttura",
+    1,
+    1,
+    "🪟"
+  ],
+  [
+    "tapparelle",
+    "Tapparella",
+    "Struttura",
+    1,
+    1,
+    "🪟"
+  ],
+  [
+    "tende",
+    "Tende",
+    "Salone",
+    1,
+    1,
+    "🪟"
+  ],
+  [
+    "tende-esterno",
+    "Tenda da sole",
+    "Balcone",
+    2,
+    1,
+    "⛱️"
+  ],
+  [
+    "termosifone",
+    "Termosifone",
+    "Impianti",
+    1,
+    1,
+    "♨️"
+  ],
+  [
+    "caldaia",
+    "Caldaia",
+    "Impianti",
+    1,
+    1,
+    "🔥"
+  ],
+  [
+    "condizionatore",
+    "Condizionatore",
+    "Impianti",
+    1,
+    1,
+    "❄️"
+  ],
+  [
+    "deumidificatore",
+    "Deumidificatore",
+    "Impianti",
+    1,
+    1,
+    "💧"
+  ],
+  [
+    "telecomando-batterie",
+    "Telecomando",
+    "Salone",
+    1,
+    1,
+    "📺"
+  ],
+  [
+    "sifone-lavandino",
+    "Sifone",
+    "Bagno",
+    1,
+    1,
+    "🔧"
+  ],
+  [
+    "tubi-esterni",
+    "Tubi esterni",
+    "Impianti",
+    1,
+    1,
+    "🔧"
+  ],
+  [
+    "addolcitore-manutenzione",
+    "Addolcitore",
+    "Impianti",
+    1,
+    1,
+    "💧"
+  ],
+  [
+    "addolcitore-sale",
+    "Sale addolcitore",
+    "Impianti",
+    1,
+    1,
+    "🧂"
+  ],
+  [
+    "filtro-cappa",
+    "Filtro cappa",
+    "Cucina",
+    1,
+    1,
+    "▦"
+  ],
+  [
+    "filtro-condizionatore",
+    "Filtro condizionatore",
+    "Impianti",
+    1,
+    1,
+    "▦"
+  ],
+  [
+    "pareti",
+    "Parete",
+    "Struttura",
+    1,
+    1,
+    "🧱"
+  ],
+  [
+    "tapparella-grande",
+    "Tapparella grande",
+    "Struttura",
+    2,
+    1,
+    "🪟"
+  ],
+  [
+    "zanzariera",
+    "Zanzariera",
+    "Struttura",
+    1,
+    1,
+    "🪟"
+  ],
+  [
+    "mobiletti-esterni",
+    "Mobiletto esterno",
+    "Balcone",
+    1,
+    1,
+    "🗄️"
+  ],
+  [
+    "dyson",
+    "Aspirapolvere cordless",
+    "Pulizia",
+    1,
+    1,
+    "🧹"
+  ],
+  [
+    "dyson-accessori",
+    "Accessori aspirapolvere",
+    "Pulizia",
+    1,
+    1,
+    "🧰"
+  ],
+  [
+    "folletto",
+    "Aspirapolvere verticale",
+    "Pulizia",
+    1,
+    1,
+    "🧹"
+  ],
+  [
+    "aspirapolvere",
+    "Aspirapolvere vintage",
+    "Pulizia",
+    1,
+    1,
+    "🧹"
+  ],
+  [
+    "robot-aspirapolvere",
+    "Robot aspirapolvere",
+    "Pulizia",
+    1,
+    1,
+    "🤖"
+  ]
+] as const satisfies readonly (readonly [string, string, AssetCategory, number, number, string])[];
+export type AdditionalAssetId = (typeof EXTRA_ASSET_ROWS)[number][0];
+const CATEGORY_COLORS: Record<AssetCategory, readonly [string, string]> = {
+  Pulizia:["#8daeb2","#f0e9da"], Cucina:["#c99f7a","#fff0d7"], Bagno:["#a4c8cf","#f3fbfc"],
+  Camera:["#bb9ea6","#fff1e9"], Salone:["#b38b83","#f6ddd1"], Balcone:["#86a98b","#e1edcb"],
+  Impianti:["#9aaeb6","#f0f4f6"], Struttura:["#c3ae93","#f3e8d6"],
+};
+/** The 'choreIcon' is the original Shop icon key; it remains stable if users rename a chore. */
+export const ADDITIONAL_ASSETS = EXTRA_ASSET_ROWS.map(([id,label,category,width,height,icon]) => ({
+  id, label, category, width, height, icon,
+  elevation: 35, color: CATEGORY_COLORS[category][0], accent: CATEGORY_COLORS[category][1],
+  choreIcon: id,
+}));
+/** Existing ten objects remain unchanged: no saved room loses its furniture. */
+const EXISTING_PRESET_ASSETS = {
+  "piante": "pianta",
+  "letto": "letto",
+  "soggiorno": "divano",
+  "vasca": "vasca",
+  "lavatrice": "lavatrice",
+  "tavolo": "tavolo",
+  "tappeto": "tappeto",
+  "divano": "divano",
+  "frigorifero": "frigo",
+  "armadio": "armadio"
+} as const;
+/** Keyed by the icon ID in public/chore-packs.json. */
+export const PRESET_ASSET_IDS: Readonly<Record<string,string>> = Object.freeze({
+  ...Object.fromEntries(ADDITIONAL_ASSETS.map(asset=>[asset.choreIcon,asset.id])),
+  ...EXISTING_PRESET_ASSETS,
+});
+export const EXISTING_ASSET_CATEGORIES: Readonly<Record<string,AssetCategory>> = {
+  divano:"Salone", letto:"Camera", tavolo:"Cucina", sedia:"Salone", armadio:"Camera",
+  lavatrice:"Bagno", vasca:"Bagno", pianta:"Balcone", tappeto:"Salone", frigo:"Cucina",
+};
+export const categoryForFurniture = (id:string): AssetCategory =>
+  ADDITIONAL_ASSETS.find(asset=>asset.id===id)?.category ?? EXISTING_ASSET_CATEGORIES[id] ?? "Struttura";
