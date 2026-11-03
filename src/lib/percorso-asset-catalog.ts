@@ -532,11 +532,6 @@ const EXISTING_PRESET_ASSETS = {
   "frigorifero": "frigo",
   "armadio": "armadio"
 } as const;
-/** Keyed by the icon ID in public/chore-packs.json. */
-export const PRESET_ASSET_IDS: Readonly<Record<string,string>> = Object.freeze({
-  ...Object.fromEntries(ADDITIONAL_ASSETS.map(asset=>[asset.choreIcon,asset.id])),
-  ...EXISTING_PRESET_ASSETS,
-});
 /** Human-readable task names: search "pulire WC" as well as "WC". */
 export const PRESET_CHORE_TITLES: Readonly<Record<string,string>> = {
   "casa": "Controllo generale casa",
@@ -607,6 +602,11 @@ export const PRESET_CHORE_TITLES: Readonly<Record<string,string>> = {
   "aspirapolvere": "Aspirapolvere vintage",
   "robot-aspirapolvere": "Avviare robot aspirapolvere"
 };
+/** Keyed by the icon ID in public/chore-packs.json. */
+export const PRESET_ASSET_IDS: Readonly<Record<string,string>> = Object.freeze({
+  ...Object.fromEntries(ADDITIONAL_ASSETS.filter(asset=>Boolean(PRESET_CHORE_TITLES[asset.choreIcon])).map(asset=>[asset.choreIcon,asset.id])),
+  ...EXISTING_PRESET_ASSETS,
+});
 export const ASSET_CHORE_TITLES: Readonly<Record<string,readonly string[]>> =
   Object.entries(PRESET_ASSET_IDS).reduce<Record<string,string[]>>((grouped,[icon,assetId])=>{
     (grouped[assetId] ??= []).push(PRESET_CHORE_TITLES[icon] ?? icon);
