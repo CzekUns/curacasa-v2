@@ -37,6 +37,7 @@ type Runtime = {
   dispose: () => void;
   rebuild: () => void;
   updatePreview: () => void;
+  updateSelection: () => void;
   draw: () => void;
 };
 
@@ -402,6 +403,7 @@ export const Room3DScene = forwardRef<Room3DHandle, Props>(function Room3DScene(
       fit(){pan.set(0,0,0);targetZoom=1;zoom=1;pitch=.85;targetYaw=Math.PI/4;yaw=targetYaw;requestDraw();},
       rebuild,
       updatePreview(){rebuildGhost();requestDraw();},
+      updateSelection(){updateSelection();requestDraw();},
       draw:requestDraw,
       dispose(){
         disposed=true;
@@ -427,7 +429,7 @@ export const Room3DScene = forwardRef<Room3DHandle, Props>(function Room3DScene(
 
   useEffect(() => { runtimeRef.current?.rebuild(); }, [props.room,props.items]);
   useEffect(() => { runtimeRef.current?.updatePreview(); }, [props.adding,props.rotation,props.mode]);
-  useEffect(() => { runtimeRef.current?.rebuild(); }, [props.selectedId]);
+  useEffect(() => { runtimeRef.current?.updateSelection(); }, [props.selectedId]);
   useEffect(() => { runtimeRef.current?.draw(); }, [props.showWalls,props.panelOpen]);
 
   return <div ref={mountRef} className="game3d-scene">
