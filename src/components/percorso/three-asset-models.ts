@@ -150,6 +150,14 @@ export function renderAdditionalAsset(parent:THREE.Group,type:string):boolean {
       box(g,.46,.03,.40,.54,.99,0,chrome);
       rod(g,[.55,.99,-.1],[.55,1.22,-.1],.025,chrome);
       break;
+    case "soggiorno":
+      box(g,1.79,.57,.66,0,.34,0,wood);
+      box(g,1.82,.10,.72,0,.67,0,pale);
+      box(g,1.22,.73,.11,0,1.12,-.06,dark);
+      box(g,1.08,.57,.035,0,1.13,.01,"#7296a5");
+      box(g,.30,.18,.28,0,.71,-.06,chrome);
+      for(const x of [-.58,.58])box(g,.12,.09,.09,x,.06,.15,wood);
+      break;
     case "balcone":
       box(g,1.7,.13,.18,0,.78,-.37,wood);
       for(const x of [-.76,0,.76])rod(g,[x,.08,-.38],[x,1.14,-.38],.035,chrome);
