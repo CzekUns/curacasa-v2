@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { FURNITURE, furnitureSize, type Furniture, type FurnitureType, type HouseRoom } from "../../lib/percorso.ts";
+import { editableTileSlots } from "../../lib/percorso-grid.ts";
 
 /**
  * CuraCasa 3D lab: procedural low-poly models. No downloaded models or branded
@@ -209,8 +210,10 @@ export type RoomVisual = {
   dispose: () => void;
 };
 
-export function buildRoom(room: HouseRoom, furniture: Furniture[]): RoomVisual {
+export function buildRoom(room: HouseRoom, furniture: Furniture[], editable = false, showLabel = false): RoomVisual {
   const root = new THREE.Group(), floor: THREE.Mesh[] = [];
+  root.userData.roomId = room.id;
+  root.position.set(room.offsetX,0,room.offsetY);
   const walls: RoomVisual["walls"] = [];
   const objects = new Map<string, THREE.Group>();
   const active = new Set(room.cells);
@@ -257,6 +260,44 @@ export function buildRoom(room: HouseRoom, furniture: Furniture[]): RoomVisual {
       }
     }
   }
+  if (editable) {
+    for (const {x,y} of editableTileSlots(room)) {
+      const ghost = new THREE.Mesh(
+        new THREE.BoxGeometry(.92,.035,.92),
+        new THREE.MeshBasicMaterial({
+          color:"#78b89a", transparent:true, opacity:.34,
+          depthWrite:false, side:THREE.DoubleSide,
+        }),
+      );
+      ghost.position.set(x+.5,-.07,y+.5);
+      ghost.userData.tile = {x,y,missing:true};
+      ghost.userData.tilePlaceholder = true;
+      root.add(ghost);
+    }
+  }
+  if (showLabel) {
+    const canvas=document.createElement("canvas");
+    canvas.width=512;canvas.height=128;
+    const ctx=canvas.getContext("2d");
+    if(ctx) {
+      ctx.fillStyle="rgba(255,254,247,.94)";
+      ctx.beginPath();
+      ctx.roundRect(8,10,496,104,46);
+      ctx.fill();
+      ctx.lineWidth=7;ctx.strokeStyle="#b1cdb8";ctx.stroke();
+      ctx.fillStyle="#3d6f57";
+      ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.font="bold 41px sans-serif";
+      const name=room.name.length>22?room.name.slice(0,20)+"…":room.name;
+      ctx.fillText(name,256,63,448);
+      const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;
+      const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map,transparent:true,depthTest:false}));
+      sprite.position.set(room.width/2,2.9,room.height/2);
+      sprite.scale.set(Math.max(2.5,Math.min(3.8,room.width*.6)),.8,1);
+      sprite.userData.roomLabel=true;
+      root.add(sprite);
+    }
+  }
   for (const item of furniture) {
     const group = createFurniture(item);
     root.add(group);
@@ -264,6 +305,11 @@ export function buildRoom(room: HouseRoom, furniture: Furniture[]): RoomVisual {
   }
   const dispose = () => {
     root.traverse((obj)=>{
+      if(obj instanceof THREE.Sprite){
+        const material=obj.material as THREE.SpriteMaterial;
+        material.map?.dispose();
+        material.dispose();
+      }
       if(obj instanceof THREE.Mesh){
         obj.geometry.dispose();
         for (const mat of Array.isArray(obj.material)?obj.material:[obj.material]) mat.dispose();
