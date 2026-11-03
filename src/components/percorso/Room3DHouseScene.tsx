@@ -6,7 +6,7 @@ import {
   type FurnitureType, type HouseRoom,
 } from "../../lib/percorso";
 import { moveHouseRoom } from "../../lib/percorso-grid";
-import { draggedFurniturePosition, tappedFurniturePosition } from "../../lib/percorso-furniture-touch";
+import { draggedFurniturePosition, tappedFurniturePosition, canDragFurniture } from "../../lib/percorso-furniture-touch";
 
 export type GameMode = "play" | "furniture" | "finishes" | "tiles";
 export type House3DHandle = {
@@ -378,8 +378,8 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       const selectedFurniture = hit?.kind==="furniture" && hit.roomId===p.room.id &&
         !p.showAll && !p.isShowcasePreview;
       const movableObject = selectedFurniture &&
-        ((p.mode==="furniture"&&!p.adding) ||
-          (p.movingFurnitureId!==null && p.movingFurnitureId===hit?.itemId));
+        canDragFurniture(hit?.itemId??null,p.mode,p.movingFurnitureId,
+          Boolean(p.adding),p.isShowcasePreview);
       gesture={
         pointerId:e.pointerId,start:pos,last:pos,moved:false,candidate:null,
         objectId:movableObject?hit?.itemId??null:null,
