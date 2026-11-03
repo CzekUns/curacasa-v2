@@ -25,3 +25,15 @@ export function tappedFurniturePosition(
   const y = Math.round(ground.z - room.offsetY - size.height / 2);
   return { x, y, valid: validPlacement(room, { ...item, x, y }, item.id) };
 }
+
+
+export function canDragFurniture(
+  itemId: string | null,
+  mode: "play"|"furniture"|"finishes"|"tiles",
+  movingFurnitureId: string | null,
+  addingFurniture: boolean,
+  showroomPreview: boolean,
+): boolean {
+  if (!itemId || addingFurniture || showroomPreview) return false;
+  return mode==="furniture" || itemId===movingFurnitureId;
+}
