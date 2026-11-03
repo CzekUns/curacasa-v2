@@ -210,3 +210,56 @@
 .game3d-demo-choice > div { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
 .game3d-demo-choice button { border-radius:10px;background:#dfe8df;color:#5b7c6a;padding:11px 6px;font-size:.68rem;font-weight:850; }
 .game3d-demo-choice button:last-child { color:#fff;background:#568d70; }
+
+
+/* GameLab 3D 2.1: room/whole-house switch + touch-first tile editor. */
+.game3d-view-switch {
+  position:absolute;top:75px;left:12px;z-index:7;
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px;border:1px solid #dce9dc;border-radius:15px;
+  background:#fffefaee;box-shadow:0 6px 18px #4e70501a;
+  backdrop-filter:blur(7px);
+}
+.game3d-view-switch button {
+  padding:9px 13px;min-height:37px;border-radius:11px;
+  background:transparent;color:#7c9687;
+  font-size:.69rem;font-weight:850;white-space:nowrap;
+}
+.game3d-view-switch button.active {
+  background:#deeee1;color:#377458;
+  box-shadow:inset 0 0 0 1px #b6d7c0;
+}
+.game3d-progress {top:131px;}
+.game3d-tile-actions {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+}
+.game3d-tile-actions button {
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:49px;padding:8px 4px;border-radius:12px;
+  background:#eef3e9;color:#6f8d79;border:1px solid #e0e9de;
+  font-size:.68rem;font-weight:870;
+}
+.game3d-tile-actions button.active {
+  background:#dcefe0;color:#367654;border-color:#a9d1b5;
+}
+.game3d-tile-summary {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;min-height:39px;padding:9px 12px;
+  color:#638573;background:#f7faf3;border-radius:11px;
+  font-size:.69rem;
+}
+.game3d-tile-summary span {color:#8d9c8e;font-size:.65rem}
+.game3d-tabs {grid-template-columns:repeat(4,minmax(0,1fr));}
+.game3d-tabs button {font-size:.63rem;gap:3px;min-width:0}
+.game3d-tabs button svg {width:22px;height:22px}
+@media (max-width:380px){
+  .game3d-view-switch {top:70px;}
+  .game3d-view-switch button {padding:8px 9px;}
+  .game3d-progress {top:122px;}
+  .game3d-tile-actions button {font-size:.62rem;}
+  .game3d-tabs button {font-size:.59rem;}
+}
+@media (min-width:860px){
+  .game3d-view-switch {top:88px;left:24px;}
+  .game3d-progress {top:148px;}
+}
