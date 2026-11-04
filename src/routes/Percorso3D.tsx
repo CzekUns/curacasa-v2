@@ -4,7 +4,7 @@ import {
   ArrowLeft, Armchair, Brush, Check, Coins,
   Eye, EyeOff, Maximize, RotateCcw, RotateCw,
   Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, WandSparkles, Move,
-  ChevronLeft, ChevronRight, House, PlusCircle, type LucideIcon,
+  ChevronLeft, ChevronRight, House, PlusCircle, ListChecks, type LucideIcon,
 } from "lucide-react";
 import { Room3DHouseScene, type House3DHandle, type GameMode } from "../components/percorso/Room3DHouseScene";
 import { editHouseTile } from "../lib/percorso-grid";
@@ -14,14 +14,20 @@ import {
   saveRoomArrangement, type RoomArrangement,
 } from "../lib/percorso-arrangement";
 import { sampleFurniture } from "../components/percorso/three-room-model";
-import { ASSET_CATEGORIES, ASSET_CHORE_TITLES, PRESET_ASSET_IDS, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
+import { ASSET_CATEGORIES, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
+import { actionsForAsset, physicalAssetId, presetActionsForAsset } from "../lib/percorso-asset-actions";
+import { normalizeStorePacks } from "../lib/shop-catalog";
+import { ChoreIcon } from "../lib/icons";
 import {
   FLOOR_STYLES, WALL_STYLES, FURNITURE, loadHouse, saveHouse,
   validPlacement, type Direction, type Furniture, type FurnitureType,
   type FloorStyle, type HouseRoom, type HouseLayout, type WallStyle,
 } from "../lib/percorso";
 import { eligibleRoomNames, getRoomRule } from "../lib/chore-rooms";
-import { getWallet, hasCompletedToday, loadData, type AppData } from "../lib/store";
+import {
+  addLog, getWallet, hasCompletedToday, importPresets, loadData,
+  saveData, statusFor, type AppData, type PresetChore,
+} from "../lib/store";
 import "./percorso3d.css";
 
 const tabs: {id: "play"|"furniture"|"tiles"; title:string; Icon:LucideIcon}[] = [
@@ -51,6 +57,8 @@ export function Percorso3D() {
   const [adding,setAdding] = useState<FurnitureType|null>(null);
   const [assetSearch,setAssetSearch] = useState("");
   const [assetCategory,setAssetCategory] = useState<AssetCategory|"Tutti">("Tutti");
+  const [availablePresets,setAvailablePresets] = useState<PresetChore[]>([]);
+  const [confirmActionId,setConfirmActionId] = useState<string|null>(null);
   const [rotation,setRotation] = useState<Direction>(0);
   const [selectedId,setSelectedId] = useState<string|null>(null);
   const [movingFurnitureId,setMovingFurnitureId] = useState<string|null>(null);
@@ -84,23 +92,41 @@ export function Percorso3D() {
   const selected=items.find(item=>item.id===selectedId);
   const selectedSpec=FURNITURE.find(x=>x.id===selected?.type);
   const visibleFurniture=useMemo(()=>FURNITURE.filter(entry=>{
+    // The Shop can have two chores for one appliance. Don't offer users two
+    // different 3D objects just to refill and maintain the same addolcitore.
+    if(physicalAssetId(entry.id)!==entry.id)return false;
     const matchesCategory=assetCategory==="Tutti" || categoryForFurniture(entry.id)===assetCategory;
     const q=assetSearch.trim().toLocaleLowerCase("it");
     return matchesCategory && (!q || entry.label.toLocaleLowerCase("it").includes(q) ||
       entry.id.toLocaleLowerCase("it").includes(q) ||
-      ASSET_CHORE_TITLES[entry.id]?.some(title=>title.toLocaleLowerCase("it").includes(q)));
+      presetActionsForAsset(entry.id).some(action=>
+        action.title.toLocaleLowerCase("it").includes(q) ||
+        action.icon.toLocaleLowerCase("it").includes(q)));
   }),[assetSearch,assetCategory]);
   const relevantChores=room?data.chores.filter(chore =>
     eligibleRoomNames(data.rooms,data.roomDetails,getRoomRule(chore)).includes(room.name)):[];
   const completed=relevantChores.filter(chore=>hasCompletedToday(data,chore.id)).length;
   const completionPercent = relevantChores.length? Math.round(completed/relevantChores.length*100):0;
   const wallet=getWallet(data);
-  const objectChores=selectedSpec?relevantChores.filter(chore=>{
-    const title=chore.title.toLocaleLowerCase("it");
-    const label=selectedSpec.label.toLocaleLowerCase("it");
-    return PRESET_ASSET_IDS[chore.icon]===selected?.type ||
-      title.includes(label) || (selected?.type==="frigo"&&title.includes("frigorifero"));
-  }):[];
+  const objectActions=selected?actionsForAsset(
+    selected.type,data,roomName,availablePresets):[];
+  const objectChores=objectActions.flatMap(action=>action.chore?[action.chore]:[]);
+
+  // Use the same authoritative preset definitions as the Shop: no duplicate
+  // fake chores or guessed recurrence rules in the game.
+  useEffect(()=>{
+    const controller=new AbortController();
+    fetch(`${import.meta.env.BASE_URL}chore-packs.json?catalog=grouped-v2`,{
+      cache:"no-store",signal:controller.signal,
+    }).then(response=>{
+      if(!response.ok)throw new Error("Catalogo non disponibile");
+      return response.json() as Promise<unknown>;
+    }).then(content=>{
+      if(controller.signal.aborted)return;
+      setAvailablePresets(normalizeStorePacks(content).flatMap(pack=>pack.chores));
+    }).catch(()=>{/* Offline: preserve existing links and show Shop fallback. */});
+    return ()=>controller.abort();
+  },[]);
 
   useEffect(()=>{
     if(!toast)return;
@@ -162,7 +188,7 @@ export function Percorso3D() {
     setHouse(previous.house);saveHouse(previous.house);
     setArrangement(previous.arrangement);saveRoomArrangement(previous.arrangement);
     setCanUndo(undoRef.current.length>0);
-    setSelectedId(null);setAdding(null);setMovingFurnitureId(null);
+    setSelectedId(null);setAdding(null);setMovingFurnitureId(null);setConfirmActionId(null);
     setToast("Ultima modifica annullata.");
   }
   function applyShowcase() {
@@ -178,7 +204,37 @@ export function Percorso3D() {
   function selectFurniture(id:string|null) {
     setSelectedId(id);
     setMovingFurnitureId(null);
+    setConfirmActionId(null);
     if(id){setAdding(null);setPanelOpen(false);}
+  }
+  function addAssetAction(icon:string) {
+    if(!room)return;
+    const preset=availablePresets.find(chore=>chore.icon===icon);
+    if(!preset){setToast("Apri lo Shop per aggiungere questa faccenda.");return;}
+    if(!eligibleRoomNames(data.rooms,data.roomDetails,getRoomRule(preset)).includes(room.name)){
+      setToast("Questa faccenda non è prevista per questa stanza.");return;
+    }
+    const fresh=loadData();
+    const result=importPresets(fresh,[preset]);
+    setData(result.data);
+    if(result.added){
+      saveData(result.data);
+      setToast("Faccenda aggiunta! Ora puoi registrarla da questo oggetto.");
+    }else setToast("Faccenda già presente tra le tue attività.");
+  }
+  function completeAssetAction(choreId:string) {
+    if(!room || !selected || preview || confirmActionId!==choreId)return;
+    const fresh=loadData();
+    const chore=fresh.chores.find(entry=>entry.id===choreId);
+    if(!chore || !actionsForAsset(selected.type,fresh,room.name).some(action=>action.chore?.id===choreId)){
+      setToast("Faccenda non disponibile in questa stanza.");setConfirmActionId(null);return;
+    }
+    const next=addLog(fresh,choreId,{rooms:[room.name]});
+    setConfirmActionId(null);
+    setData(next);
+    if(next===fresh){setToast("Questa faccenda è già stata registrata oggi.");return;}
+    saveData(next);
+    setToast("Faccenda completata! +1 CuraCoin.");
   }
   function startMovingFurniture() {
     if(!selected || preview)return;
@@ -188,20 +244,20 @@ export function Percorso3D() {
     setToast("Trascina il mobile oppure tocca un tile libero per spostarlo.");
   }
   function chooseRoom(id:string) {
-    setRoomId(id);setSelectedId(null);setAdding(null);setMovingFurnitureId(null);
+    setRoomId(id);setSelectedId(null);setAdding(null);setMovingFurnitureId(null);setConfirmActionId(null);
     setShowcase(true);setPanelOpen(false);
     setShowAll(false);
     setMode("play");
     sceneRef.current?.fit();
   }
   function chooseMode(next:GameMode) {
-    setMode(next);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);
+    setMode(next);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setConfirmActionId(null);
     if(next==="furniture")setShowAll(false);
     setPanelOpen(next==="furniture");
     if(next==="tiles")setToast("Tocca il pavimento per togliere tile; tocca le caselle verdi per aggiungerli.");
   }
   function changeView(all:boolean){
-    setShowAll(all);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setPanelOpen(false);
+    setShowAll(all);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setConfirmActionId(null);setPanelOpen(false);
     if(all)setMode("play");
     setToast(all?"Trascina una stanza per sistemarla. Toccala per entrarci.":"");
   }
@@ -232,7 +288,7 @@ export function Percorso3D() {
     if(preview){setToast("Prima usa l'esempio oppure scegli «Parti da zero».");return;}
     if(!validPlacement(room,item)){setToast("Spazio occupato: prova un'altra casella.");return;}
     updateRoom({...room,furniture:[...room.furniture,item]});
-    setSelectedId(item.id);setAdding(null);setMovingFurnitureId(null);
+    setSelectedId(item.id);setAdding(null);setMovingFurnitureId(null);setConfirmActionId(null);
     setPanelOpen(false);
     setToast("Arredo posizionato. Toccalo per spostarlo o ruotarlo.");
   }
@@ -258,7 +314,7 @@ export function Percorso3D() {
   function deleteSelected() {
     if(!room || !selected || preview)return;
     updateRoom({...room,furniture:room.furniture.filter(obj=>obj.id!==selected.id)});
-    setMovingFurnitureId(null);
+    setMovingFurnitureId(null);setConfirmActionId(null);
     setSelectedId(null);setToast("Arredo rimosso. Puoi annullare.");
   }
   function finish(style:FloorStyle|WallStyle) {
