@@ -15,7 +15,7 @@ import {
 } from "../lib/percorso-arrangement";
 import { sampleFurniture } from "../components/percorso/three-room-model";
 import {
-  FURNITURE_SKINS, DEFAULT_FURNITURE_SKIN, getDefaultFurnitureSkin,
+  FURNITURE_SKINS, getDefaultFurnitureSkin,
   normalizeFurnitureSkinId, setDefaultFurnitureSkin, type FurnitureSkinId,
 } from "../lib/percorso-furniture-skins";
 import { ASSET_CATEGORIES, ASSET_CHORE_TITLES, PRESET_ASSET_IDS, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
