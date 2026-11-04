@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import * as THREE from "three";
+import type { FurnitureSkinId } from "../../lib/percorso-furniture-skins.ts";
 import { buildRoom, createFurniture, readSceneTheme, type RoomVisual } from "./three-room-model";
 import {
   furnitureSize, validPlacement, type Direction, type Furniture,
@@ -22,6 +23,7 @@ type Props = {
   mode:GameMode;
   movingRooms:boolean;
   adding:FurnitureType|null;
+  addingSkin:FurnitureSkinId;
   rotation:Direction;
   selectedId:string|null;
   movingFurnitureId:string|null;
@@ -210,7 +212,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
       clearGhost();
       const p=current.current;
       if(p.mode!=="furniture"||!p.adding || p.showAll)return;
-      const sample:Furniture={id:"preview",type:p.adding,x:0,y:0,rotation:p.rotation};
+      const sample:Furniture={id:"preview",type:p.adding,x:0,y:0,rotation:p.rotation,skin:p.addingSkin};
       ghost=createFurniture(sample);
       ghost.traverse(node=>{
         if(node instanceof THREE.Mesh){
@@ -457,7 +459,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
         const candidate=ghostAt(pos.x,pos.y);
         if(candidate?.valid)p.onPlace({
           id:"arredo_"+crypto.randomUUID(),
-          type:p.adding,rotation:p.rotation,x:candidate.x,y:candidate.y,
+          type:p.adding,rotation:p.rotation,x:candidate.x,y:candidate.y,skin:p.addingSkin,
         });
         else p.onError("Questo mobile non entra qui.");
         return;
@@ -569,7 +571,7 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
 
   useEffect(()=>{runtimeRef.current?.rebuild();},
     [props.room,props.rooms,props.items,props.showAll,props.mode,props.movingRooms]);
-  useEffect(()=>{runtimeRef.current?.preview();},[props.adding,props.rotation]);
+  useEffect(()=>{runtimeRef.current?.preview();},[props.adding,props.rotation,props.addingSkin]);
   useEffect(()=>{runtimeRef.current?.selection();},[props.selectedId]);
   useEffect(()=>{runtimeRef.current?.draw();},[props.showWalls,props.panelOpen]);
   useEffect(()=>{runtimeRef.current?.fit();},[props.showAll,props.room.id]);
