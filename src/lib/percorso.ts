@@ -161,7 +161,10 @@ export function reconcileHouse(savedNames: string[], saved: unknown): HouseLayou
       ? old.furniture.filter((item): item is Furniture => !!item && typeof item.id === "string" && isFurnitureType(item.type as string) &&
         Number.isInteger(item.x) && Number.isInteger(item.y) && [0, 1, 2, 3].includes(item.rotation as number))
         .reduce<Furniture[]>((accepted, item) => {
-          if (validPlacement({ ...room, furniture: accepted }, item)) accepted.push({...item,...(isFurnitureSkinId(item.skin)?{skin:item.skin}:{})});
+          if (validPlacement({ ...room, furniture: accepted }, item)) {
+            const { skin, ...rest } = item;
+            accepted.push(isFurnitureSkinId(skin) ? {...rest,skin} : rest);
+          }
           return accepted;
         }, [])
       : [];
