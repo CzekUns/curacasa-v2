@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowLeft, Armchair, Brush, Check, Coins,
+  ArrowLeft, Armchair, Brush, Check, Coins, Palette,
   Eye, EyeOff, Maximize, RotateCcw, RotateCw,
   Sparkles, Trash2, Trophy, Undo2, X, Grid2X2, WandSparkles, Move,
   ChevronLeft, ChevronRight, House, PlusCircle, type LucideIcon,
@@ -14,6 +14,10 @@ import {
   saveRoomArrangement, type RoomArrangement,
 } from "../lib/percorso-arrangement";
 import { sampleFurniture } from "../components/percorso/three-room-model";
+import {
+  FURNITURE_SKINS, DEFAULT_FURNITURE_SKIN, getDefaultFurnitureSkin,
+  normalizeFurnitureSkinId, setDefaultFurnitureSkin, type FurnitureSkinId,
+} from "../lib/percorso-furniture-skins";
 import { ASSET_CATEGORIES, ASSET_CHORE_TITLES, PRESET_ASSET_IDS, categoryForFurniture, type AssetCategory } from "../lib/percorso-asset-catalog";
 import {
   FLOOR_STYLES, WALL_STYLES, FURNITURE, loadHouse, saveHouse,
@@ -49,6 +53,8 @@ export function Percorso3D() {
   const [panelOpen,setPanelOpen] = useState(false);
   const [walls,setWalls] = useState(true);
   const [adding,setAdding] = useState<FurnitureType|null>(null);
+  const [addingSkin,setAddingSkin] = useState<FurnitureSkinId>(getDefaultFurnitureSkin);
+  const [showSkinChooser,setShowSkinChooser] = useState(false);
   const [assetSearch,setAssetSearch] = useState("");
   const [assetCategory,setAssetCategory] = useState<AssetCategory|"Tutti">("Tutti");
   const [rotation,setRotation] = useState<Direction>(0);
@@ -83,6 +89,7 @@ export function Percorso3D() {
   const items=room?(preview?demoItems:room.furniture):[];
   const selected=items.find(item=>item.id===selectedId);
   const selectedSpec=FURNITURE.find(x=>x.id===selected?.type);
+  const selectedSkin=normalizeFurnitureSkinId(selected?.skin);
   const visibleFurniture=useMemo(()=>FURNITURE.filter(entry=>{
     const matchesCategory=assetCategory==="Tutti" || categoryForFurniture(entry.id)===assetCategory;
     const q=assetSearch.trim().toLocaleLowerCase("it");
@@ -162,7 +169,7 @@ export function Percorso3D() {
     setHouse(previous.house);saveHouse(previous.house);
     setArrangement(previous.arrangement);saveRoomArrangement(previous.arrangement);
     setCanUndo(undoRef.current.length>0);
-    setSelectedId(null);setAdding(null);setMovingFurnitureId(null);
+    setSelectedId(null);setAdding(null);setMovingFurnitureId(null);setShowSkinChooser(false);
     setToast("Ultima modifica annullata.");
   }
   function applyShowcase() {
@@ -178,30 +185,32 @@ export function Percorso3D() {
   function selectFurniture(id:string|null) {
     setSelectedId(id);
     setMovingFurnitureId(null);
+    setShowSkinChooser(false);
     if(id){setAdding(null);setPanelOpen(false);}
   }
   function startMovingFurniture() {
     if(!selected || preview)return;
     setMode("play");
+    setShowSkinChooser(false);
     setMovingFurnitureId(selected.id);
     setPanelOpen(false);
     setToast("Trascina il mobile oppure tocca un tile libero per spostarlo.");
   }
   function chooseRoom(id:string) {
     setRoomId(id);setSelectedId(null);setAdding(null);setMovingFurnitureId(null);
-    setShowcase(true);setPanelOpen(false);
+    setShowcase(true);setPanelOpen(false);setShowSkinChooser(false);
     setShowAll(false);
     setMode("play");
     sceneRef.current?.fit();
   }
   function chooseMode(next:GameMode) {
-    setMode(next);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);
+    setMode(next);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setShowSkinChooser(false);
     if(next==="furniture")setShowAll(false);
     setPanelOpen(next==="furniture");
     if(next==="tiles")setToast("Tocca il pavimento per togliere tile; tocca le caselle verdi per aggiungerli.");
   }
   function changeView(all:boolean){
-    setShowAll(all);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setPanelOpen(false);
+    setShowAll(all);setAdding(null);setSelectedId(null);setMovingFurnitureId(null);setPanelOpen(false);setShowSkinChooser(false);
     if(all)setMode("play");
     setToast(all?"Trascina una stanza per sistemarla. Toccala per entrarci.":"");
   }
@@ -235,6 +244,28 @@ export function Percorso3D() {
     setSelectedId(item.id);setAdding(null);setMovingFurnitureId(null);
     setPanelOpen(false);
     setToast("Arredo posizionato. Toccalo per spostarlo o ruotarlo.");
+  }
+  function chooseAddingSkin(style:FurnitureSkinId) {
+    setAddingSkin(style);
+    setDefaultFurnitureSkin(style);
+  }
+  function setSelectedFurnitureSkin(style:FurnitureSkinId) {
+    if(!room || !selected || preview)return;
+    if(selectedSkin===style)return;
+    updateRoom({...room,furniture:room.furniture.map(item=>item.id===selected.id?{...item,skin:style}:item)});
+    setToast("Stile "+FURNITURE_SKINS.find(s=>s.id===style)?.label+" applicato.");
+  }
+  function applyFurnitureSkinToRoom(style:FurnitureSkinId) {
+    if(!room || preview)return;
+    updateRoom({...room,furniture:room.furniture.map(item=>({...item,skin:style}))});
+    setToast("Stile applicato agli arredi di "+room.name+".");
+  }
+  function applyFurnitureSkinToHouse(style:FurnitureSkinId) {
+    if(preview)return;
+    persist({...house,rooms:house.rooms.map(entry=>({
+      ...entry,furniture:entry.furniture.map(item=>({...item,skin:style}))
+    }))});
+    setToast("Stile applicato a tutti gli arredi della casa.");
   }
   function move(id:string,x:number,y:number) {
     if(!room || preview)return;
@@ -289,7 +320,7 @@ export function Percorso3D() {
       {sceneRoom ? <Room3DHouseScene ref={sceneRef} room={sceneRoom}
         rooms={showAll ? overviewRooms : [sceneRoom]} items={items} mode={mode}
         showAll={showAll} movingRooms={showAll}
-        adding={adding} rotation={rotation} selectedId={selectedId}
+        adding={adding} addingSkin={addingSkin} rotation={rotation} selectedId={selectedId}
         movingFurnitureId={movingFurnitureId} isShowcasePreview={preview}
         showWalls={walls} panelOpen={panelOpen} onPlace={place} onMove={move}
         onPickRoom={chooseRoom} onMoveRoom={shiftRoom} onTile={changeTile}
@@ -376,6 +407,12 @@ export function Percorso3D() {
               movingFurnitureId?setMovingFurnitureId(null):startMovingFurniture()}>
             <Move size={19}/><small>{movingFurnitureId?"Annulla":"Sposta"}</small>
           </button>
+          <button type="button" className={showSkinChooser?"active":""}
+            aria-label="Scegli la skin di questo mobile"
+            aria-pressed={showSkinChooser}
+            onClick={()=>{setShowSkinChooser(true);setPanelOpen(true);setMovingFurnitureId(null);}}>
+            <Palette size={19}/><small>Stile</small>
+          </button>
           <button type="button" aria-label="Ruota mobile" onClick={rotateSelected}>
             <RotateCw size={19}/><small>Ruota</small>
           </button>
@@ -387,15 +424,34 @@ export function Percorso3D() {
           onClick={()=>selectFurniture(null)}><X size={17}/></button>
       </div>}
       {toast && <p className="game3d-toast" role="status">{toast}</p>}
-      {panelOpen && <section className={"game3d-sheet open"+(mode==="furniture"?" game3d-sheet--catalog":"")} aria-label="Comandi contestuali">
+      {panelOpen && <section className={"game3d-sheet open"+(mode==="furniture"||showSkinChooser?" game3d-sheet--catalog":"")} aria-label="Comandi contestuali">
         <button type="button" className="game3d-sheet-handle" aria-expanded={panelOpen}
-          onClick={()=>setPanelOpen(v=>!v)}>
+          onClick={()=>{setPanelOpen(v=>!v);setShowSkinChooser(false);}}>
           <span className="game3d-handle-dash"/>
-          <strong>{mode==="play"?"Missioni":mode==="furniture"?"Mobili":"Colori e materiali"}</strong>
+          <strong>{showSkinChooser?"Skin di "+(selectedSpec?.label??"arredo"):mode==="play"?"Missioni":mode==="furniture"?"Mobili":"Colori e materiali"}</strong>
           <X size={18}/>
         </button>
         <div className="game3d-sheet-content">
-          {mode==="play" && <>
+          {showSkinChooser && selected && !preview && <div className="game3d-skin-editor">
+            <p className="game3d-sheet-note">Scegli l'aspetto di questo oggetto. La posizione e le faccende associate restano invariate.</p>
+            <div className="game3d-skin-grid" role="group" aria-label="Skin per l'oggetto selezionato">
+              {FURNITURE_SKINS.map(skin=><button type="button" key={skin.id}
+                className={selectedSkin===skin.id?"selected":""} aria-pressed={selectedSkin===skin.id}
+                onClick={()=>setSelectedFurnitureSkin(skin.id)}>
+                <span className="game3d-skin-sample" style={{background:skin.swatch}}>
+                  <i style={{background:skin.accent}}/>
+                </span>
+                <strong>{skin.label}</strong>
+                {selectedSkin===skin.id && <Check size={15}/>}
+                <small>{skin.description}</small>
+              </button>)}
+            </div>
+            <div className="game3d-skin-bulk">
+              <button type="button" onClick={()=>applyFurnitureSkinToRoom(selectedSkin)}>Applica a tutta la stanza</button>
+              <button type="button" onClick={()=>applyFurnitureSkinToHouse(selectedSkin)}>Applica a tutta la casa</button>
+            </div>
+          </div>}
+          {!showSkinChooser && mode==="play" && <>
             {selectedSpec && <div className="game3d-object-context">
               <strong>{selectedSpec.label}</strong>
               <span>{objectChores.length?"Faccende collegate: "+objectChores.map(c=>c.title).join(", "):"Nessuna faccenda specifica collegata."}</span>
@@ -411,7 +467,7 @@ export function Percorso3D() {
             </div> : <p className="game3d-empty">Qui non ci sono ancora faccende: aggiungile dall'app.</p>}
             <Link to="/app/faccende" className="game3d-main-cta">Apri le faccende</Link>
           </>}
-          {mode==="furniture" && <>
+          {!showSkinChooser && mode==="furniture" && <>
             {preview && <div className="game3d-demo-choice">
               <p className="game3d-empty">Stai guardando un esempio non salvato. Scegli come iniziare:</p>
               <div>
@@ -419,6 +475,16 @@ export function Percorso3D() {
                 <button type="button" onClick={()=>{applyShowcase();setPanelOpen(false);}}>Usa questa stanza</button>
               </div>
             </div>}
+            <div className="game3d-asset-skin-picker">
+              <div><strong>Aspetto dei nuovi oggetti</strong><small>Ogni arredo può cambiare skin anche dopo essere stato posizionato.</small></div>
+              <div className="game3d-asset-skin-pills" role="group" aria-label="Skin per gli arredi da aggiungere">
+                {FURNITURE_SKINS.map(skin=><button type="button" key={skin.id}
+                  className={addingSkin===skin.id?"active":""} aria-pressed={addingSkin===skin.id}
+                  title={skin.description} onClick={()=>chooseAddingSkin(skin.id)}>
+                  <span style={{background:skin.swatch}}/>{skin.label}
+                </button>)}
+              </div>
+            </div>
             <div className="game3d-asset-tools">
               <input type="search" value={assetSearch} onChange={event=>setAssetSearch(event.target.value)}
                 placeholder="Cerca arredi o faccende…" aria-label="Cerca un oggetto 3D" />
@@ -442,7 +508,7 @@ export function Percorso3D() {
             <p className="game3d-sheet-note">Scegli un mobile e tocca o trascina sulla stanza: l'anteprima diventa rossa se la posizione è occupata.</p>
           </>}
 
-          {mode==="finishes" && <>
+          {!showSkinChooser && mode==="finishes" && <>
             <div className="game3d-finish-tabs">
               <button type="button" className={finishPart==="floor"?"active":""} onClick={()=>setFinishPart("floor")}>Pavimenti</button>
               <button type="button" className={finishPart==="wall"?"active":""} onClick={()=>setFinishPart("wall")}>Pareti</button>
