@@ -415,6 +415,50 @@ export function Percorso3D() {
           onClick={()=>setRotation(v=>((v+1)%4) as Direction)}><RotateCw size={18}/></button>
         <button type="button" aria-label="Annulla aggiunta" onClick={()=>{setAdding(null);setPanelOpen(true);}}><X size={19}/></button>
       </div>}
+      {selected && !adding && !showAll && mode!=="tiles" && !preview && !movingFurnitureId &&
+        <section className="game3d-asset-action-panel" aria-label={"Azioni per "+(selectedSpec?.label??"oggetto")}>
+          <div className="game3d-asset-action-heading">
+            <ListChecks size={17} aria-hidden="true"/>
+            <strong>Azioni</strong>
+            <small>{objectActions.length} {objectActions.length===1?"attività":"attività"}</small>
+          </div>
+          {objectActions.length ? <div className="game3d-asset-action-list">
+            {objectActions.map(action=>{
+              const done=Boolean(action.chore && hasCompletedToday(data,action.chore.id));
+              const confirming=Boolean(action.chore && confirmActionId===action.chore.id);
+              return <div key={action.key} className={"game3d-asset-action-row"+(done?" done":"")}>
+                <span className="game3d-asset-action-icon" aria-hidden="true">
+                  <ChoreIcon name={action.icon} size={28}/>
+                </span>
+                <span className="game3d-asset-action-info">
+                  <strong>{action.title}</strong>
+                  <small>{done?"Fatta oggi":action.chore?
+                    (statusFor(action.chore,data.logs)==="overdue"?"Scaduta":
+                      statusFor(action.chore,data.logs)==="warning"?"Da fare oggi":"Da fare"):
+                    "Non ancora nelle tue faccende"}</small>
+                </span>
+                {confirming && action.chore ? <span className="game3d-asset-action-confirm">
+                  <button type="button" className="confirm" aria-label={"Conferma "+action.title}
+                    onClick={()=>completeAssetAction(action.chore!.id)}>Conferma</button>
+                  <button type="button" aria-label="Annulla registrazione" onClick={()=>setConfirmActionId(null)}>Annulla</button>
+                </span> : action.chore ?
+                  <button type="button" className="game3d-asset-action-done" disabled={done}
+                    aria-label={done?action.title+" già fatta oggi":"Segna completata: "+action.title}
+                    onClick={()=>setConfirmActionId(action.chore!.id)}>
+                    {done?<Check size={17}/>:<>Fatta <Check size={15}/></>}
+                  </button> : action.preset ?
+                  <button type="button" className="game3d-asset-action-add"
+                    aria-label={"Aggiungi faccenda "+action.title}
+                    onClick={()=>addAssetAction(action.icon)}>Aggiungi</button> :
+                  <Link className="game3d-asset-action-shop" to="/app/shop"
+                    aria-label={"Apri lo Shop per "+action.title}>Shop</Link>}
+              </div>;
+            })}
+          </div> : <div className="game3d-asset-action-empty">
+            Nessuna faccenda predefinita per questo oggetto.
+            <Link to="/app/aggiungi">Crea una faccenda</Link>
+          </div>}
+        </section>}
       {selected && !adding && !showAll && mode!=="tiles" && <div
         className={"game3d-selected game3d-object-menu"+(movingFurnitureId?" game3d-object-menu--moving":"")}
         role="group" aria-label={"Azioni per "+(selectedSpec?.label??"mobile")}>
