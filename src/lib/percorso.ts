@@ -1,5 +1,6 @@
 import { guessRoomKind, type RoomKind } from "./rooms.ts";
 import { ADDITIONAL_ASSETS, type AdditionalAssetId } from "./percorso-asset-catalog.ts";
+import { isFurnitureSkinId, type FurnitureSkinId } from "./percorso-furniture-skins.ts";
 
 export type Tile = { x: number; y: number };
 export type Direction = 0 | 1 | 2 | 3;
@@ -7,7 +8,7 @@ export type FloorStyle = "parquet" | "piastrelle" | "cotto" | "terrazzo" | "piet
 export type WallStyle = "avorio" | "salvia" | "cipria" | "righe" | "carta";
 export type FurnitureType = "divano" | "letto" | "tavolo" | "sedia" | "armadio" | "lavatrice" | "vasca" | "pianta" | "tappeto" | "frigo" | AdditionalAssetId;
 export type FurnitureSpec = { id: FurnitureType; label: string; width: number; height: number; elevation: number; color: string; accent: string; icon: string; category?: string; choreIcon?: string };
-export type Furniture = { id: string; type: FurnitureType; x: number; y: number; rotation: Direction };
+export type Furniture = { id: string; type: FurnitureType; x: number; y: number; rotation: Direction; skin?: FurnitureSkinId };
 export type HouseRoom = {
   id: string;
   name: string;
@@ -160,7 +161,7 @@ export function reconcileHouse(savedNames: string[], saved: unknown): HouseLayou
       ? old.furniture.filter((item): item is Furniture => !!item && typeof item.id === "string" && isFurnitureType(item.type as string) &&
         Number.isInteger(item.x) && Number.isInteger(item.y) && [0, 1, 2, 3].includes(item.rotation as number))
         .reduce<Furniture[]>((accepted, item) => {
-          if (validPlacement({ ...room, furniture: accepted }, item)) accepted.push(item);
+          if (validPlacement({ ...room, furniture: accepted }, item)) accepted.push({...item,...(isFurnitureSkinId(item.skin)?{skin:item.skin}:{})});
           return accepted;
         }, [])
       : [];
