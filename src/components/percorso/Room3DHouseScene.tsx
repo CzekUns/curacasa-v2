@@ -196,6 +196,9 @@ export const Room3DHouseScene = forwardRef<House3DHandle,Props>(function Room3DH
     }
     function freeGroup(group:THREE.Group){
       group.traverse(node=>{
+        if(node instanceof THREE.LineSegments){
+          node.geometry.dispose();(node.material as THREE.Material).dispose();
+        }
         if(node instanceof THREE.Mesh){
           node.geometry.dispose();
           for(const mat of Array.isArray(node.material)?node.material:[node.material])mat.dispose();
