@@ -424,7 +424,7 @@ export function Percorso3D() {
           onClick={()=>selectFurniture(null)}><X size={17}/></button>
       </div>}
       {toast && <p className="game3d-toast" role="status">{toast}</p>}
-      {panelOpen && <section className={"game3d-sheet open"+(mode==="furniture"||showSkinChooser?" game3d-sheet--catalog":"")} aria-label="Comandi contestuali">
+      {panelOpen && <section className={"game3d-sheet open"+(mode==="furniture"||showSkinChooser?" game3d-sheet--catalog":"")+(showSkinChooser?" game3d-sheet--skins":"")} aria-label="Comandi contestuali">
         <button type="button" className="game3d-sheet-handle" aria-expanded={panelOpen}
           onClick={()=>{setPanelOpen(v=>!v);setShowSkinChooser(false);}}>
           <span className="game3d-handle-dash"/>
