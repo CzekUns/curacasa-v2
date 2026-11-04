@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { renderAdditionalAsset } from "./three-asset-models.ts";
+import { applyFurnitureSkin } from "./three-furniture-skins.ts";
 import { FURNITURE, furnitureSize, type Furniture, type FurnitureType, type HouseRoom } from "../../lib/percorso.ts";
 import { editableTileSlots } from "../../lib/percorso-grid.ts";
 
@@ -208,6 +209,7 @@ export function createFurniture(item: Furniture): THREE.Group {
     default:
       if (!renderAdditionalAsset(primitive,item.type)) box(sx*.8,.5,sz*.8,0,.25,0,swatch?.color ?? palette.cream);
   }
+  applyFurnitureSkin(primitive,item.skin,item.type);
   if (item.rotation % 2) primitive.rotation.y = -Math.PI / 2;
   // Furniture geometry is authored at the catalog footprint center; rotate it.
   if (item.rotation === 2) primitive.rotation.y = Math.PI;
@@ -337,6 +339,10 @@ export function buildRoom(
         const material=obj.material as THREE.SpriteMaterial;
         material.map?.dispose();
         material.dispose();
+      }
+      if(obj instanceof THREE.LineSegments){
+        obj.geometry.dispose();
+        (obj.material as THREE.Material).dispose();
       }
       if(obj instanceof THREE.Mesh){
         obj.geometry.dispose();
